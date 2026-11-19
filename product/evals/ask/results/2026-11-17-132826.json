@@ -1,0 +1,3197 @@
+{
+  "run_at": "2026-11-17T20:28:26.406Z",
+  "options": {
+    "only": null,
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": false,
+  "not_run_on_runtime": [],
+  "cost_usd": 3.62,
+  "refusals": {
+    "answer_calls": 19,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 11,
+    "total": 18,
+    "percent": 61,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "01-parent-source",
+      "title": "Comp 1: a child with no keys rides a null moved by expressions; the answer names the parent, its expressions, and puts steps on the parent",
+      "covers": [
+        "TD 17.1",
+        "FR-003",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-022",
+        "A3"
+      ],
+      "hash": "330fd5291b33e055cd0e3131d346b7fde73085985830fdd630174f4837de6100",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "3 steps (wanted 2 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_keyframe_skills@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "step_on_layer@1",
+              "pass": true,
+              "detail": "no step on Shake Control (steps are on Shake Control, (none))"
+            },
+            {
+              "check": "step_text_order:bigger_pixel_source_first@1",
+              "pass": true,
+              "detail": "ok (the later one isn't present)"
+            },
+            {
+              "check": "step_order:hit_sizes_before_pivot@1",
+              "pass": true,
+              "detail": "not_taught at 1, transform.anchor at 2"
+            },
+            {
+              "check": "text:names_parent",
+              "pass": true,
+              "detail": "explanation of turn 1: \"Shake Control\""
+            },
+            {
+              "check": "text:names_rock",
+              "pass": true,
+              "detail": "explanation of turn 1: \"rock.png\""
+            },
+            {
+              "check": "text:names_expressions",
+              "pass": true,
+              "detail": "explanation of turn 1: \"expression\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "At 142 words the answer opens on the source with no greeting or recap, gives three steps, and ends on one question naming only Set the pivot, which is step 2's tag: \"Try them, or want to go deeper on step 2 with *Set the pivot*?\""
+            },
+            {
+              "item": "R-NAMES-SOURCE",
+              "pass": true,
+              "reason": "It says \"rock.png rides on Shake Control, a null moved by two expressions\", names Position and Rotation as the driven properties, and both edit steps target Shake Control, not rock.png."
+            },
+            {
+              "item": "R-HONEST-KINDS",
+              "pass": false,
+              "reason": "No read returned Shake Control's anchor point or where the hammer hits, yet the answer says the pivot \"looks like it isn't where the hammer hits\" instead of naming that as unread, and it states \"settling over about a second\" as plain fact although that is inferred from the decay value."
+            },
+            {
+              "item": "R-STEPS-ACTIONABLE",
+              "pass": true,
+              "reason": "All three steps start with an action on a named layer (\"Open Shake Control's Position expression\", \"Select Shake Control… use the Pan Behind tool\", \"Play it back\"), and they follow the read's amounts, putting Position (12 px) before the pivot/Rotation step (9 px)."
+            },
+            {
+              "item": "R-OUTSIDE-STEP-SHAPE",
+              "pass": true,
+              "reason": "Step 1 asks the learner to open the Position expression, reports what the read shows (\"it uses the second hit's values for all three\"), gives no new values or code, and ends with \"Not something I teach yet.\""
+            }
+          ],
+          "cost": 0.2207876,
+          "session_id": "e0473b4a-b84d-43d4-8047-ba06f32bdba5",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the rock shake from where the hammer hits.\nTOOL CALL describe_layers {\"layers\":[\"rock\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":28,\"layer\":\"rock.png\",\"asked\":\"rock\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}},{\"property\":\"Rotation\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}]}],\"shifts\":[{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Position\",\"shift_px\":12.15,\"at\":1.502,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"},{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Rotation\",\"shift_px\":9.36,\"at\":2.569,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, rock.png rides on Shake Control, a null moved by two expressions:\n- Position moves the rock about 12 px at most, around 1.5 s, settling over about a second; all three hits use the second hit's size.\n- Rotation moves the rock about 9 px at most, around 2.6 s, and turns around the null's pivot, which looks like it isn't where the hammer hits.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Open Shake Control's Position expression and look at how it picks each hit's size and settle: it uses the second hit's values for all three. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n2. Select Shake Control (it carries 13 layers) and use the Pan Behind tool to drag its pivot to where the hammer hits.  [tag: Set the pivot; layer: Shake Control]\n3. Play it back and watch where the rock turns from.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 2 with *Set the pivot*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 142\n"
+        }
+      ]
+    },
+    {
+      "id": "02-review-due-question-first",
+      "title": "A review is due and the first message is a question: the answer comes first, with no review or lesson ahead of it",
+      "covers": [
+        "TD 17.4",
+        "FR-001",
+        "FR-061"
+      ],
+      "hash": "47886fee0dafae2931034d2f576776475b2326746f29544ce625e0040901afd9",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind describe"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was describe (wanted answer or describe)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "turn_first_tool@1",
+              "pass": true,
+              "detail": "turn 1's first tool was describe_layers"
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "text:names_ctrl",
+              "pass": true,
+              "detail": "explanation of turn 1: \"CTRL\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ANSWER-FIRST",
+              "pass": true,
+              "reason": "The turn opens directly on the question (\"In Mentor Practice, Title is parented to CTRL…\") and nothing mentions the due review, offers a refresher, or starts a lesson; the closing offer only hands back choices about this answer's slide and Title's own moves."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "At 73 words it is one answer: the parent and its keys, then Title's own keys, then one closing question (\"Want to change how that slide feels, or ask about Title's own moves?\"), with no greeting, recap, praise, second question or skill offer outside the (empty) step tags."
+            },
+            {
+              "item": "R-HONEST-KINDS",
+              "pass": true,
+              "reason": "Read facts are stated plainly and match the tool result: CTRL is a null with 2 linear Position keys and 2 children, and Title has 4/2/2 linear keys. The one inference is marked with \"so it slides Title… at a steady speed\", and nothing unread is claimed or called empty."
+            }
+          ],
+          "cost": 0.17017659999999998,
+          "session_id": "ff8716f9-821d-4ed6-8a15-c6dd436fe6d7",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: What is CTRL doing to Title?\nTOOL CALL describe_layers {\"layers\":[\"CTRL\",\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: describe; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Title is parented to CTRL, a null that never renders but carries Title along with it:\n- CTRL has 2 Position keys, linear, so it slides Title (and one other child) across at a steady speed.\n- On top of that ride, Title's own keys still play: 4 on Position, 2 on Scale and 2 on Opacity, all linear.\n\nCLOSING OFFER: Want to change how that slide feels, or ask about Title's own moves?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 73\n"
+        }
+      ]
+    },
+    {
+      "id": "03-natural-expression-only",
+      "title": "\"Make the shake natural\" on motion that is all expressions: the source is named and no keyframe skill is proposed",
+      "covers": [
+        "TD 17.5",
+        "FR-022",
+        "A2"
+      ],
+      "hash": "793c402130f6e777511e0eea7945c7090ecddac345d3223d8447213c04587f1c",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "4 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_keyframe_skills@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "step_on_layer@1",
+              "pass": true,
+              "detail": "no step on Shake Control (steps are on Shake Control, (none))"
+            },
+            {
+              "check": "text:names_source",
+              "pass": true,
+              "detail": "explanation of turn 1: \"Shake Control\""
+            },
+            {
+              "check": "text:names_expressions",
+              "pass": true,
+              "detail": "explanation of turn 1: \"expression\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The answer opens on the source ('In Comp 1, rock.png rides on Shake Control…') with no greeting, recap or praise, and gives one stated assumption, two bullets and four steps in 143 words, which is not well past 150; it closes on a single question offering one tagged skill: 'Try them, or want to go deeper on step 3 with *Set the pivot*?'"
+            },
+            {
+              "item": "R-NAMES-SOURCE",
+              "pass": true,
+              "reason": "It names both the asked layer and the moving layer, and the source: 'rock.png rides on Shake Control, a null moved by expressions', with bullets for Position and Rotation; all steps target Shake Control, not rock.png."
+            },
+            {
+              "item": "R-EXPRESSION-ONLY",
+              "pass": true,
+              "reason": "It says expressions drive Shake Control's Position and Rotation, and steps 1–2 open and look at those expressions, tagged not taught yet; no step or offer uses Easing, Key types, Speed graph or Offset, and nothing claims the rock is still for lack of keys."
+            }
+          ],
+          "cost": 0.21386339999999998,
+          "session_id": "11c93d98-1bb2-4401-969b-c33a1e2dbb48",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the rock's shake feel more natural.\nTOOL CALL describe_layers {\"layers\":[\"rock\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":28,\"layer\":\"rock.png\",\"asked\":\"rock\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}},{\"property\":\"Rotation\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}]}],\"shifts\":[{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Position\",\"shift_px\":12.15,\"at\":1.502,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"},{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Rotation\",\"shift_px\":9.36,\"at\":2.569,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, rock.png rides on Shake Control, a null moved by expressions. Assuming natural means each hit lands differently:\n- Position moves the rock about 12 px at most, around 1.5 s, and all three hits share one size and settle speed.\n- Rotation moves it about 9 px at most, around 2.6 s.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Open Shake Control's Position expression and look at how it picks each hit's size and settle speed: it uses the second hit's values for all three. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n3. Select Shake Control and Pan Behind its pivot to where the hammer hits (I didn't read where it sits now).  [tag: Set the pivot; layer: Shake Control]\n4. Play it back and watch the hits.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 3 with *Set the pivot*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 143\n"
+        }
+      ]
+    },
+    {
+      "id": "04-link-described",
+      "title": "\"What does Sweep Control do?\": a null whose Position drives an effect on another layer; the link is described, never \"can't see\"",
+      "covers": [
+        "TD 17.6",
+        "FR-004",
+        "FR-011",
+        "A5",
+        "A6"
+      ],
+      "hash": "a6ade0907569dfdead8d1aa41c9d87d48ff4ffc60dcad400b6931d9ea2283e3b",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind describe"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was describe (wanted describe)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:names_effect",
+              "pass": true,
+              "detail": "explanation of turn 1: \"Light Sweep\""
+            },
+            {
+              "check": "text:names_target_layer",
+              "pass": true,
+              "detail": "explanation of turn 1: \"Black Solid 1\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-LINK-DESCRIBED",
+              "pass": true,
+              "reason": "The answer names the effect, property and carrying layer (\"set the center of its CC Light Sweep effect\" on Black Solid 1), marks the inferred link with \"It looks like\", and says the null \"never renders\"."
+            },
+            {
+              "item": "R-HONEST-KINDS",
+              "pass": false,
+              "reason": "\"Black Solid 1 doesn't render right now\" is stated as a plain fact, but no read returned Black Solid 1's render state; target_renders:false describes the link's target, the Sweep Control null, so \"that sweep won't show\" rests on a misread."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The turn is one 101-word describe answer with no greeting, praise or recap, and it ends on a single closing question that names no skills."
+            }
+          ],
+          "cost": 0.1803578,
+          "session_id": "2f3c45db-b39e-4c60-88b2-1fbda70100e6",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: What does Sweep Control do?\nTOOL CALL describe_layers {\"layers\":[\"Sweep Control\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":26,\"layer\":\"Sweep Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":1,\"first\":[{\"from_layer\":\"Black Solid 1\",\"from_property\":\"Effects › CC Light Sweep › Center\",\"property\":\"Position\",\"inferred\":true,\"target_renders\":false}],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: describe; what the learner sees, rebuilt from the answer call)\nIn Comp 1, Sweep Control is a null with no children, so it never renders and moves no layers itself:\n- Its Position has two linear keys, so it slides at a steady speed from one spot to another.\n- It looks like an expression on Black Solid 1 reads that Position to set the center of its CC Light Sweep effect, so the null steers where the light sweep crosses.\n- Black Solid 1 doesn't render right now, which means that sweep won't show in the comp as it stands.\n\nCLOSING OFFER: Want to ask about the sweep's motion or about Black Solid 1 next?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 101\n"
+        }
+      ]
+    },
+    {
+      "id": "05-keyed-softer-one-offer",
+      "title": "A question inside one skill on a keyed layer (\"make Subtitle land softer\"): steps plus one offer of the speed graph, and no lesson starts",
+      "covers": [
+        "TD 17.7",
+        "FR-008",
+        "FR-016",
+        "FR-022"
+      ],
+      "hash": "189737e03db15a7391260a16e18fce132135622fbd9477463062b27442a064ee",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "3 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_skills_include@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:offer_names_speed_graph",
+              "pass": true,
+              "detail": "offer of turn 1: \"Speed graph\""
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The turn is one answer at 109 words: it states its assumption once ('assuming \"land\" means where its move stops'), says what moves Subtitle, gives three steps, and ends on one question naming one tagged skill ('Try them, or want to go deeper on step 2 with *Speed graph*?'), with no greeting, praise or recap."
+            },
+            {
+              "item": "R-STEPS-ACTIONABLE",
+              "pass": true,
+              "reason": "All three steps begin with an action on a named layer or property in After Effects' terms ('Select CTRL's last Position keyframe and apply Easy Ease In', 'Open the Graph Editor on Subtitle's Position... drag the last key's incoming handle', 'Play it back'), there are two to four of them, and none only states a fact."
+            },
+            {
+              "item": "R-OFFER-FITS",
+              "pass": true,
+              "reason": "The closing offer names exactly one skill, *Speed graph*, which is step 2's tag, as a question; no lesson starts, nothing is demonstrated, and the turn ends on the learner's choice ('Try them, or want to go deeper...'). The extra Easing step on CTRL follows from the read showing CTRL's linear keys."
+            }
+          ],
+          "cost": 0.1927162,
+          "session_id": "602360df-a796-498c-9e74-404f1d0c5da4",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Subtitle land softer.\nTOOL CALL describe_layers {\"layers\":[\"Subtitle\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":2,\"layer\":\"Subtitle\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"eased\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"mixed\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"CTRL\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Subtitle moves two ways, assuming \"land\" means where its move stops:\n- It rides on CTRL, a null with 2 Position keys, both linear, so that part stops dead.\n- Its own 3 Position keys are already eased.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select CTRL's last Position keyframe and apply Easy Ease In (Shift+F9). CTRL carries 2 layers, so the other one changes too.  [tag: Easing; layer: CTRL]\n2. Open the Graph Editor on Subtitle's Position, show the Speed Graph, and drag the last key's incoming handle longer so the speed eases down to zero more gradually.  [tag: Speed graph; layer: Subtitle]\n3. Play it back and watch the landing.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 2 with *Speed graph*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 109\n"
+        }
+      ]
+    },
+    {
+      "id": "06-do-it-for-me",
+      "title": "\"Can you just do it for me?\" after an answer: the decline in one sentence, step 1 again in one sentence, nothing changed",
+      "covers": [
+        "TD 17.9",
+        "FR-020",
+        "FR-002"
+      ],
+      "hash": "4106067b1f8c0cea25ec1a2b25fd129ef8eda58a7026b8788c453d863e1262a4",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "3 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_answer@2",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "text:declines",
+              "pass": true,
+              "detail": "prose of turn 2: \"yourself\""
+            },
+            {
+              "check": "prose_max_sentences:decline_then_step",
+              "pass": true,
+              "detail": "2 sentences of prose in turn 2 (at most 2)"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-DECLINE",
+              "pass": true,
+              "reason": "Turn 2 is two sentences: \"I'll leave this change to you, since making it yourself is what makes it stick.\" then step 1 restated in one sentence (select Title's last Position and Scale keys, apply Easy Ease In), with no change made, no demo, no lesson offer, no apology or lecture."
+            }
+          ],
+          "cost": 0.29790659999999997,
+          "session_id": "c9f31ea3-ee1c-4659-8fad-fc69a5109d28",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Title land softer.\nTOOL CALL describe_layers {\"layers\":[\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"CTRL\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Title moves by its own keys and also rides on CTRL, a null that moves it by keys:\n- Title's Position (4 keys), Scale (2) and Opacity (2) are all linear, so it stops at full speed.\n- CTRL's Position (2 keys) is linear too, so Title's landing gets the same hard stop.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select Title's last Position key and its last Scale key, then apply Keyframe Assistant > Easy Ease In (Shift+F9).  [tag: Easing; layer: Title]\n2. Select CTRL's last Position key and apply Easy Ease In as well.  [tag: Easing; layer: CTRL]\n3. Play it back and watch the landing.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper with *Easing*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 101\n\n### Turn 2: the open comp is readable\nLEARNER: Can you just do it for me?\nMENTOR PROSE: I'll leave this change to you, since making it yourself is what makes it stick. Start by selecting Title's last Position key and its last Scale key, then apply Keyframe Assistant > Easy Ease In (Shift+F9).\n"
+        }
+      ]
+    },
+    {
+      "id": "07-outside-the-six",
+      "title": "A question fully outside (render settings): the outside line, no steps, no offer, nothing from general knowledge",
+      "covers": [
+        "TD 17.10",
+        "FR-018"
+      ],
+      "hash": "d57e05bd8913fffa5ba89f410adeaad1973aa18b83487663e20902a83dd6f81e",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind outside"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was outside (wanted outside)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "no_offer_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:no_general_answer",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OUTSIDE",
+              "pass": false,
+              "reason": "The first sentence correctly says render and export settings are outside what it covers, but it names nothing it does cover; instead a separate CLOSING OFFER ('I can help with the motion itself: easing, key types, the speed graph, offsetting timing, setting a pivot, or grouping layers with a null') lists all six skills, and the case requires one sentence with no offer."
+            }
+          ],
+          "cost": 0.18646839999999998,
+          "session_id": "17d392e9-fc84-4149-bebf-ed693621d700",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: What render settings should I use to export this for Instagram?\nTOOL CALL describe_layers {}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":{\"status\":\"not_read\",\"reason\":\"not_asked\"},\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":2,\"layer\":\"Subtitle\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"eased\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"mixed\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":2,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":4,\"layer\":\"Bar\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"End\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"X Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":5,\"layer\":\"Glow\",\"kind\":\"adjustment\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Blurriness\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[\"Gaussian Blur\"],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":6,\"layer\":\"Cursor\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Opacity\",\"keys\":6,\"key_types\":\"all_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\",\"expression_on\":true}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":8,\"layer\":\"Old Take\",\"kind\":\"text\",\"class\":\"hidden\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":9,\"layer\":\"Icon\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":10,\"layer\":\"Background\",\"kind\":\"solid\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: outside; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, render and export settings are outside what I cover, so I can't guide you on exporting for Instagram.\n\nCLOSING OFFER: I can help with the motion itself: easing, key types, the speed graph, offsetting timing, setting a pivot, or grouping layers with a null.\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 45\n"
+        }
+      ]
+    },
+    {
+      "id": "08-partly-outside",
+      "title": "A goal partly outside (soften Title, plus how to export): the inside part gets steps, the outside part is named and not dropped, nothing from general knowledge",
+      "covers": [
+        "TD 17.11",
+        "FR-018"
+      ],
+      "hash": "56cb24fe60aaf7fa1ef3f36247ba0eb4ad5d4b8cc95de86e92871029b3d05ef5",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "4 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_starts_with_action@1",
+              "pass": false,
+              "detail": "\"If CTRL's move ends near the same time, select its\" doesn't start with an action verb (the list is a guess)",
+              "warn": true
+            },
+            {
+              "check": "text:outside_part_kept",
+              "pass": true,
+              "detail": "all of turn 1: \"Export\""
+            },
+            {
+              "check": "text:no_general_answer",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-PARTLY-OUTSIDE",
+              "pass": true,
+              "reason": "The inside part gets tagged Easing steps (steps 1–2), and step 4 names the export part as outside the mentor's scope ('Export it for Instagram once it feels right. Not something I teach yet.') without any settings or codec advice, though it does not say where to look."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "At 103 words, the answer opens on what drives Title ('rides on CTRL… keys are all linear, so it stops at full speed'), gives four steps, and ends on one question naming only Easing, a step tag ('Try the steps, or want to go deeper with *Easing*?'), with no greeting, recap or praise."
+            }
+          ],
+          "cost": 0.1835754,
+          "session_id": "c329fde2-2e1a-4256-af11-530eede17187",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Title land softer, and tell me the best way to export it for Instagram.\nTOOL CALL describe_layers {\"layers\":[\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Title moves on its own keys and rides on CTRL, a null that also moves it by keys. Assuming the landing is Title's own move: its Position, Scale and Opacity keys are all linear, so it stops at full speed.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select Title's last Position, Scale and Opacity keys and press F9 for Easy Ease.  [tag: Easing; layer: Title]\n2. If CTRL's move ends near the same time, select its last keys and press F9 too.  [tag: Easing; layer: CTRL]\n3. Play it back and watch the landing.  [no tag]\n4. Export it for Instagram once it feels right. Not something I teach yet.  [no tag: not taught yet]\n\nCLOSING OFFER: Try the steps, or want to go deeper with *Easing*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 103\n"
+        }
+      ]
+    },
+    {
+      "id": "09-ambiguous-layer",
+      "title": "\"The rock\" names two layers whose first steps differ: one clarifying question naming both, then an answer that states its assumption",
+      "covers": [
+        "TD 17.12",
+        "FR-014",
+        "A13"
+      ],
+      "hash": "4268209a607370badb52c16f1f595fa1aa95d18d29c496d2baf6d37123d83f0d",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "read_before_answer@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_prose_empty@2",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind clarify"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was clarify (wanted clarify)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "no_offer_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "max_sentences:explanation@1",
+              "pass": true,
+              "detail": "1 sentences in the explanation (at most 1)"
+            },
+            {
+              "check": "answer_given@2",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@2",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@2",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@2",
+              "pass": true,
+              "detail": "4 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@2",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@2",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@2",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@2",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@2",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:names_first_rock",
+              "pass": true,
+              "detail": "explanation of turn 1: \"rock.png\""
+            },
+            {
+              "check": "text:names_second_rock",
+              "pass": true,
+              "detail": "explanation of turn 1: \"Small Rock\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-CLARIFY",
+              "pass": true,
+              "reason": "Turn 1 is one question, with no steps or offer, naming both candidates from the read: \"which rock do you mean: rock.png, shaken by Shake Control, or Small Rock.png, which moves on its own keys?\"; the short descriptors tell the choices apart and don't explain anything."
+            },
+            {
+              "item": "R-ASSUMPTION",
+              "pass": false,
+              "reason": "Turn 2 answers about rock.png without asking again, but it never says what it took the learner to mean; it opens straight with \"In Comp 1, rock.png rides on Shake Control...\" and has no line like \"I'm taking the rock as rock.png\" or saying how it read \"heavier\"."
+            }
+          ],
+          "cost": 0.34780520000000004,
+          "session_id": "199cb3df-9094-4308-af58-36e351fb3a5b",
+          "answer_calls": 2,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the rock feel heavier.\nTOOL CALL describe_layers {\"layers\":[\"rock\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"asked\":\"rock\",\"error\":\"NAME_PARTIAL\",\"candidates\":[{\"layer_index\":22,\"layer\":\"Small Rock.png\",\"parent\":null},{\"layer_index\":28,\"layer\":\"rock.png\",\"parent\":\"Shake Control\"}]}]}\nTOOL CALL describe_layers {\"layers\":[22,28]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":22,\"layer\":\"Small Rock.png\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":28,\"layer\":\"rock.png\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}},{\"property\":\"Rotation\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}]}],\"shifts\":[{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Position\",\"shift_px\":12.15,\"at\":1.502,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"},{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Rotation\",\"shift_px\":9.36,\"at\":2.569,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: clarify; what the learner sees, rebuilt from the answer call)\nIn Comp 1, which rock do you mean: rock.png, shaken by Shake Control, or Small Rock.png, which moves on its own keys?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 22\n\n### Turn 2: the open comp is readable\nLEARNER: The rock.png one.\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- Position moves the rock about 12 px at most, at the second hit.\n- Rotation moves it about 9 px at most, near the third hit.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Open Shake Control's Position expression and look at its speed, 8 shakes a second, and how it uses the second hit's size and settle for all three hits. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n2. Open Shake Control's Rotation expression and look at its speed, 10 shakes a second, and its amounts, 0.75° at most. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n3. Select Shake Control and Pan Behind its pivot to where the rock rests; I didn't read where it sits now.  [tag: Set the pivot; layer: Shake Control]\n4. Play it back and judge the weight.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 3 with *Set the pivot*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 137\n"
+        }
+      ]
+    },
+    {
+      "id": "10-vague-goal-two-ways",
+      "title": "A vague goal with two different first steps (keys on Card, an expression on Glow): one question naming both, then an answer that states its assumption",
+      "covers": [
+        "TD 17.13",
+        "FR-014"
+      ],
+      "hash": "4fddec32ef769f6e51f8fa36f3fedffe44721b12233f4f991e12e8a993b6ebc7",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "read_before_answer@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_prose_empty@2",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind clarify"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was clarify (wanted clarify)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "no_offer_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "max_sentences:explanation@1",
+              "pass": true,
+              "detail": "1 sentences in the explanation (at most 1)"
+            },
+            {
+              "check": "answer_given@2",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@2",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@2",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@2",
+              "pass": true,
+              "detail": "3 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@2",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@2",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@2",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@2",
+              "pass": true,
+              "detail": "names Intro"
+            },
+            {
+              "check": "no_step_list_in_prose@2",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:names_card",
+              "pass": true,
+              "detail": "explanation of turn 1: \"Card\""
+            },
+            {
+              "check": "text:names_glow",
+              "pass": true,
+              "detail": "explanation of turn 1: \"Glow\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-CLARIFY",
+              "pass": true,
+              "reason": "Turn 1 is a single question naming both choices from the read ('Card's Scale, which is keyed, or Glow's Position, which comes from an expression?') with no steps, offer or explanation beyond telling the two apart."
+            },
+            {
+              "item": "R-ASSUMPTION",
+              "pass": false,
+              "reason": "Turn 2 answers about Card without asking again, but its first part ('In Intro, Card's Scale is animated by its own two keys, both linear…') states a fact rather than saying what it took the learner to mean, such as taking 'The Card' as Card's Scale and 'more natural' as easing its keys."
+            }
+          ],
+          "cost": 0.28864959999999995,
+          "session_id": "08c2fa46-c950-421c-a4a4-b8aa0cea147f",
+          "answer_calls": 2,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the animation feel more natural.\nTOOL CALL describe_layers {}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Intro\",\"time\":0.6},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":{\"status\":\"not_read\",\"reason\":\"not_asked\"},\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Card\",\"kind\":\"solid\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":2,\"layer\":\"Glow\",\"kind\":\"solid\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":28.878,\"max_at\":2.433,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: clarify; what the learner sees, rebuilt from the answer call)\nIn Intro, which motion do you want to feel more natural: Card's Scale, which is keyed, or Glow's Position, which comes from an expression?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 24\n\n### Turn 2: the open comp is readable\nLEARNER: The Card.\nTOOL CALL describe_layers {\"layers\":[\"Card\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Intro\",\"time\":0.6},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Card\",\"kind\":\"solid\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Intro, Card's Scale is animated by its own two keys, both linear, so it starts and stops at full speed with no ease.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select both of Card's Scale keyframes and choose Animation > Keyframe Assistant > Easy Ease (F9).  [tag: Easing; layer: Card]\n2. Open the Graph Editor, switch to the Speed Graph, and drag the second key's handle out to lengthen the landing.  [tag: Speed graph; layer: Card]\n3. Play it back and watch how the Card settles.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 1 with *Easing*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 79\n"
+        }
+      ]
+    },
+    {
+      "id": "11-precomp-unread",
+      "title": "A precomp in reach (Icon): \"I couldn't see inside\" it, never \"nothing inside\"",
+      "covers": [
+        "TD 17.14",
+        "FR-012",
+        "A7"
+      ],
+      "hash": "a6f099f91b821a3a3420821163bb91fca9110859bd8b1f78a2336e558f5145f8",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer or describe)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "2 steps"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:says_not_read",
+              "pass": true,
+              "detail": "all of turn 1: \"couldn't see inside\""
+            },
+            {
+              "check": "text:never_nothing_inside",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-UNREAD-NAMED",
+              "pass": true,
+              "reason": "The answer says \"I couldn't see inside Icon, so I can't tell yet what moves there or whether it's eased\", never calls the precomp empty or still, and its steps only open Icon and look (press U) rather than assuming its contents."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "At 92 words it goes straight to the source (Icon has nothing of its own, so the motion is inside the precomp), gives two look steps, and ends on one closing question that names no skill, with no greeting, recap, praise or second question."
+            }
+          ],
+          "cost": 0.17034540000000004,
+          "session_id": "4795f759-4f30-4fa7-9b59-8c2cb4adf560",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the Icon move more smoothly.\nTOOL CALL describe_layers {\"layers\":[\"Icon\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":9,\"layer\":\"Icon\",\"kind\":\"precomp\",\"class\":\"renders\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Icon is a precomp with no keys, expressions, parent or effects of its own, so its motion looks like it comes from inside the precomp. I couldn't see inside Icon, so I can't tell yet what moves there or whether it's eased.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Double-click Icon in the timeline to open its precomp.  [no tag; layer: Icon]\n2. Select all the layers inside and press U to show the properties that have keys.  [no tag]\n\nCLOSING OFFER: With that precomp open, want to ask me again so I can read what moves there and point you to the right fix?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 92\n"
+        }
+      ]
+    },
+    {
+      "id": "12-matte-eye-off",
+      "title": "A matte with its eye off by design in reach: it is a matte, never \"hidden\"",
+      "covers": [
+        "TD 17.15",
+        "FR-012",
+        "A8"
+      ],
+      "hash": "19d0046df3fef1d8dac294c7d9947d34e15fa7bf3065ffc606e1eba0ffd642b8",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind describe"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was describe (wanted answer or describe)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Intro"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:says_matte",
+              "pass": true,
+              "detail": "all of turn 1: \"Matte\""
+            },
+            {
+              "check": "text:never_hidden",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-MATTE-NOT-HIDDEN",
+              "pass": true,
+              "reason": "The answer says Window Matte is 'a solid set up as a matte, so it never shows on its own' and that it 'only decides which parts of the layer using it show through'; it never calls it hidden and gives no step to turn its eye on."
+            },
+            {
+              "item": "R-HONEST-KINDS",
+              "pass": false,
+              "reason": "The read's fine sweep is not_read and only a coarse 0.25s sample returned varies:false with a max_offset of 15, yet the bullet states 'An expression holds its Rotation at 15°, with no change over time' as plain fact, so a gap sits behind a confident sentence, even though 'I didn't read which layer uses it' is properly named."
+            }
+          ],
+          "cost": 0.1778744,
+          "session_id": "4e997c43-35f0-4272-96bb-be46f388e9ad",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Why can't I see Window Matte?\nTOOL CALL describe_layers {\"layers\":[\"Window Matte\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Intro\",\"time\":0.6},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":{\"status\":\"not_read\",\"reason\":\"fixture\",\"coarse\":\"read\"},\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":2,\"layer\":\"Window Matte\",\"kind\":\"solid\",\"class\":\"matte\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":false,\"max_offset\":15,\"max_at\":0,\"units\":\"degrees\",\"sampled_every\":0.25,\"sweep\":\"coarse\",\"fine\":{\"status\":\"not_read\",\"reason\":\"fixture\"}}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":1,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: describe; what the learner sees, rebuilt from the answer call)\nIn Intro, Window Matte is a solid set up as a matte, so it never shows on its own. It only decides which parts of the layer using it show through. I didn't read which layer uses it.\n- An expression holds its Rotation at 15°, with no change over time, so the window shape is tilted.\n\nCLOSING OFFER: Want to ask about the layer it cuts out, or about that tilt?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 69\n"
+        }
+      ]
+    },
+    {
+      "id": "13-expression-over-keys",
+      "title": "Keys and an enabled expression on one property (Logo's Rotation): both said; the keys are not edited as if they drove it",
+      "covers": [
+        "EE-4",
+        "FR-010",
+        "A1"
+      ],
+      "hash": "45ac1d9f5f94806d133e5488d38cd6a754a30d84a596ba204b46aa34f0d45b66",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "2 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "2 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_starts_with_action@1",
+              "pass": false,
+              "detail": "\"Twirl open Logo's Rotation expression and look at \" doesn't start with an action verb (the list is a guess)",
+              "warn": true
+            },
+            {
+              "check": "no_keyframe_skills@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "text:says_expression",
+              "pass": true,
+              "detail": "all of turn 1: \"expression\""
+            },
+            {
+              "check": "text:says_keys",
+              "pass": true,
+              "detail": "all of turn 1: \"keys\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-KEYS-AND-EXPRESSION",
+              "pass": true,
+              "reason": "The answer names both the expression and the keys (\"an expression on its own Rotation\" and \"Logo also has two linear Rotation keys, but the expression replaces them\"). The replacement claim rests on the read text \"time * 30\" and builds_on \"sets_own\", and no step eases or retimes the keys."
+            },
+            {
+              "item": "R-HONEST-KINDS",
+              "pass": true,
+              "reason": "Read facts are stated plainly: \"up to 140° by about 7.7 s\" from max_offset/max_at, \"multiplies the time by a fixed speed\" from the text \"time * 30\", and \"sets the angle by itself\" from sets_own. The inferences are marked with \"so\" (\"so it never slows down\", \"so they don't change the spin you see\", \"so there's no slowdown at the end\"), and nothing unread is called fine or absent."
+            }
+          ],
+          "cost": 0.18976159999999997,
+          "session_id": "493cb5ea-e4fb-493f-b872-0d0c76db48e6",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the Logo's spin ease out.\nTOOL CALL describe_layers {\"layers\":[\"Logo\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":{\"status\":\"not_read\",\"reason\":\"fixture\",\"coarse\":\"read\"},\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\",\"expression_on\":true}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\",\"fine\":{\"status\":\"not_read\",\"reason\":\"fixture\"}}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Logo\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":{\"status\":\"not_read\",\"reason\":\"fixture\",\"coarse\":\"read\"},\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"display_path\":\"Transform › Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"display_path\":\"Transform › Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\",\"expression_on\":true}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\",\"fine\":{\"status\":\"not_read\",\"reason\":\"fixture\"}},\"display_path\":\"Transform › Rotation\",\"keys\":2,\"text\":\"time * 30\",\"cut_short\":false,\"full_length\":9,\"values\":{\"base\":0,\"after\":0,\"time\":0},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Logo's spin comes from an expression on its own Rotation, which sets the angle by itself:\n- It turns at a steady rate the whole time, up to 140° by about 7.7 s, so it never slows down.\n- Logo also has two linear Rotation keys, but the expression replaces them, so they don't change the spin you see.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Twirl open Logo's Rotation expression and look at how it works: it multiplies the time by a fixed speed, so there's no slowdown at the end. Not something I teach yet.  [no tag: not taught yet; layer: Logo]\n2. Play it back and watch the end of the spin.  [no tag]\n\nCLOSING OFFER: Want to try those, or ask about either step?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 110\n"
+        }
+      ]
+    },
+    {
+      "id": "14-separated-dimensions",
+      "title": "Separated dimensions (Bar's X Position has the keys): the step names X Position, never a Position that isn't there",
+      "covers": [
+        "EE-4",
+        "FR-010",
+        "A4"
+      ],
+      "hash": "f3fd2a9d86924e5a6789ba6e5c9117cddf8bd29420f68c2a9ca530ec19468e6e",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "3 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_starts_with_action@1",
+              "pass": false,
+              "detail": "\"In Bar's X Position, select all three keyframes an\" doesn't start with an action verb (the list is a guess)",
+              "warn": true
+            },
+            {
+              "check": "text:names_x_position",
+              "pass": true,
+              "detail": "all of turn 1: \"X Position\""
+            },
+            {
+              "check": "text:never_bare_position_keys",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-DIMENSION",
+              "pass": true,
+              "reason": "The answer says \"Bar slides on its own three X Position keys,\" matching the read (X Position, 3 keys), and steps 1 and 2 both act on \"Bar's X Position\" keyframes; there is no bare \"Position keys\" anywhere."
+            }
+          ],
+          "cost": 0.1632654,
+          "session_id": "cd308aef-b323-4492-9b6d-3747a5fb65de",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the Bar's slide ease in.\nTOOL CALL describe_layers {\"layers\":[\"Bar\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":4,\"layer\":\"Bar\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"End\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"X Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Bar slides on its own three X Position keys, and all of them are linear, so it moves at one even speed. I'm assuming you want the slide to slow down as it arrives at each key.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. In Bar's X Position, select all three keyframes and choose Animation > Keyframe Assistant > Easy Ease In.  [tag: Easing; layer: Bar]\n2. If you also want a soft start, select only the first X Position keyframe and choose Animation > Keyframe Assistant > Easy Ease Out.  [tag: Easing; layer: Bar]\n3. Play it back and watch how the slide lands.  [no tag]\n\nCLOSING OFFER: Want to try these, or go deeper with *Easing*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 96\n"
+        }
+      ]
+    },
+    {
+      "id": "15-single-and-hold-keys",
+      "title": "One key (set, not animated) and hold keys (a jump): Logo's single Scale key and Cursor's holds are each said as what they are",
+      "covers": [
+        "EE-4",
+        "FR-010",
+        "A10"
+      ],
+      "hash": "cb9d48c39cead8df89bbdcca5e4b0f93956e9d8ae01fd527deb1acc2f56ea89d",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer or describe)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_starts_with_action@1",
+              "pass": false,
+              "detail": "\"On Logo, move the playhead later, then change Scal\" doesn't start with an action verb (the list is a guess)",
+              "warn": true
+            },
+            {
+              "check": "text:single_key_said",
+              "pass": true,
+              "detail": "all of turn 1: \"one key\""
+            },
+            {
+              "check": "text:hold_or_snap_said",
+              "pass": true,
+              "detail": "all of turn 1: \"jump\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-KEY-SHAPES",
+              "pass": true,
+              "reason": "The explanation says \"Logo's Scale has one key, so it's set, not animated\" and \"Cursor's Opacity has 6 keys, all held, so it jumps between values instead of fading\"; step 2 treats the holds as jumps to be changed, not as a slide to ease."
+            }
+          ],
+          "cost": 0.17567339999999998,
+          "session_id": "cc0ab4d2-a66c-40ee-bfc3-2d26684287dc",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Why doesn't the Logo scale up, and why does the Cursor snap on and off?\nTOOL CALL describe_layers {\"layers\":[\"Logo\",\"Cursor\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":{\"status\":\"not_read\",\"reason\":\"fixture\",\"coarse\":\"read\"},\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\",\"expression_on\":true}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\",\"fine\":{\"status\":\"not_read\",\"reason\":\"fixture\"}}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":6,\"layer\":\"Cursor\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Opacity\",\"keys\":6,\"key_types\":\"all_held\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, both come from each layer's own keys:\n- Logo's Scale has one key, so it's set, not animated: there's no second value to grow to.\n- Cursor's Opacity has 6 keys, all held, so it jumps between values instead of fading.\nAssuming you want the Logo to grow and the Cursor to fade:\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. On Logo, move the playhead later, then change Scale to a bigger value so After Effects adds a second key. Not something I teach yet.  [no tag: not taught yet; layer: Logo]\n2. On Cursor, select all Opacity keys, right-click one and choose Toggle Hold Keyframe so they fade instead of jump.  [tag: Key types; layer: Cursor]\n3. Play it back and watch both.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 2 with *Key types*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 117\n"
+        }
+      ]
+    },
+    {
+      "id": "16-locked-layer-in-the-step",
+      "title": "A locked layer (Title) that stops a step from working: the unlock is said in the step it blocks",
+      "covers": [
+        "EE-4",
+        "FR-015",
+        "A12"
+      ],
+      "hash": "8ef5fd71bf50ccb8ef769fb3d728e2434c524defd6a710161fdef76b4238a23f",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "3 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:unlock_in_a_step",
+              "pass": true,
+              "detail": "steps of turn 1: \"Unlock\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-BLOCKER-IN-STEP",
+              "pass": true,
+              "reason": "The read shows Title \"locked\":true, and step 1 opens with \"Unlock Title first, then select its last Position and Scale keyframes…\", so the unlock sits at the start of the step it blocks; CTRL is unlocked so step 2 needs no unlock, and no unrelated finding is added."
+            }
+          ],
+          "cost": 0.177463,
+          "session_id": "2f6e22f8-aedf-4a3e-a899-1c674e86ff70",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Title land softer.\nTOOL CALL describe_layers {\"layers\":[\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":true,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"CTRL\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Title moves by its own keys and also rides on CTRL, a null moved by keys:\n- Title's Position (4 keys), Scale and Opacity (2 keys each) are all linear, so they stop dead.\n- CTRL's Position (2 keys) is linear too, which means the whole title arrives at full speed.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Unlock Title first, then select its last Position and Scale keyframes and apply Animation > Keyframe Assistant > Easy Ease In.  [tag: Easing; layer: Title]\n2. Select CTRL's last Position keyframe and apply Easy Ease In.  [tag: Easing; layer: CTRL]\n3. Play it back and watch the landing.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper with *Easing*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 97\n"
+        }
+      ]
+    },
+    {
+      "id": "17-howto-no-target",
+      "title": "A how-to inside the six with no comp target: two sentences, no steps, one offer of the lesson (A only; B1 offers nothing)",
+      "covers": [
+        "FR-019",
+        "PQ-4"
+      ],
+      "hash": "ad3a4000aff0c5f429609f45ba80d6e1b68bc849e8166ab21b85b43e39bddee3",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind howto"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was howto (wanted howto)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "max_sentences:explanation@1",
+              "pass": true,
+              "detail": "2 sentences in the explanation (at most 2)"
+            },
+            {
+              "check": "text:offer_names_speed_graph",
+              "pass": true,
+              "detail": "offer of turn 1: \"Speed graph\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-HOWTO",
+              "pass": true,
+              "reason": "The answer is two sentences: how the Speed graph works, and a pointer to Subtitle's eased Position keys, which the read confirms (ease: \"eased\"). It has no steps or tutorial and ends on one offer of the lesson, \"Want to go deeper with *Speed graph*?\""
+            }
+          ],
+          "cost": 0.1845874,
+          "session_id": "b9a60c25-2e0e-4735-ab3b-1643a6cf6939",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: How does the speed graph work?\nTOOL CALL describe_layers {}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":{\"status\":\"not_read\",\"reason\":\"not_asked\"},\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":2,\"layer\":\"Subtitle\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"eased\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"mixed\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":2,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":4,\"layer\":\"Bar\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"End\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"X Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":5,\"layer\":\"Glow\",\"kind\":\"adjustment\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Blurriness\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[\"Gaussian Blur\"],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":6,\"layer\":\"Cursor\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Opacity\",\"keys\":6,\"key_types\":\"all_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\",\"expression_on\":true}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":8,\"layer\":\"Old Take\",\"kind\":\"text\",\"class\":\"hidden\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":9,\"layer\":\"Icon\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":10,\"layer\":\"Background\",\"kind\":\"solid\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: howto; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, the Speed graph in the Graph Editor shows how fast a property changes over time: a high curve is fast, a low one is slow, and dragging a key's handles reshapes how it speeds up into or eases out of that key. Subtitle's Position keys are already eased, so it's a good place to see the curve bend.\n\nCLOSING OFFER: Want to go deeper with *Speed graph*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 68\n"
+        }
+      ]
+    },
+    {
+      "id": "18-followup-after-lesson",
+      "title": "The first follow-up after a lesson, sent in the context wrapper: a fresh read first, then a short prose answer that follows from the earlier answer (FR-028), with no wrapper label in what the learner reads",
+      "covers": [
+        "T104",
+        "amendment (e)",
+        "contracts/panel-ask.md > Context after a lesson",
+        "FR-028",
+        "FR-001",
+        "FR-016"
+      ],
+      "hash": "06c0faf03e073e484909966a78e49faddcd7b540a202623fee104cd9373468be",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "no_answer@1",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "turn_first_tool@1",
+              "pass": true,
+              "detail": "turn 1's first tool was describe_layers"
+            },
+            {
+              "check": "text:follows_step_2",
+              "pass": true,
+              "detail": "prose of turn 1: \"Rotation\""
+            },
+            {
+              "check": "text:no_wrapper_label",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "prose_max_sentences:short_follow_up",
+              "pass": false,
+              "detail": "5 sentences of prose in turn 1 (at most 4)"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.1019918,
+          "session_id": "5c18e3ae-9322-4df8-a580-e90f9ee401e9",
+          "answer_calls": 0,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Earlier question and answer, as shown in the panel:\nQuestion: Make the rock shake from where the hammer hits.\nAnswer: In Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- All three hits are the same size.\n- Rotation moves the rock about 9 px at most, gone in about 1/3 s.\n- The turn centers on the rock, where Shake Control sits.\nSteps:\n1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet. (layer: Shake Control)\n2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet. (layer: Shake Control)\n3. Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits. (layer: Shake Control)\n4. Play it back and watch the turn.\nClosing: Try them, or want to go deeper on step 3 with *Set the pivot*?\nFollow-up: What about step 2?\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE: Step 2 just points you at how much the rock turns. Shake Control's Rotation expression gives each of the three hits its own amount, rising from a quarter of a degree to three quarters of a degree, and each hit settles at the same speed. When I read it, the biggest turn came to about 0.59° just after 2.5 s, on the last hit.\n\nThe step is still the same: open Shake Control's Rotation expression and look at those per-hit amounts. Changing them is something I don't teach yet.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

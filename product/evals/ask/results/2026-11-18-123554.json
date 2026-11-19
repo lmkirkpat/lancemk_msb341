@@ -1,0 +1,520 @@
+{
+  "run_at": "2026-11-18T19:35:54.966Z",
+  "options": {
+    "only": "02-review-due-question-first",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.53,
+  "refusals": {
+    "answer_calls": 3,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "02-review-due-question-first",
+      "title": "A review is due and the first message is a question: the answer comes first, with no review or lesson ahead of it",
+      "covers": [
+        "TD 17.4",
+        "FR-001",
+        "FR-061"
+      ],
+      "hash": "ed949892e3de6988a9c3090e9ee0920d96b0d293cec28350aeb498c752106066",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind describe"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was describe (wanted answer or describe)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "turn_first_tool@1",
+              "pass": true,
+              "detail": "turn 1's first tool was describe_layers"
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "text:names_ctrl",
+              "pass": true,
+              "detail": "explanation of turn 1: \"CTRL\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ANSWER-FIRST",
+              "pass": true,
+              "reason": "The answer opens directly on the question (\"In Mentor Practice, CTRL is a null that Title rides on as its parent...\") and nowhere mentions, offers or starts the due review or any lesson."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "At 90 words it is one answer about CTRL's effect on Title, with no greeting, recap or praise, and it ends on a single closing question (\"Want to ask how CTRL's slide and Title's own moves work together?\") that names no skills."
+            },
+            {
+              "item": "R-HONEST-KINDS",
+              "pass": true,
+              "reason": "Read facts are stated plainly and each matches the tool result (parent CTRL, two linear Position keys, Title's 4/2/2 keys, Subtitle as a child, no expressions or effects); the inferences are marked with \"so\" (\"so it slides from one spot to another\", \"so its two Position keys are all it adds\"), and nothing unread is claimed."
+            }
+          ],
+          "cost": 0.1744206,
+          "session_id": "b5b8c20f-247e-41d8-bb9e-f463048e2f7b",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: What is CTRL doing to Title?\nTOOL CALL describe_layers {\"layers\":[\"CTRL\",\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"child_layers\":[{\"layer_index\":1,\"layer\":\"Title\"},{\"layer_index\":2,\"layer\":\"Subtitle\"}],\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: describe; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, CTRL is a null that Title rides on as its parent, so CTRL's movement carries Title along:\n- CTRL has two linear Position keys, so it slides from one spot to another, and Title and Subtitle move with it.\n- Title also has its own keys on top of that: four on Position, two on Scale and two on Opacity, all linear.\n- CTRL has no expressions or effects, so its two Position keys are all it adds.\n\nCLOSING OFFER: Want to ask how CTRL's slide and Title's own moves work together?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 90\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind describe"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was describe (wanted answer or describe)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "turn_first_tool@1",
+              "pass": true,
+              "detail": "turn 1's first tool was describe_layers"
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "text:names_ctrl",
+              "pass": true,
+              "detail": "explanation of turn 1: \"CTRL\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ANSWER-FIRST",
+              "pass": true,
+              "reason": "The answer opens directly on what CTRL does to Title (\"CTRL is a null that Title is parented to\"), never mentions the due review, and the closing offer returns to the learner's own question about the slide and Title's keys."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "At 87 words there is no greeting, recap or praise, just what drives Title, three bullets and one closing question (\"Want to change how that slide moves, or ask about Title's own keys?\") that hands the choice back without naming any skill."
+            },
+            {
+              "item": "R-HONEST-KINDS",
+              "pass": true,
+              "reason": "Read facts are stated plainly (two linear Position keys on CTRL, Title's four Position, two Scale and two Opacity keys, Subtitle as a child, CTRL being a null), and inferences are marked (\"so it carries Title\", \"which means it slides Title and Subtitle together\"), with no claim beyond what the describe_layers result returned."
+            }
+          ],
+          "cost": 0.1788904,
+          "session_id": "c1e894bb-cc6b-4e20-91b8-1781c5123016",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: What is CTRL doing to Title?\nTOOL CALL describe_layers {\"layers\":[\"CTRL\",\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"child_layers\":[{\"layer_index\":1,\"layer\":\"Title\"},{\"layer_index\":2,\"layer\":\"Subtitle\"}],\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: describe; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, CTRL is a null that Title is parented to, so it carries Title wherever it goes:\n- CTRL has two linear Position keys, which means it slides Title and Subtitle together, both moving the same way.\n- Title also has its own keys on Position (four), Scale (two) and Opacity (two). These play on top of CTRL's slide.\n- CTRL never shows in the render. You only see it through the layers it moves.\n\nCLOSING OFFER: Want to change how that slide moves, or ask about Title's own keys?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 87\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind describe"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was describe (wanted answer or describe)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "turn_first_tool@1",
+              "pass": true,
+              "detail": "turn 1's first tool was describe_layers"
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "text:names_ctrl",
+              "pass": true,
+              "detail": "explanation of turn 1: \"CTRL\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ANSWER-FIRST",
+              "pass": true,
+              "reason": "The turn opens with the answer to the question (\"In Mentor Practice, CTRL is a null that Title is parented to...\"), and nothing mentions or offers the due review or a lesson."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "At 91 words it gives the source, then three bullets, then one closing sentence that ends on a question and names no skills (\"Want to change how that shared move feels, or ask about Title's own keys?\"), with no greeting, recap or praise."
+            },
+            {
+              "item": "R-HONEST-KINDS",
+              "pass": true,
+              "reason": "Read facts are stated plainly and match the tool result (\"two linear Position keys\", Title's 4/2/2 linear keys, empty expressions and effects); inferences are marked with \"so\" (\"so CTRL moves Title\", \"so it carries Title (and Subtitle) along\"), and nothing unread is claimed."
+            }
+          ],
+          "cost": 0.17570619999999998,
+          "session_id": "63639af3-111f-4a7b-8f38-f63ab0b9e7f0",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: What is CTRL doing to Title?\nTOOL CALL describe_layers {\"layers\":[\"CTRL\",\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"child_layers\":[{\"layer_index\":1,\"layer\":\"Title\"},{\"layer_index\":2,\"layer\":\"Subtitle\"}],\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: describe; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, CTRL is a null that Title is parented to, so CTRL moves Title even though CTRL never shows itself:\n- CTRL has two linear Position keys, so it carries Title (and Subtitle) along in one straight move with no easing.\n- Title also has its own keys on top of that: four on Position, two on Scale and two on Opacity, all linear.\n- No expressions or effects on either layer link them in any other way.\n\nCLOSING OFFER: Want to change how that shared move feels, or ask about Title's own keys?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 91\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

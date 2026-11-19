@@ -6,8 +6,8 @@ makes the motion, says what it read and what it didn't, puts steps in the learne
 and leaves the project alone. It runs the real skill and server in headless Claude Code against saved snapshots,
 so **After Effects doesn't need to be open**. Whether the reads are *correct* is spec 015's unit tests.
 
-Written 2026-11-16 and **dry-run only**: nothing here has been run, and `ask-mentor` (spec 014 T014) and its
-tools `describe_layers` and `give_answer` don't exist yet. T037 is the first run, at the phase 1 merge commit.
+Written 2026-11-16. It has run on B1: the T037 baseline at `91fd9c7` (2026-11-18) passed 18/18 with `--repeat 3`
+(see Results). It hasn't run on A yet (T089).
 
 ## Cases
 
@@ -116,8 +116,8 @@ node --test product/evals/ask/test/                      # the checks, the fixtu
 - **Refusals** (plan > Risks): each run prints `refused n/m` (give_answer calls the tool refused, over all of them) and the
   results file has `refusals: { answer_calls, refused, rate, by_code }`. A guard that fires on more than 1 in 10 good
   answers gets loosened. Per case the results hold `refusals_by_code` for each run, and `refusals.by_case` and `refusals.offer_not_ready` (the A-only OFFER_NOT_READY count) summarize the run. The codes read include the five the build added (ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN, NOT_PLAIN_WORDS). A turn that never gets an accepted answer fails `answer_given` and names the codes.
-- **Cost estimate (B1, full run, not measured):** 21 mentor turns and 18 judge calls, about $6 to $9. Only
-  `--dry-run`, `--only` and `--changed` while working; one full run at the phase 1 merge commit (T037).
+- **Cost (B1, measured at T037):** about $11 for a full `--repeat 3` run, about $3.70 for a single run. Only
+  `--dry-run`, `--only` and `--changed` while working; a full run before a commit that changes the skill or its tools.
 
 ## Fixtures
 
@@ -152,4 +152,13 @@ TD § 16) is a live check. A new capture only needs `build.mjs` re-run; the case
 
 ## Results
 
-None yet.
+### T037, B1 (2026-11-18, at `91fd9c7`)
+
+`node product/evals/ask/run.mjs --repeat 3` (majority pass): **18/18 (100%), $11.04, no hard-rule (FR-061) check failing.**
+Results: `results/2026-11-18-200243.json`. This meets SC-006's B1 half, as the builder accepted.
+
+- **Refusals:** 3 of 60 answer calls (5%, under the 1 in 10 line): STEP_NEEDS_LAYER 2, BAD_CLOSING 1. All three were on case 11, and each passed on retry.
+- **Situations 1, 4, 5 (cases 01 to 05):** 02 to 05 passed 3 of 3. 01 passed 2 of 3: its miss was `step_text_order` and `step_order` (the pivot step came first and the Position step was missing). A re-run at the same commit (`results/2026-11-18-123502.json`) passed 3 of 3, so 01 is 5 of 6, accepted, with the ordering miss on the watch list.
+- **Watch list (one run missed, majority still passed):** 08 R-PARTLY-OUTSIDE (export filed as "Not something I teach yet" instead of outside); 11 R-ONE-IDEA (the closing offer named skills with no step tags); 12 `never_hidden`; 15 `single_key_said`.
+- **Path to the baseline:** first full run 0/18 (plumbing and rubric); second 9/18; 2026-11-17 at `8f5f764` 11/18 single-run (`132826`); at `dd18959` 16/18 repeat-3 (`141138`); then round 5 (fixes (o) to (q): no time worked out from expression text, children named when 5 or fewer, follow-ups at most three sentences), which gave this baseline. Runs flip from one to the next, so the bar is `--repeat 3` with a majority pass.
+- **Follow-ups:** case 18's wrapper still quotes "gone in about 1/3 s": it's past screen text, but it no longer matches the worked answer. Add a case for the `over_1px` read once Comp 1 is re-captured live.

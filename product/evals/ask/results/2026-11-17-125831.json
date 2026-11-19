@@ -1,0 +1,221 @@
+{
+  "run_at": "2026-11-17T19:58:31.472Z",
+  "options": {
+    "only": "05",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.19,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "05-keyed-softer-one-offer",
+      "title": "A question inside one skill on a keyed layer (\"make Subtitle land softer\"): steps plus one offer of the speed graph, and no lesson starts",
+      "covers": [
+        "TD 17.7",
+        "FR-008",
+        "FR-016",
+        "FR-022"
+      ],
+      "hash": "58feb071c639a361417d9cb090257924d377a18ca346e1ac2b10f1d2b5414aa4",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "4 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_starts_with_action@1",
+              "pass": false,
+              "detail": "\"On Subtitle, select the last Position keyframe and\" doesn't start with an action verb (the list is a guess)",
+              "warn": true
+            },
+            {
+              "check": "step_skills_include@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:offer_names_speed_graph",
+              "pass": true,
+              "detail": "offer of turn 1: \"Speed graph\""
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "One answer at 121 words: the source bullets (own Position keys plus the CTRL parent), then the steps, then a single closing sentence naming two skills (*Easing*, *Speed graph*) that are both step tags and ending on a question, with no greeting, recap or praise."
+            },
+            {
+              "item": "R-STEPS-ACTIONABLE",
+              "pass": true,
+              "reason": "Four steps, each starting with an action in After Effects' own words on a named layer or property (\"On Subtitle, select the last Position keyframe and apply Easy Ease In\", \"On CTRL, select its last Position keyframe\", \"Open the Graph Editor on Subtitle's Position\", \"Play it back\"), and none of them is only an explanation."
+            },
+            {
+              "item": "R-OFFER-FITS",
+              "pass": false,
+              "reason": "The case calls for exactly one offer, of the one skill the steps are about, but the closing offer \"go deeper with *Easing* or the *Speed graph*?\" names two skills for one idea."
+            }
+          ],
+          "cost": 0.1859502,
+          "session_id": "07e5e9f2-0d1b-4696-a17c-e156e96c7feb",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Subtitle land softer.\nTOOL CALL describe_layers {\"layers\":[\"Subtitle\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":2,\"layer\":\"Subtitle\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":3,\"key_types\":\"none_held\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"CTRL\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Subtitle moves two ways, assuming \"land\" means where its motion settles:\n- Its own Position has 3 keys, none held, and Opacity has 2.\n- It rides on CTRL, a null with 2 Position keys that moves both of its children.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. On Subtitle, select the last Position keyframe and apply Easy Ease In (Shift+F9) so it slows into its landing.  [tag: Easing; layer: Subtitle]\n2. On CTRL, select its last Position keyframe and apply Easy Ease In too; this also changes CTRL's other child.  [tag: Easing; layer: CTRL]\n3. Open the Graph Editor on Subtitle's Position and drag the last key's influence handle longer for an even gentler settle.  [tag: Speed graph; layer: Subtitle]\n4. Play it back and watch the landing.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper with *Easing* or the *Speed graph*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 121\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

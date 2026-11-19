@@ -183,9 +183,9 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 ## Phase 1 gate
 
-- [ ] T034 (reviewer) Review the skill-builder branch against FR-001 to FR-021, FR-057 (FR-047 withdrawn) and Edge Cases
+- [x] T034 (reviewer) Review the skill-builder branch against FR-001 to FR-021, FR-057 (FR-047 withdrawn) and Edge Cases
   A1 to A13, and the contracts.
-- [ ] T035 (design-reviewer) Review the panel-builder branch against MU's phase 1 states, Copy and
+- [x] T035 (design-reviewer) Review the panel-builder branch against MU's phase 1 states, Copy and
   Accessibility, FR-046, FR-048 to FR-050, FR-053, FR-054.
 - [x] T101 (panel-builder; before T036) **Remove the dead comp-active code** (FR-047 withdrawn 2026-11-16,
   research R10): the `comp_active` reading in `panel/lib/connection.js` and `noComp`, the `home-nocomp` state
@@ -196,7 +196,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 *Added 2026-11-16 (spec amendment (e)); cockpit numbers; being built now, before T036:*
 
-- [ ] T102 (panel-builder) **The first send after a lesson** (FR-052's note (e), contracts/panel-ask.md ›
+- [x] T102 (panel-builder) **The first send after a lesson** (FR-052's note (e), contracts/panel-ask.md ›
   Requests, Context after a lesson, Home): (1) the first follow-up or Try again into the thread after any
   lesson gets the `/ask-mentor ` prefix; (2) it carries the wrapper exactly as the contract gives it, built from
   the saved thread's latest valid AskView (AskView keeps each step's `layer`, data-model § 7), the prefix and
@@ -207,7 +207,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 - [x] T103 [P] (skill-builder) Add one line to `.claude/skills/ask-mentor/SKILL.md`: "If the message carries an
   earlier question and answer, treat the learner's text as a follow-up to it, and read the comp again before
   answering." Matches the wrapper's first line in contracts/panel-ask.md.
-- [ ] T104 [P] (eval-engineer) Ask case 18: a follow-up sent in the wrapper after a lesson changed the comp.
+- [x] T104 [P] (eval-engineer) Ask case 18: a follow-up sent in the wrapper after a lesson changed the comp.
   Checks: a fresh read before `give_answer`; the answer follows from the earlier question and from the comp as
   read now, not as the context described it. The request uses the wrapper from `REQUESTS`. Dry run validates.
   *Corrected 2026-11-16 (f), from the T037 triage:* "before `give_answer`" conflicted with FR-028 and TD § 6
@@ -217,7 +217,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   `give_answer` (amendment (d)); that is not case 18.
 - [x] T036 (cockpit) Merge both with `/merge-worktree` (skill-builder's shared owner named), between live
   sittings.
-- [ ] T037 (eval-engineer) The ask set on B1 at the merge commit: at least 80% and every hard check passing;
+- [x] T037 (eval-engineer) The ask set on B1 at the merge commit: at least 80% and every hard check passing;
   situations 1, 4 and 5 at 3 of 3 (SC-006's B1 half). Triage with `/eval-triage`; log in the set's README with
   the refusal counts (plan › Risks).
 - [ ] T038 (skill-builder reads, AE, **builder's hands**) Live B1 smoke in the panel (quickstart › Phase 1

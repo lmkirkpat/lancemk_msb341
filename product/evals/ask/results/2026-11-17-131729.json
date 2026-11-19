@@ -1,0 +1,198 @@
+{
+  "run_at": "2026-11-17T20:17:29.470Z",
+  "options": {
+    "only": "09",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.29,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "09-ambiguous-layer",
+      "title": "\"The rock\" names two layers whose first steps differ: one clarifying question naming both, then an answer that states its assumption",
+      "covers": [
+        "TD 17.12",
+        "FR-014",
+        "A13"
+      ],
+      "hash": "c016c7495feb2cc5b722813e40b7a21c37efb646312b49284e7901a1003e6bf5",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": false,
+              "detail": "kind was answer (wanted clarify)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "max_sentences:explanation@1",
+              "pass": false,
+              "detail": "4 sentences in the explanation (at most 1)"
+            },
+            {
+              "check": "answer_given@2",
+              "pass": false,
+              "detail": "no accepted give_answer call in turn 2"
+            },
+            {
+              "check": "text:names_first_rock",
+              "pass": true,
+              "detail": "explanation of turn 1: \"rock.png\""
+            },
+            {
+              "check": "text:names_second_rock",
+              "pass": false,
+              "detail": "explanation of turn 1: never matched /Rock Shadow/"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.2927046,
+          "session_id": "d779215b-3d58-45fc-a9b3-465a8f359f9e",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the rock feel heavier.\nTOOL CALL describe_layers {\"layers\":[\"rock\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"asked\":\"rock\",\"error\":\"NAME_PARTIAL\",\"candidates\":[{\"layer_index\":22,\"layer\":\"Rock Shadow.png\",\"parent\":null},{\"layer_index\":28,\"layer\":\"rock.png\",\"parent\":\"Shake Control\"}]}]}\nTOOL CALL describe_layers {\"layers\":[28,22,\"Shake Control\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":28,\"layer\":\"rock.png\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"shifts\":[{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Position\",\"shift_px\":12.15,\"at\":1.502,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"},{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Rotation\",\"shift_px\":9.36,\"at\":2.569,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":22,\"layer\":\"Rock Shadow.png\",\"kind\":\"footage\",\"class\":\"hidden\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, rock.png rides on Shake Control, a null moved by expressions (I'm assuming you mean rock.png, not the hidden shadow):\n- Position moves the rock about 12 px at most, peaking around 1.5 s.\n- Rotation moves it about 9 px at most, peaking around 2.6 s.\n- Every hit uses the same size and settle speed in Position.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Open Shake Control's Position expression and look at its shake speed and settle: 8 shakes per second, with every hit using the middle hit's size and settle. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n2. Open Shake Control's Rotation expression and look at its speed and amounts: 10 shakes per second, up to 0.75°. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n3. Play it back and watch how quickly each hit settles.  [no tag]\n\nCLOSING OFFER: Want to try these, or ask about one of the steps?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 135\n\n### Turn 2: the open comp is readable\nLEARNER: The rock.png one.\nMENTOR PROSE: Good, the steps above are already about rock.png: it moves only because it rides on Shake Control, so that's where the steps go. Start by opening Shake Control's Position expression and looking at how fast it shakes and how quickly it settles.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

@@ -1,0 +1,219 @@
+{
+  "run_at": "2026-11-17T19:58:13.433Z",
+  "options": {
+    "only": "03",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.29,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "03-natural-expression-only",
+      "title": "\"Make the shake natural\" on motion that is all expressions: the source is named and no keyframe skill is proposed",
+      "covers": [
+        "TD 17.5",
+        "FR-022",
+        "A2"
+      ],
+      "hash": "42182a4f0c9ffdacff500d9b4a9109cf69761e5682ca9da3db26627632ac3994",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "3 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_keyframe_skills@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "step_on_layer@1",
+              "pass": true,
+              "detail": "no step on Shake Control (steps are on Shake Control, (none))"
+            },
+            {
+              "check": "text:names_source",
+              "pass": true,
+              "detail": "explanation of turn 1: \"Shake Control\""
+            },
+            {
+              "check": "text:names_expressions",
+              "pass": true,
+              "detail": "explanation of turn 1: \"expression\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The answer runs straight from the source ('rock.png has no keys of its own; it rides on Shake Control…') to three steps and one closing question ('Try those, or want to ask about one of them?'), with no greeting, recap or second question, and stays at 133 words, short of 'well past 150'."
+            },
+            {
+              "item": "R-NAMES-SOURCE",
+              "pass": true,
+              "reason": "It names both layers and the source ('rock.png has no keys of its own; it rides on Shake Control, a null moved by two expressions') and puts steps 1–2 on Shake Control, the layer that makes the motion, not on rock.png."
+            },
+            {
+              "item": "R-EXPRESSION-ONLY",
+              "pass": true,
+              "reason": "It says Shake Control's Position and Rotation are driven by expressions, its steps open those expressions tagged 'not taught yet', and nothing offers Easing, Key types, Speed graph or Offset or calls the rock still for having no keys."
+            }
+          ],
+          "cost": 0.2911782,
+          "session_id": "757d3343-90b3-4f1e-9eb0-aa3c74f7bdea",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the rock's shake feel more natural.\nTOOL CALL describe_layers {\"layers\":[\"rock\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"asked\":\"rock\",\"error\":\"NOT_FOUND\"}]}\nTOOL CALL describe_layers {}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":{\"status\":\"not_read\",\"reason\":\"not_asked\"},\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"DISCOVER the past to INSPIRE the future\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\"}],\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":2,\"layer\":\"O2 Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":3,\"layer\":\"O2 Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":4,\"layer\":\"Y Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":5,\"layer\":\"Y Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":6,\"layer\":\"G Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":7,\"layer\":\"G Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":8,\"layer\":\"O Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":9,\"layer\":\"O Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":10,\"layer\":\"L Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":11,\"layer\":\"L Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":12,\"layer\":\"E Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":13,\"layer\":\"E Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":14,\"layer\":\"G Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":15,\"layer\":\"G Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":16,\"layer\":\"U Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":17,\"layer\":\"U Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":18,\"layer\":\"Y Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":19,\"layer\":\"Y Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":20,\"layer\":\"B Shakers\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":21,\"layer\":\"B Fragments\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":22,\"layer\":\"outline.png\",\"kind\":\"footage\",\"class\":\"hidden\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":23,\"layer\":\"Black Solid 1\",\"kind\":\"solid\",\"class\":\"hidden\",\"parents\":[],\"children\":0,\"effects\":[\"CC Light Sweep\"],\"expressions\":[{\"property\":\"Center\",\"group\":\"effect\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"status\":\"not_read\",\"reason\":\"not_transform\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":1,\"precomp\":\"not_a_precomp\"},{\"layer_index\":24,\"layer\":\"logo.png\",\"kind\":\"footage\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"parents\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":26,\"layer\":\"Sweep Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":1,\"first\":[{\"from_layer\":\"Black Solid 1\",\"from_property\":\"Effects › CC Light Sweep › Center\",\"property\":\"Position\",\"inferred\":true,\"target_renders\":false}],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":27,\"layer\":\"General Logo Animation Graphics.png\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Rotation\",\"keys\":6,\"key_types\":\"none_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":28,\"layer\":\"rock.png\",\"kind\":\"footage\",\"class\":\"renders\",\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false},{\"property\":\"Rotation\",\"error\":false}]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":29,\"layer\":\"White Solid 1\",\"kind\":\"solid\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"rock.png\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":28,\"layer\":\"rock.png\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}},{\"property\":\"Rotation\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}]}],\"shifts\":[{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Position\",\"shift_px\":12.15,\"at\":1.502,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"},{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Rotation\",\"shift_px\":9.36,\"at\":2.569,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\"}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, rock.png has no keys of its own; it rides on Shake Control, a null moved by two expressions:\n- Position moves the rock about 12 px at most, and all three hits are the same size and settle at the same speed.\n- Rotation moves the rock about 9 px at most, growing with each hit.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Open Shake Control's Position expression and look at how it picks each hit's size and settle speed: it uses the second hit's values for all three hits. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n2. Open Shake Control's Rotation expression and look at its amounts: up to 0.75° per hit, all settling at one speed. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n3. Play it back and watch how each hit settles.  [no tag]\n\nCLOSING OFFER: Try those, or want to ask about one of them?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 133\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

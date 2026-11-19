@@ -59,3 +59,42 @@ written back at `mentor/lib/learner-store.mjs:126-129`), and its entry's kind is
 hand-edited record) logs `first`, not `practice`; the schedule is still kept.
 
 **What it changes:** nothing; the § 11 rule (asking again is normal, not a review) holds in today's code.
+
+## Phase 1 (2026-11-16 to 2026-11-18)
+
+### T037: the ask set on B1 (SC-006's B1 half)
+
+**Answer:** met on 2026-11-18 at `91fd9c7`. With `--repeat 3` and majority pass, 18/18 (100%) for $11.04,
+and no FR-061 hard-rule check failed. Refusals were 3 of 60 answer calls (5%), all on case 11, and each passed
+on retry. Situations 4 and 5 (cases 02 to 05) passed 3 of 3. Situation 1 (case 01) passed 2 of 3 in the full
+run, missing on step order (the pivot step came first and the Position step was missing), and 3 of 3 in a
+re-run at the same commit. That's 5 of 6, which the builder accepted with the ordering on the watch list.
+Details are in `product/evals/ask/README.md` › Results.
+
+**How it got there:** the full runs went 0/18, 9/18, 11/18 (`8f5f764`), 16/18 (`dd18959`, repeat 3), then
+18/18. Each round fixed causes in this order: plumbing, then the fixtures, then the tool, then `SKILL.md`.
+- Ask fixes (a) to (n): a loose-name match (NAME_PARTIAL), Ease in own keys, `from_renders` on links,
+  clarify replies that say what was taken, and pivots never read.
+- Round 5 (o) to (q):
+  - No time worked out from an expression's text. A read for each shift's span over 1 px was added, which
+    waits on a fresh Comp 1 capture.
+  - The children are named when there are 5 or fewer.
+  - Follow-ups are at most three sentences.
+- In the eval set:
+  - The two-rocks fixture's second rock is now Small Rock.png, since "Rock Shadow" read as the rock's
+    shadow.
+  - R-OUTSIDE follows FR-018.
+
+**What it changes:**
+- Single runs flip, so the ask set's bar is now repeat 3 with majority pass.
+- A prompt line asking the model to mark a number as inferred didn't hold while the worked answer modeled
+  that number. Making the number a read, or taking it out of the example, did.
+- Watch list: 01's step order, 08 (export filed as not taught), 11 (an offer with no step tags), 12
+  `never_hidden`, 15 `single_key_said`.
+- Follow-ups:
+  - The curriculum designer rewords TD § 5.1a and § 16 (a time no read gives), § 16's "The turn centers
+    on the rock…", and line 210's "Rock Shadow".
+  - At T040 the spec-writer checks round 4's and round 5's edits to spec 015's contract and data model
+    (the skill-builder made them, on the builder's approval), rewords FR-011 and US2's "target", and
+    closes 014's OQ-8.
+  - Re-capture Comp 1 live so `over_1px` reaches the fixtures.

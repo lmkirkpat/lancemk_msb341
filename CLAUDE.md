@@ -261,8 +261,13 @@ a brand new session act like a colleague who already knows what you are working 
     `product/evals/ask/results/` are uncommitted. T034, T035, T102 and T104 are done but not ticked in
     `tasks.md`.
   - **Next (sprint ends 2026-11-24; phase 2, Go deeper, is on the sessions' critical path):**
-    1. Finish T037: re-run 01, 03, 05, 08, 09, 13 and 18 on triage 2, fix, then one full B1 run (≥ 80%,
-       every hard check). Commit the results, then T039.
+    1. **T037 met 2026-11-18** at `91fd9c7`: 18/18 with `--repeat 3` (majority pass; single runs flip, so
+       this is the bar), $11.04, no hard-rule failure, refusals 3 of 60. Case 01 was 5 of 6 (an ordering
+       miss, accepted and on the watch list). Logged in `ask-build.md` › Phase 1 and the set's README. T039
+       finishes after T038. Follow-ups:
+       - Curriculum designer: TD § 5.1a, § 16 and line 210.
+       - Spec-writer at T040: round 4 and round 5's spec 015 edits, FR-011 and US2's "target", OQ-8.
+       - A live Comp 1 recapture, so `over_1px` reaches the fixtures.
     2. T038, the live smoke test (builder), with the panel-builder's checks: keyboard focus on Your steps; a
        close while reading shows "Your question's still here."; a lesson keeps the thread; a new question in
        the follow-up bar folds the earlier one; Pick up names the comp; a follow-up after a lesson picks up
