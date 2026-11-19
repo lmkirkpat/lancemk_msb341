@@ -1,0 +1,65 @@
+{
+  "id": "20-asked-again-about-a-learned-skill",
+  "title": "Situation 18: Set the pivot is learned and the learner asks a question that sits inside it on a new comp. Answered as helpfully as a first question; where offers exist the pivot is offered as practice. Never a review, a quiz, or a line that makes them feel they should remember",
+  "covers": [
+    "TD 17.18",
+    "FR-023",
+    "H-5",
+    "SC-010",
+    "T058"
+  ],
+  "learner_record": "product/evals/ask/records/pivot-learned.json",
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ],
+        "no_keyframe_skills": true,
+        "step_skills_include": [
+          "transform.anchor"
+        ],
+        "offered_equals": [
+          "transform.anchor"
+        ],
+        "skill_step_on_layer": [
+          {
+            "skill": "transform.anchor",
+            "layer": "Shake Control"
+          }
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "no_review_words",
+        "never": "\\breview|\\bquiz|refresher|\\bdue\\b|\\btest\\b",
+        "in": "all"
+      },
+      {
+        "id": "never_makes_them_feel_forgetful",
+        "never": "you already|you['’]ve (?:already )?(?:learned|done|covered)|you (?:learned|know) (?:this|that|how)|remember (?:when|how|that)|as we (?:covered|discussed)|last time|we (?:covered|did)|as you (?:know|learned)|forgot",
+        "in": "all"
+      },
+      {
+        "id": "offer_not_a_first_lesson",
+        "never": "\\bfirst lesson\\b|\\bnew lesson\\b|\\blearn (?:it|this)\\b",
+        "in": "offer"
+      }
+    ]
+  },
+  "rubric": [
+    "R-ONE-IDEA",
+    "R-ASKED-AGAIN"
+  ],
+  "note": "Spec 014 T058, situation 18 (answer half; runs on B1 and A, where offered_equals counts on A only). The lesson half (a go-deeper on a learned skill is practice: no review words, a miss says what's off with no fail words) is anchor case 60, whose record has Set the pivot learned. The record's pivot review isn't due, so the answer-first rule (case 02) isn't what's under test. The sentence about the earlier lesson is allowed only as a bridge that credits the learner (TD 11), which this case doesn't require."
+}

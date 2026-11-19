@@ -32,6 +32,7 @@ import { blankFrame } from "../lib/blank-frame.mjs"; // flat 1920 x 1080 preview
 import { parseJudgeReply } from "../lib/judge-reply.mjs"; // lenient judge reply (fences, stray text); unreadable = plumbing
 import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
 import { turnChecks, turnProblems, TURN_KEYS } from "../lib/turn-checks.mjs"; // last_turn_* and say_max_sentences (spec 007)
+import { handInProblems, seedHandIn } from "../lib/hand-in.mjs"; // a case's seeded hand-in (spec 014 T058)
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
 // with no builder CLAUDE.md or auto-memory in context (agent audit 2026-10-12, lesson 4.5).
@@ -142,6 +143,7 @@ function validate(c) {
   }
   for (const n of Object.keys(c.fixture_sources || {})) if (!fixtureNames(c).includes(n)) problems.push(`fixture_sources names ${n}, which no turn uses`);
   if (c.learner_record && !fs.existsSync(recordFile(c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
+  problems.push(...handInProblems(c.hand_in));
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = [...TURN_KEYS, "first_tool", "tools_called", "tools_not_called", "snapshot_with", "snapshot_focus_excludes", "no_focus_set", "demo_calls_min", "demo_calls_max", "demo_only_on",
@@ -596,6 +598,7 @@ async function runCase(c, opts) {
   fs.mkdirSync(snaps);
   fs.writeFileSync(path.join(snaps, "frame.png"), blankFrame());
   if (c.learner_record) fs.copyFileSync(recordFile(c.learner_record), path.join(home, "learner.json"));
+  if (c.hand_in) seedHandIn(home, c.hand_in); // what go_deeper leaves on A; B1 refuses it (T058)
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
   const mentor = opts.runtime === "a" ? ab.openCase({ repo: REPO, home, env, opts }) : null;
   const runtime = mentor ? null : ensureRuntime(REPO, path.join(home, "runtime"));

@@ -1,0 +1,119 @@
+{
+  "id": "19-go-deeper-hands-over-and-back",
+  "title": "A only, situation 16: the learner says yes to going deeper on the pivot step. The mentor hands over (go_deeper, then the hand-over, nothing said), the pivot lesson opens on Shake Control with no intent question and no proposal, and after the pass its last line hands back to the answer's next step",
+  "covers": [
+    "TD 17.16",
+    "FR-022",
+    "FR-025",
+    "FR-026",
+    "FR-027",
+    "SC-013",
+    "T058"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "lesson_skill": "anchor-mentor",
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "Yes, go deeper on Set the pivot.",
+      "yes": true
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "OK, both are showing.",
+      "followup": true
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1-shake-pivot-panned.json",
+      "say": "I used Pan Behind on it. Done.",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ],
+        "no_keyframe_skills": true,
+        "step_skills_include": [
+          "transform.anchor"
+        ],
+        "skill_step_on_layer": [
+          {
+            "skill": "transform.anchor",
+            "layer": "Shake Control"
+          }
+        ]
+      }
+    ],
+    "handover": [
+      {
+        "turn": 2,
+        "skill": "anchor-mentor",
+        "snapshot": "anchor_snapshot",
+        "mode_source": "hand_in",
+        "go_deeper": {
+          "skill": "transform.anchor"
+        }
+      }
+    ],
+    "no_answer_turns": [
+      2,
+      3,
+      4
+    ],
+    "tools_called": [
+      "anchor_check",
+      "record_lesson"
+    ],
+    "tools_not_called": [
+      "anchor_demo"
+    ],
+    "text": [
+      {
+        "id": "opens_on_shake_control",
+        "must": "Shake Control",
+        "in": "prose",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_intent_question",
+        "never": "which layer|turn or grow|nothing comes to mind|want to try that one",
+        "in": "prose",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_review",
+        "never": "\\breview",
+        "in": "all"
+      },
+      {
+        "id": "hand_back_line",
+        "must": "That was step \\d+; next is \\S|That was the last step",
+        "in": "prose",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-OVER-OPENS",
+    "R-HAND-BACK"
+  ],
+  "note": "Spec 014 T058, situation 16, A only (go_deeper refuses on B1, FR-017; the lesson sets' cases 60 to 62 and 56 to 57 cover the lesson side on B1 with a seeded hand-in). Turn 2 is the panel's own Go deeper request, with no /ask-mentor prefix. Turn 1 pins what the hand-over needs: a step tagged Set the pivot on Shake Control; if the answer puts it elsewhere the case fails there, and the later turns say why they didn't run as intended. Turn 4's fixture has Pan Behind planted on Shake Control with nothing else moved, so the check passes. Run with --repeat 3 at ship step T089/T090."
+}

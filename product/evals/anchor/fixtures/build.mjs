@@ -165,3 +165,45 @@ console.log("wrote fixtures/synthetic/*, records/*.json");
   r.synthetic = "Case 56 (spec 015 T035): live 015 Rig with the playhead at 0.6 s.";
   write("rig-playhead-0.6.json", r);
 }
+
+// Cases 60 to 62 (spec 014 T058): spec 015's live Comp 1 capture with a Pan Behind planted, the way
+// mentor/test/anchor-hand-in.test.mjs plants it: Anchor Point moves by d in the layer's own space, and
+// Position (and its value before the expression, where read) by L*d, L the layer's own rotation and scale
+// at each sample, so nothing moves on screen. STAND-IN: re-derive from a live capture after a real Pan Behind.
+{
+  const { layerMatrix } = await import("../../../../mentor/lib/comp-space.mjs");
+  const base = JSON.parse(fs.readFileSync(path.resolve(HERE, "../../../../mentor/test/fixtures/expressions/comp1.json"), "utf8"));
+  const clone = (x) => structuredClone(x);
+  const layer = (snap, name) => snap.layer_info.find((l) => l.name === name);
+  const panBehind = (snap, name, d) => {
+    const out = clone(snap);
+    for (const smp of layer(out, name).samples) {
+      const move = (vals, pos) => {
+        const [a, b, c, dd] = layerMatrix({ anchor: [0, 0], position: [0, 0], scale: vals.scale, rotation: vals.rotation });
+        pos[0] += a * d[0] + c * d[1];
+        pos[1] += b * d[0] + dd * d[1];
+      };
+      const b = smp.base ? { scale: smp.base.scale || smp.scale, rotation: smp.base.rotation ?? smp.rotation } : null;
+      move(b || smp, smp.position);
+      if (smp.base && smp.base.position) move(b, smp.base.position);
+      smp.anchor[0] += d[0];
+      smp.anchor[1] += d[1];
+    }
+    return out;
+  };
+  const moveLayer = (snap, name, dx) => {
+    const out = clone(snap);
+    for (const smp of layer(out, name).samples) smp.position[0] += dx;
+    return out;
+  };
+  const note = (s) => `${s} Built by fixtures/build.mjs from the live Comp 1 capture; the pivot moves with Position compensating, so nothing moves on screen.`;
+  const shake = panBehind(base, "Shake Control", [320, -40]);
+  shake.synthetic = note("Case 60 (spec 014 T058): Pan Behind on Shake Control by 320, -40.");
+  write("comp1-shake-pivot-panned.json", shake);
+  const moved = moveLayer(shake, "rock.png", 30);
+  moved.synthetic = note("Case 60: the same Pan Behind on Shake Control, then rock.png dragged 30 px right (a child that moved).");
+  write("comp1-shake-pivot-panned-rock-moved.json", moved);
+  const rock = panBehind(base, "rock.png", [500, 250]);
+  rock.synthetic = note("Case 61 (AB held 3): Pan Behind on rock.png by 500, 250, onto the art well off the layer's box.");
+  write("comp1-rock-pivot-panned.json", rock);
+}

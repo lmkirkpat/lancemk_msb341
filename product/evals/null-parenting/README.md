@@ -668,3 +668,16 @@ Fixtures `eval-synthetic/jump-expr-base.json`, `jump-expr-null.json`, `jump-expr
 ## Spec 015 T036 re-baseline (2026-11-16, B1, at `edc0a1e`)
 
 **First run `-154257` was void: 0/55, $0.00.** The 5-hour usage limit was already hit. Plumbing. **Re-run after the reset: `results/2026-11-16-185236.json`, 50/55 (91%), $40.99.** SC-006 met; the one failed deterministic check, 05 `say:no_jump_claim`, was noise (3/3 on repeat, `-192439`, $2.96); every universal check passed. Last B1 baseline 45/52. T035 and T059 cases 53, 54 and 55 passed. Misses and repeats (3 each): 05 3/3 and 17 3/3 (R-REVIEW-HINT) and 35 3/3 (R-USES-MEMORY), all noise. 30 first failed on `ETIMEDOUT` (plumbing), then 2/3 on repeat (`-192619`; the miss was R-NAMES-REAL, 'two keys on its Rotation'). 52 also first failed on `ETIMEDOUT`, then 2/3 (`-192836`; R-ONE-IDEA, a second explanatory sentence). 30 and 52 are minor, majority passes, so noise; no prompt change proposed.
+
+## Spec 014 phase 2 cases (T058 and T108, written 2026-11-19, dry-run only, B1)
+
+Cases 56 to 58. Nothing here has run. The first run is spec 014 T059. A case may carry a `hand_in`, seeded into `session.json` as `go_deeper` would leave it (`product/evals/lib/hand-in.mjs`; B1 can't run `go_deeper`), and its lesson reads it from the snapshot's `hand_in`.
+
+| Case | Situation | Hard check | Rubric |
+|---|---|---|---|
+| 56 hand-in-group-follows-an-expression-parent | Rule 1: the step's layer, rock.png, already follows Shake Control on the live Comp 1 | `mode_source` hand_in and `focus_set` false; names Shake Control and the pivot; never "add a null" | R-NULL-TRACE-FIRST |
+| 57 hand-in-existing-control-null-routes-to-the-pivot | Routing: the step's layer is Shake Control itself, a null with children | same fields; names the pivot; never "add a null" | R-NULL-ROUTES-TO-PIVOT |
+| 58 end-lesson-in-words | T108: "end lesson" straight after the opening | `end_lesson` called in the last turn; no `record_lesson`, demo or check; at most two sentences; no question | R-STOP-WITH-NOTHING-TO-SAVE |
+
+- **57 is the second guard.** On A, `go_deeper` refuses a null with children (`ROUTE_TO_PIVOT`) before it saves a hand-in, so the ask mentor names *Set the pivot* itself. The case runs the skill's own line, which is what a stale or hand-built hand-in would reach.
+- **The skill's routing sentence sits under "From an answer"**, so the case seeds a hand-in. Whether the line also holds without one is not tested.

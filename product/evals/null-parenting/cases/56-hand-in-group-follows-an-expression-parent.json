@@ -1,0 +1,82 @@
+{
+  "id": "56-hand-in-group-follows-an-expression-parent",
+  "title": "From an answer, a group whose motion comes from a parent above it: rock.png already follows Shake Control, a null an expression moves. The lesson says in a sentence that the parent already moves it, that where it turns is Set the pivot on Shake Control, and teaches no second null",
+  "covers": [
+    "spec014-rule-1",
+    "FR-026",
+    "T050",
+    "T058"
+  ],
+  "hand_in": {
+    "skill": "parenting.null",
+    "layer": "rock.png",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Parent rock.png and the letters to one null placed where they turn, so they move as one.",
+        "skill": "parenting.null",
+        "layer": "rock.png"
+      },
+      {
+        "text": "Play it back.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "expressions/comp1.json": "live"
+  },
+  "turns": [
+    {
+      "project": "expressions/comp1.json",
+      "say": "/null-parenting-mentor"
+    }
+  ],
+  "expect": {
+    "first_snapshot_reply": {
+      "mode": "lesson",
+      "mode_source": "hand_in",
+      "focus_set": false
+    },
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "names_the_parent",
+        "must": "Shake Control",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "routes_to_the_pivot",
+        "must": "\\bpivot\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_second_null",
+        "never": "\\b(?:add|make|create|insert) (?:a|another|a new) null\\b|\\b(?:second|another) null\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-TRACE-FIRST",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 014 T058 (rule 1 for Group with a null; T050's 'Trace first'). B1 can't run go_deeper, so the run seeds the hand-in it would leave (product/evals/lib/hand-in.mjs). On the live Comp 1, 13 layers ride on Shake Control, so the group the step names is already parented: the snapshot refuses it with the parent's name (focus_set false). The mentor reads that, not an earlier answer, since a B1 run has no conversation before the lesson. The ask mentor should seldom produce this step; the case is the guard if it does."
+}

@@ -1,0 +1,114 @@
+{
+  "id": "61-hand-in-padded-png-own-place",
+  "title": "From an answer, a padded PNG: rock.png's art doesn't fill its box and the learner names a spot on the art. The lesson says once what it can check and that the spot is theirs, never asks them to put the pivot anywhere else, and passes on the layer not moving, wherever the pivot went",
+  "covers": [
+    "spec014-rule-2",
+    "AB-3",
+    "FR-024",
+    "FR-026",
+    "T058"
+  ],
+  "hand_in": {
+    "skill": "transform.anchor",
+    "layer": "rock.png",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select rock.png and Pan Behind its pivot to the tip of the rock, where the hammer hits.",
+        "skill": "transform.anchor",
+        "layer": "rock.png"
+      },
+      {
+        "text": "Play it back and watch the turn.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": true
+  },
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "comp1.json": "live",
+    "synthetic/comp1-rock-pivot-panned.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "comp1.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "comp1.json",
+      "say": "It should turn from the tip of the rock, where the hammer hits. Both are showing."
+    },
+    {
+      "project": "synthetic/comp1-rock-pivot-panned.json",
+      "say": "I used Pan Behind. Done."
+    }
+  ],
+  "expect": {
+    "first_snapshot_reply": {
+      "mode": "lesson",
+      "mode_source": "hand_in",
+      "places": {
+        "rock.png": "your_call"
+      }
+    },
+    "demo_calls_max": 0,
+    "tools_called": [
+      "anchor_check"
+    ],
+    "last_check": {
+      "passed": true,
+      "lacks": [
+        "not_moved_enough",
+        "neighbour_place"
+      ]
+    },
+    "say": [
+      {
+        "id": "says_what_it_can_check",
+        "must": "can check",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "place_is_theirs",
+        "must": "\\byours\\b|\\byour call\\b|\\bup to you\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "never_asks_to_move_it_elsewhere",
+        "never": "\\bnudge\\b|put (?:it|the pivot) back|move (?:it|the pivot) (?:back|to)|try (?:putting|placing|moving) (?:it|the pivot)|\\binstead\\b[^.?!]*\\b(?:corner|edge|middle|center)\\b",
+        "turns": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": "never_grades_the_place",
+        "never": "right (?:place|spot)|correct (?:place|spot|position)|in the right|exactly (?:on|where)|\\bnailed\\b",
+        "turns": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": "no_undo",
+        "never": "\\bundo\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-HAND-IN-OPENS",
+    "R-AN-OWN-PLACE",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 014 T058 (AB held 3: the padded rock.png and a spot named on the art, rule 2 / K1). Seeded hand-in (place_named true); fixtures as in case 60. Turn 3's fixture has rock.png's pivot 500 and 250 px off in its own space with Position compensating, so it didn't move: the check passes whatever the spot (the unit test passes it for three different spots). The case is about what the mentor says and never says."
+}

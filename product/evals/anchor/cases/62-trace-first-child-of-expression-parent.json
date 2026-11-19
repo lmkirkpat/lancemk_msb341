@@ -1,0 +1,77 @@
+{
+  "id": "62-trace-first-child-of-expression-parent",
+  "title": "rock.png rides on Shake Control, a null an expression moves, and the learner says the shake is what they want to turn from a point: the explanation says the parent moves it, that where it turns is set on the parent, and that Shake Control is a null whose pivot this lesson can't check yet. It never teaches rock.png's pivot as the fix, and says nothing is undone",
+  "covers": [
+    "spec014-rule-1",
+    "AB-2",
+    "T049",
+    "T058"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "rig.json": "live"
+  },
+  "turns": [
+    {
+      "project": "rig.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "rig.json",
+      "say": "rock.png should turn from its top-right corner. It's the shake I'm after, the way it turns when the hammer hits."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "tools_not_called": [
+      "anchor_check",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "parent_moves_it",
+        "must": "rock\\.png rides on Shake Control, which an expression moves",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "set_on_the_parent",
+        "must": "where it turns[^.?!]*(?:Shake Control|parent)|(?:Shake Control|parent)[^.?!]*where it turns",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "null_cant_check_yet",
+        "must": "null[^.?!]*can['’]t check its pivot in this lesson yet",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_undo",
+        "never": "\\bundo\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_trace_the_parent",
+        "never": "open (?:its|the) expression|look at (?:its|the) expression",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-TRACE-FIRST",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ],
+  "note": "Spec 014 T058 (rule 1 on a child of an expression-driven parent; TD 10.1 rule 1, the pivot's 'Trace first' line). Case 57 pins the parent note when the learner doesn't say the shake is the parent's; this case is the same rig with the learner saying it, so the note gains the trace sentence. No hand-in: the line lives in the parent note of step 2, for any lesson on a child. The null sentence is the skill's own; if the model words it differently the judge item R-AN-TRACE-FIRST still decides."
+}

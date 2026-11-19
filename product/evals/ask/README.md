@@ -11,7 +11,7 @@ Written 2026-11-16. It has run on B1: the T037 baseline at `91fd9c7` (2026-11-18
 
 ## Cases
 
-18 cases. All run on B1 and A (no case sets `runtimes`); the A-only expectations are individual checks.
+20 cases. All but 19 run on B1 and A; the A-only expectations in the others are individual checks. Case 19 is `runtimes: ["a"]` (go_deeper refuses on B1, FR-017).
 
 | Case | TD § 17 situation, or row | What it covers | Fixture |
 |---|---|---|---|
@@ -33,6 +33,8 @@ Written 2026-11-16. It has run on B1: the T037 baseline at `91fd9c7` (2026-11-18
 | 16-locked-layer-in-the-step | EE-4 row 4 (A12) | A locked layer: the unlock is in the step it blocks (locked stands for "locked or Collapse") | `practice-title-locked.json` |
 | 17-howto-no-target | FR-019 (PQ-4) | A how-to with no comp target: two sentences, no steps, one offer of the lesson | `practice.json` |
 | 18-followup-after-lesson | T104, amendment (e), FR-028 | The first follow-up after a lesson, sent in the full context wrapper (contracts/panel-ask.md): a read first, then a short prose answer (no `give_answer`, FR-028) that follows from the earlier answer (TD § 16's, "What about step 2?"), no wrapper label in what the learner reads | `comp1.json` |
+| 19-go-deeper-hands-over-and-back | 16 (A only) | A yes to going deeper on the pivot step: `go_deeper`, the hand-over, the lesson opens on Shake Control with no intent question or proposal, and after the pass the last line hands back to the answer's next step | `comp1.json`, `comp1-shake-pivot-panned.json` |
+| 20-asked-again-about-a-learned-skill | 18 | Set the pivot is learned: the same question gets a full answer, the pivot offered as practice on A, never a review or a line that makes the learner feel forgetful (H-5) | `comp1.json` + `records/pivot-learned.json` |
 
 Not in this set (they need later phases): situations 2, 3, 8, 16, 17, 18 and 19 of § 17 (turn 4's fresh read,
 the padded PNG, "just the steps", the hand-in, the record entry, a learned skill as practice, a change on the
@@ -63,9 +65,11 @@ On the words the learner reads (explanation, step lines, closing offer, and any 
 On the tools:
 
 - **read_before_answer**: on an answer, describe or clarify turn, `describe_layers` was called before `give_answer` (FR-001; the tool can't enforce it). A how-to or outside answer needs no read.
-- **only_ask_tools**: `describe_layers`, `preview_frame` and `give_answer` only.
-- **no_project_change**: no demonstration, no `set_*`, no `pan_*`, no `record_lesson`.
-- **no_lesson_started**: no `Skill`, no `go_deeper`, no snapshot or `recommend_next` call. This set never says yes.
+- **only_ask_tools**: `describe_layers`, `preview_frame` and `give_answer` only; from a case's yes turn on (phase 2), also `go_deeper`, `Skill` and the named lesson skill's own tools (`lesson_skill`).
+- **no_project_change**: no demonstration, no `set_*`, no `pan_*`, no `record_lesson`, no `end_lesson` (before a yes turn).
+- **no_lesson_started**: no `Skill`, no `go_deeper`, no snapshot or `recommend_next` call before the case's yes turn (T058: no lesson starts without a yes). Only case 19 has one; every other case never says yes.
+- **no_undo** covers the turns before the yes turn only: a lesson's hint says Edit > Undo.
+- **record_changes_only_the_lesson** (a case with a yes turn): only the skill the yes handed over to may change in the record. **no_answer_after_yes**: no `give_answer` once the lesson has begun.
 - **record_skills_unchanged**: the learner record's `skills` and `lessons` are as the case began (the asked entry changes no skill state).
 
 On each answer a case expects (`expect.answers`):
@@ -83,9 +87,10 @@ On each answer a case expects (`expect.answers`):
 
 ## Case-level `expect` keys
 
-- `answers`: `[{ turn, kind (a string or a list), steps: [min, max], no_keyframe_skills, step_skills_include, step_skills_forbid, offered_equals (A only), step_on_layer, max_sentences: [{ field: "explanation"|"closing_offer", max }], step_order: [{ id, first, then, needs_sweeps }], step_text_order: [{ id, first, then, needs_sweeps }] }]`.
+- `answers`: `[{ turn, kind (a string or a list), steps: [min, max], no_keyframe_skills, step_skills_include, step_skills_forbid, offered_equals (A only), step_on_layer, skill_step_on_layer: [{ skill, layer }], max_sentences: [{ field: "explanation"|"closing_offer", max }], step_order: [{ id, first, then, needs_sweeps }], step_text_order: [{ id, first, then, needs_sweeps }] }]`.
   `step_order` compares step skill tags; `step_text_order` compares regexes over the step text (FR-007, OQ-6: the bigger pixel source first, e.g. Position's 12.15 px before Rotation's 9.36 px on Comp 1).
   `step_order` with `needs_sweeps` counts only when the fixture carries expression sweeps (see Fixtures). The Comp 1 fixtures do, so case 01's is active; a fixture without sweeps is reported inactive in the dry run.
+- `handover`: `[{ turn, skill (the hand-over's command skill), snapshot (the lesson's snapshot tool), mode_source, go_deeper: { skill, step? } }]`: in that (yes) turn `go_deeper` was accepted with these inputs, `Skill` named the lesson, then the snapshot tool replied with this `mode_source`, in that order.
 - `no_answer_turns`: turns that must not call `give_answer` (a follow-up is prose).
 - `turn_first_tool`: `[{ turn, tool }]`.
 - `tools_called`, `tools_not_called`: over the whole case.
@@ -150,12 +155,18 @@ TD § 16) is a live check. A new capture only needs `build.mjs` re-run; the case
 - **A reply to a clarifying question is a new answer turn** (09, 10), not prose: FR-014 says it answers after any reply.
 - **Case 11 (precomp)** accepts an answer or a describe, never a clarify: the "couldn't see inside" line has to appear.
 
+## Phase 2 additions (2026-11-19, T058)
+
+- **Cases 19 and 20.** Case 19 needs a turn with `"yes": true`, which must be the panel's own request, "Yes, go deeper on [short name].", and the case's `lesson_skill` (`anchor-mentor` or `null-parenting-mentor`); it is `runtimes: ["a"]` and its first A run is T089/T090. Case 20 runs on both runtimes (answer half only).
+- **OFFER_NOT_READY.** Pivot and null offers are no longer refused on A, so the A refusal count for those two drops to 0 and `offered_equals` can name `transform.anchor` or `parenting.null`. An offer of the other four skills is still refused until phase 3; no case expects the refusal. The results file's `offer_not_ready` count should stay near 0 for these cases.
+- **Where the rest of T058 lives.** The pivot cases (60 to 63), null cases (56 to 58) and next-mentor case 14 are in their own sets. The ask runner can't seed a hand-in, so it has the A-only case; the lesson sets seed the hand-in `go_deeper` would leave (`product/evals/lib/hand-in.mjs`).
+
 ## Results
 
 ### T037, B1 (2026-11-18, at `91fd9c7`)
 
 `node product/evals/ask/run.mjs --repeat 3` (majority pass): **18/18 (100%), $11.04, no hard-rule (FR-061) check failing.**
-Results: `results/2026-11-18-200243.json`. This meets SC-006's B1 half, as the builder accepted.
+Results: `results/2026-11-18-200243.json`. This meets SC-006's B1 half, as the builder accepted. The bar, as spec 014 amendment (h) fixes it for every situation: a whole-set run at `--repeat 3`, a case passes on 2 of 3 runs, at least 80% of cases pass, and every FR-061 hard rule passes on every run.
 
 - **Refusals:** 3 of 60 answer calls (5%, under the 1 in 10 line): STEP_NEEDS_LAYER 2, BAD_CLOSING 1. All three were on case 11, and each passed on retry.
 - **Situations 1, 4, 5 (cases 01 to 05):** 02 to 05 passed 3 of 3. 01 passed 2 of 3: its miss was `step_text_order` and `step_order` (the pivot step came first and the Position step was missing). A re-run at the same commit (`results/2026-11-18-123502.json`) passed 3 of 3, so 01 is 5 of 6, accepted, with the ordering miss on the watch list.

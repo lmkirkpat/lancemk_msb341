@@ -1,0 +1,83 @@
+{
+  "id": "57-hand-in-existing-control-null-routes-to-the-pivot",
+  "title": "From an answer, the step's layer is an existing control null that already carries layers (Shake Control): that is Set the pivot's, never this lesson's. The mentor says so plainly, names the pivot lesson in words, and doesn't teach a null",
+  "covers": [
+    "spec014-routing",
+    "FR-027",
+    "SW-2",
+    "T050",
+    "T058"
+  ],
+  "hand_in": {
+    "skill": "parenting.null",
+    "layer": "Shake Control",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Move Shake Control to where the hammer hits without the letters jumping.",
+        "skill": "parenting.null",
+        "layer": "Shake Control"
+      },
+      {
+        "text": "Play it back.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "expressions/comp1.json": "live"
+  },
+  "turns": [
+    {
+      "project": "expressions/comp1.json",
+      "say": "/null-parenting-mentor"
+    }
+  ],
+  "expect": {
+    "first_snapshot_reply": {
+      "mode": "lesson",
+      "mode_source": "hand_in",
+      "focus_set": false
+    },
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "names_the_null",
+        "must": "Shake Control",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "routes_to_the_pivot",
+        "must": "\\bpivot\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_new_null",
+        "never": "\\b(?:add|make|create|insert) (?:a|another|a new) null\\b|\\b(?:second|another) null\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-ROUTES-TO-PIVOT",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 014 T058 (routing; FR-027: an existing control null's pivot routes to Set the pivot). The real path never gets here on A: go_deeper refuses a null that carries children with ROUTE_TO_PIVOT before it saves a hand-in, and the ask mentor then names Set the pivot instead (ask unit tests cover that). This case is the second guard, the skill's own line, for a hand-in that names the control null among a step's layers or an older session."
+}

@@ -275,3 +275,35 @@ question", "you said", "follow-up", "closing", no repeated labels).
 - **Fail:** a clarifying question about which step; an answer about a different layer or the Position hits; a
   recap of the whole earlier answer; or any wrapper label or the phrase "earlier answer" in what the learner
   reads.
+
+## R-HAND-OVER-OPENS: a yes hands over without a word, and the lesson opens on the answer's layer (spec 014 T058, case 19)
+
+The learner said yes to going deeper on one step. The mentor wrote nothing of its own in that turn before the lesson spoke
+(the hand-over is a call, not an announcement) and never named a command or a skill ID. The lesson opens as a continued
+lesson on the layer from the answer (Shake Control), in one sentence in the learner's goal, and its first ask is the one the pivot
+lesson begins with (select the layer, press A, then Shift+P). It asks no "which layer, and where" question and makes no
+proposal.
+
+- **Pass:** "We're on Shake Control, so the shake turns from where the hammer hits. Select Shake Control in the timeline and press A, then Shift+P, so both show."
+- **Fail:** the mentor says "let me start the lesson" or a command, asks which layer or where it should turn from, proposes a
+  different layer, starts with a memory clause, or opens a lesson on another layer than the answer's step named.
+
+## R-HAND-BACK: the lesson's last line hands back to the answer's next step (spec 014 T058, case 19)
+
+After the pass and the record, the last line names the step done and the step after it, as numbered in the answer the
+learner saw in turn 1, using that next step's own words; or says it was the last step. Nothing follows it.
+
+- **Pass:** "That was step 3; next is Play it back and watch the turn."
+- **Fail:** the numbers don't match turn 1's answer, the next step is made up or from a different list, more words follow,
+  the line is missing, or a lesson is offered in its place.
+
+## R-ASKED-AGAIN: asking again about a learned skill is normal (spec 014 T058, case 20; TD 11, H-5)
+
+The record says Set the pivot is learned. The answer is as plain and as complete as a first question's. Where the pivot is
+the step's skill, it is one of the steps (tagged), and where an offer is made it is for practice on this comp's layer, never
+a review or a first lesson. The mentor never says or implies the learner should remember it, already knows it, or is
+repeating themselves. Crediting a bridge ("the same move as on Door, on the null") is fine.
+
+- **Pass:** "...Pan Behind its pivot to where the hammer hits. Try them, or want to go deeper on step 3 with *Set the pivot*?"
+- **Fail:** "you already learned this", "remember when", "as we covered", "a quick review", a quiz, an offer that calls
+  it a lesson to learn, or an answer thinner than a first question would get.

@@ -589,3 +589,33 @@ shows a field name.
 - **Pass:** "Stamp is 120 px left of where it was at 4.2 s, and an expression drives its Position too."
 - **Fail:** leaves the expression out, says it made the layer jump, says it can't see expressions without keys,
   says the layer holds still or has no animation, or shows a word from the read's own fields.
+
+## R-NULL-TRACE-FIRST: a group that already follows a parent is said to, and the lesson teaches no second null (spec 014 T058, case 56)
+
+The layer the answer's step names, rock.png, already rides on Shake Control, a null that an expression moves, so the group is
+already moving as one. The mentor says that in one sentence (naming the parent as the snapshot gives it) and that where
+the group turns is Set the pivot on that parent, named in words. It teaches no new null on top of it, calls nothing the
+learner's change, and says no command.
+
+- **Pass:** "rock.png already follows Shake Control, which moves it, so they already move together. To move where it turns, that's *Set the pivot* on Shake Control."
+- **Fail:** teaches adding a null, asks which layers should move together with no mention of the parent, says it can't
+  see why, shows a field name, or names a command.
+
+## R-NULL-ROUTES-TO-PIVOT: an existing control null is Set the pivot's, not this lesson's (spec 014 T058, case 57)
+
+The step's layer, Shake Control, is a null that already carries layers. The mentor says in plain words that moving where it
+turns is Set the pivot, not this lesson, and teaches no null: no "add a null", no parenting, no demonstration. It may offer
+to go on to a different group of layers. It never says it can't see Shake Control.
+
+- **Pass:** "Shake Control already carries those layers, so moving where it turns is *Set the pivot*, not this lesson."
+- **Fail:** teaches parenting on Shake Control, says to add a null, calls Shake Control a group, says it can't see it, or
+  says nothing about where the lesson for it lives.
+
+## R-STOP-WITH-NOTHING-TO-SAVE: "end lesson" before anything is agreed ends the lesson plainly (spec 014 T108, case 58)
+
+The learner asked to stop before any demonstration was made or any check was run. The mentor ends the lesson without recording it and answers in
+one or two sentences: the lesson is closed and they can pick it up any time. It starts no step, asks no question,
+demonstrates nothing, checks nothing, and names no command.
+
+- **Pass:** "Okay, I've closed this lesson. You can pick it up any time."
+- **Fail:** a third sentence, a question, a new step or offer, a demonstration or check, a summary of what was saved, or a command to run.

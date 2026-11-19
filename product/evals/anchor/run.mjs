@@ -30,6 +30,7 @@ import { blankFrame } from "../lib/blank-frame.mjs"; // flat 1920 x 1080 preview
 import { parseJudgeReply } from "../lib/judge-reply.mjs"; // lenient judge reply (fences, stray text); unreadable = plumbing
 import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
 import { turnChecks, turnProblems, TURN_KEYS } from "../lib/turn-checks.mjs"; // last_turn_* and say_max_sentences (spec 007)
+import { handInProblems, seedHandIn } from "../lib/hand-in.mjs"; // a case's seeded hand-in (spec 014 T058)
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
 // with no builder CLAUDE.md or auto-memory in context (agent audit 2026-10-12, lesson 4.5).
@@ -184,11 +185,12 @@ function validate(c) {
   }
   for (const n of Object.keys(c.fixture_sources || {})) if (!fixtureNames(c).includes(n)) problems.push(`fixture_sources names ${n}, which no turn uses`);
   if (c.learner_record && !fs.existsSync(recordFile(c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
+  problems.push(...handInProblems(c.hand_in));
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = [...TURN_KEYS, "first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
     "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks",
-    "proposal_named", "named_layers", "first_snapshot_mode", "demo_not_in_turns"];
+    "proposal_named", "named_layers", "first_snapshot_mode", "first_snapshot_reply", "demo_not_in_turns"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   problems.push(...turnProblems(c.expect, (c.turns || []).length));
   for (const s of (c.expect || {}).say || []) {
@@ -409,6 +411,11 @@ function check(expect, turns, c) {
     const called = calls.filter((e) => e.name === "read_learner_record");
     add("no_read_learner_record", called.length === 0, called.length ? `called read_learner_record ${called.length}x` : "never called");
   }
+  if ("first_snapshot_reply" in expect) {
+    // Fields of the first successful snapshot reply, e.g. { "mode_source": "hand_in" } (spec 014 T058).
+    const bad = Object.entries(expect.first_snapshot_reply).filter(([k, v]) => JSON.stringify((firstSnapReply || {})[k]) !== JSON.stringify(v));
+    add("first_snapshot_reply", bad.length === 0, bad.length ? bad.map(([k, v]) => `${k} was ${JSON.stringify((firstSnapReply || {})[k])}, expected ${JSON.stringify(v)}`).join("; ") : "matches");
+  }
   if ("first_snapshot_mode" in expect) {
     const m = firstSnapReply && firstSnapReply.mode;
     add("first_snapshot_mode", m === expect.first_snapshot_mode, `first snapshot reply mode was ${m}`);
@@ -605,6 +612,7 @@ async function runCase(c, opts) {
   fs.mkdirSync(snaps);
   fs.writeFileSync(path.join(snaps, "frame.png"), blankFrame());
   if (c.learner_record) fs.copyFileSync(recordFile(c.learner_record), path.join(home, "learner.json"));
+  if (c.hand_in) seedHandIn(home, c.hand_in); // what go_deeper leaves on A; B1 refuses it (T058)
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
   const mentor = opts.runtime === "a" ? ab.openCase({ repo: REPO, home, env, opts }) : null;
   const runtime = mentor ? null : ensureRuntime(REPO, path.join(home, "runtime"));

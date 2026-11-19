@@ -233,10 +233,10 @@ test("fixtureFacts reports a dangling reference", () => {
   assert.equal(f.problems.length, 2);
 });
 
-test("case files: each is valid JSON with the keys the runner needs, and the numbers run 01 to 18", () => {
+test("case files: each is valid JSON with the keys the runner needs, and the numbers run 01 to 20", () => {
   const dir = path.join(HERE, "..", "cases");
   const files = fs.readdirSync(dir).filter((f) => /^\d\d-.*\.json$/.test(f)).sort();
-  assert.deepEqual(files.map((f) => f.slice(0, 2)), Array.from({ length: 18 }, (_, i) => String(i + 1).padStart(2, "0")));
+  assert.deepEqual(files.map((f) => f.slice(0, 2)), Array.from({ length: 20 }, (_, i) => String(i + 1).padStart(2, "0")));
   for (const f of files) {
     const c = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
     assert.equal(c.id, f.replace(/\.json$/, ""));
@@ -296,4 +296,85 @@ test("a promise to read after the learner acts isn't narration; narrating a call
   assert.ok(byName(run([answerTurn(closing)]), "no_narration").pass);
   const narrated = turn(read, { kind: "say", text: "Let me read the layers." }, call(good()));
   assert.ok(!byName(run([narrated]), "no_narration").pass);
+});
+
+// ---- Phase 2 (spec 014 T058): a yes turn, the hand-over and the lesson after it
+
+const tool = (name, input = {}, result = "{}", ok = true) => ({ kind: "tool", name, input, ok, result });
+const say = (text) => ({ kind: "say", text });
+const HANDOVER = { handover: [{ turn: 2, skill: "anchor-mentor", snapshot: "anchor_snapshot", mode_source: "hand_in", go_deeper: { skill: "transform.anchor" } }] };
+const PH2 = { ...EXPECT, ...HANDOVER, no_answer_turns: [2, 3] };
+const LESSON_ALLOWED = ["anchor_snapshot", "anchor_check", "anchor_demo", "record_lesson"];
+const yesTurn = (over = {}) => turn(
+  tool("go_deeper", { skill: "transform.anchor", step: 2 }, JSON.stringify({ short_name: "Set the pivot", command_skill: "anchor-mentor", practice: false, missing_prerequisite: null })),
+  tool("Skill", { skill: "anchor-mentor" }, "Launching skill"),
+  tool("anchor_snapshot", {}, JSON.stringify({ mode: "lesson", mode_source: "hand_in", ...over })),
+  say("We're on Shake Control. Select it and press A, then Shift+P."),
+);
+const lessonTurn = turn(tool("anchor_check", {}, "{}"), say("The pivot moved and nothing else did. That was step 2; next is Play it back."));
+const phase2 = (turns, expect = PH2, over = {}) => run(turns, expect, { yesTurn: 2, lessonAllowed: LESSON_ALLOWED, ...over });
+
+test("a yes turn: the hand-over, the lesson's tools and its own words pass; the ask-only rules cover the turns before it", () => {
+  const checks = phase2([answerTurn(), yesTurn(), lessonTurn]);
+  assert.deepEqual(failed(checks), []);
+  assert.equal(byName(checks, "handover@2").pass, true);
+});
+
+test("without a yes turn the same lesson calls fail: only_ask_tools and no_lesson_started", () => {
+  const f = failed(run([answerTurn(), yesTurn()], { ...EXPECT }));
+  assert.ok(f.includes("only_ask_tools") && f.includes("no_lesson_started"));
+});
+
+test("a lesson started before the yes still fails no_lesson_started (no lesson without a yes)", () => {
+  const early = turn(read, tool("anchor_snapshot", {}, "{}"), call(good()));
+  const f = failed(phase2([early, yesTurn()], { ...EXPECT, ...HANDOVER }));
+  assert.ok(f.includes("no_lesson_started"));
+});
+
+test("the hand-over fails when go_deeper is missing, the order is wrong, or the lesson didn't open from the hand-in", () => {
+  const noGo = turn(tool("Skill", { skill: "anchor-mentor" }), tool("anchor_snapshot", {}, JSON.stringify({ mode_source: "hand_in" })));
+  assert.match(byName(phase2([answerTurn(), noGo]), "handover@2").detail, /no accepted go_deeper/);
+  assert.match(byName(phase2([answerTurn(), yesTurn({ mode_source: "default" })]), "handover@2").detail, /mode_source was default/);
+  const wrongOrder = turn(tool("Skill", { skill: "anchor-mentor" }), tool("go_deeper", { skill: "transform.anchor" }, "{}"), tool("anchor_snapshot", {}, JSON.stringify({ mode_source: "hand_in" })));
+  assert.match(byName(phase2([answerTurn(), wrongOrder]), "handover@2").detail, /order was/);
+  const otherSkill = turn(tool("go_deeper", { skill: "parenting.null" }, "{}"), tool("Skill", { skill: "anchor-mentor" }), tool("anchor_snapshot", {}, JSON.stringify({ mode_source: "hand_in" })));
+  assert.match(byName(phase2([answerTurn(), otherSkill]), "handover@2").detail, /go_deeper skill was "parenting.null"/);
+});
+
+test("Edit > Undo is allowed in the lesson after the yes, never in the answer before it", () => {
+  const hint = turn(tool("anchor_check", {}, "{}"), say("rock.png moved with it. Edit > Undo, then try Pan Behind."));
+  assert.equal(byName(phase2([answerTurn(), yesTurn(), hint]), "no_undo").pass, true);
+  const undoAnswer = answerTurn(good({ explanation: "In Comp 1, press Ctrl+Z if it goes wrong." }));
+  assert.equal(byName(phase2([undoAnswer, yesTurn()]), "no_undo").pass, false);
+});
+
+test("a give_answer after the yes fails no_answer_after_yes", () => {
+  const f = failed(phase2([answerTurn(), turn(...yesTurn().events, call(good()))]));
+  assert.ok(f.includes("no_answer_after_yes"));
+});
+
+test("the record may change only the lesson's skill after a yes; any other skill's change fails", () => {
+  const rec = (end) => ({ start: { skills: { "easing.basic": { status: "learned" } }, lessons: [] }, end });
+  const ok = rec({ skills: { "easing.basic": { status: "learned" }, "transform.anchor": { status: "practicing" } }, lessons: [{}] });
+  assert.equal(byName(phase2([answerTurn(), yesTurn()], PH2, { record: ok }), "record_changes_only_the_lesson").pass, true);
+  const stray = rec({ skills: { "easing.basic": { status: "practicing" }, "transform.anchor": { status: "practicing" } }, lessons: [] });
+  assert.equal(byName(phase2([answerTurn(), yesTurn()], PH2, { record: stray }), "record_changes_only_the_lesson").pass, false);
+});
+
+test("skill_step_on_layer: a step tagged with the skill on that layer; another layer or tag fails", () => {
+  const want = { answers: [{ turn: 1, kind: "answer", skill_step_on_layer: [{ skill: "transform.anchor", layer: "Shake Control" }] }] };
+  assert.equal(byName(run([answerTurn()], want), "skill_step_on_layer:transform.anchor@1").pass, true);
+  const onRock = good({ steps: [{ text: STEP_2, skill: "transform.anchor", layer: "rock.png" }, { text: "Play it back.", skill: null, layer: null }] });
+  assert.equal(byName(run([answerTurn(onRock)], want), "skill_step_on_layer:transform.anchor@1").pass, false);
+});
+
+// ---- The panel's own strings (contracts/panel-ask.md › Requests), word for word
+
+test("case 19's yes is the panel's Go deeper request; End lesson and the first follow-up after a go-deeper lesson are the brief's strings", async () => {
+  const { createRequire } = await import("node:module");
+  const panel = createRequire(import.meta.url)("../../../../panel/lib/requests.js");
+  const c = JSON.parse(fs.readFileSync(path.join(HERE, "..", "cases", "19-go-deeper-hands-over-and-back.json"), "utf8"));
+  assert.equal(c.turns[1].say, panel.goDeeperRequest("Set the pivot").request);
+  assert.equal(panel.endDeeperRequest().request, "/ask-mentor I've ended that lesson.");
+  assert.equal(panel.followUpRequest("What about step 2?", { afterDeeper: true }).request, "/ask-mentor What about step 2?");
 });

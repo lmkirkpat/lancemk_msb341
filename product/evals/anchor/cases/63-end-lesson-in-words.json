@@ -1,0 +1,67 @@
+{
+  "id": "63-end-lesson-in-words",
+  "title": "The learner types 'end lesson' right after the opening question, before any demonstration or check: the mentor calls end_lesson, records nothing, runs no demonstration or check, and answers in at most two sentences with no new step",
+  "covers": [
+    "spec014-T106",
+    "T108",
+    "FR-053"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "end lesson"
+    }
+  ],
+  "expect": {
+    "last_turn_tools_called": [
+      "end_lesson"
+    ],
+    "last_turn_tools_not_called": [
+      "record_lesson",
+      "anchor_demo",
+      "anchor_check"
+    ],
+    "tools_not_called": [
+      "record_lesson",
+      "anchor_demo",
+      "anchor_check"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "at_most_two",
+        "turns": [
+          2
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "no_new_step",
+        "never": "\\?",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-STOP-WITH-NOTHING-TO-SAVE"
+  ],
+  "note": "Spec 014 T108. Stop rule as the cockpit gave it 2026-11-19: 'something to record' means a demo was made or a check was run; with neither, a stop in words calls end_lesson and writes no record, even where a hand-in set the focus. This case says 'end lesson' straight after the opening, before any demo or check, so end_lesson is the expected call. Not covered (proposed, no number): a stop after a check expects record_lesson and no end_lesson; a stop in a go-deeper lesson ends on the hand-back line."
+}
