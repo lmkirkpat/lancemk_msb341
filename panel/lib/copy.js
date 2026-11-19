@@ -122,6 +122,20 @@ const COPY = {
     // Always ends in a period, whether or not the step's text does (T035 design review item 7).
     hand_back: (n, next) => { const t = String(next == null ? "" : next).trim(); return `That was step ${n}; next is step ${n + 1}: ${/[.!?…]$/.test(t) ? t : `${t}.`}`; },
     last_step: "That was the last step.",
+    // Spec 014 FR-051, PQ-3 (contracts/panel-ask.md › Result lines and dividers): what the check saw on
+    // a passing go-deeper lesson, by skill. Plain, with no pass or fail words. resultLine() picks one.
+    result_lines: {
+      "easing.basic": "Pairs eased, nothing else changed.",
+      "keyframes.types": "Keys set the way you wanted.",
+      "easing.speed_graph": "Ease shaped, still comes to rest.",
+      "timing.offset": "Staggered, and each one still lands.",
+      "transform.anchor": "Pivot moved, nothing else did.",
+      "parenting.null": "The group moves as one. Nothing jumped.",
+    },
+    // The return divider (ask-back, ask-ended). The layer comes from the hand-in or the lesson's focus;
+    // with none known, the divider stops at "practiced".
+    divider_practiced: (tag, layer) => (layer ? `${tag} · practiced on ${layer}` : `${tag} · practiced`),
+    divider_ended: (tag) => `${tag} · ended, not saved`,
   },
   quiet: {
     pick_up: (skill, focus) => (focus ? `Pick up ${skill} on ${focus}` : `Pick up ${skill}`),
@@ -281,4 +295,16 @@ function freeze(node) {
   return node;
 }
 
-module.exports = { COPY: freeze(COPY) };
+// FR-051: the result line for a go-deeper lesson's check, by skill and the check's own `passed`. Null
+// when it didn't pass or the skill has no line, so nothing is drawn.
+function resultLine(skillId, passed) {
+  if (passed !== true) return null;
+  return Object.prototype.hasOwnProperty.call(COPY.ask.result_lines, skillId) ? COPY.ask.result_lines[skillId] : null;
+}
+
+// The divider on return from a go-deeper lesson: practiced when its record was saved, else ended.
+function deeperDivider(tag, { saved, layer } = {}) {
+  return saved === true ? COPY.ask.divider_practiced(tag, layer || null) : COPY.ask.divider_ended(tag);
+}
+
+module.exports = { COPY: freeze(COPY), resultLine, deeperDivider };
