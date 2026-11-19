@@ -28,11 +28,20 @@ const section = (heading) => {
 const squash = (t) => t.replace(/\s+/g, " ").trim();
 const SOURCES = squash(section("16.") + section("19."));
 
-test("FR-057: named ask-mentor; allowed tools are describe_layers, preview_frame and give_answer, all on the server", () => {
+test("FR-057: named ask-mentor; allowed tools are describe_layers, preview_frame, give_answer, go_deeper (phase 2) and Skill, the mentor's all on the server", () => {
   assert.equal(field("name"), "ask-mentor");
   const tools = field("allowed-tools").split(",").map((t) => t.trim());
-  assert.deepEqual(tools, ["mcp__ae-mentor__describe_layers", "mcp__ae-mentor__preview_frame", "mcp__ae-mentor__give_answer"]);
-  for (const t of tools) assert.ok(TOOLS.find((x) => x.name === t.replace("mcp__ae-mentor__", "")), t);
+  assert.deepEqual(tools, ["mcp__ae-mentor__describe_layers", "mcp__ae-mentor__preview_frame", "mcp__ae-mentor__give_answer", "mcp__ae-mentor__go_deeper", "Skill"]);
+  for (const t of tools.filter((x) => x.startsWith("mcp__"))) assert.ok(TOOLS.find((x) => x.name === t.replace("mcp__ae-mentor__", "")), t);
+});
+
+test("T051: a yes calls go_deeper then Skill; B1's refusal gets TD § 7.1's line; an ended lesson names the next step", () => {
+  const after = squash(SKILL.slice(SKILL.indexOf("## After the answer")));
+  assert.match(after, /call `go_deeper` with the skill, the step's number, and `place_named` true when they named their own spot\. Then call `Skill` with its `command_skill`, writing nothing/);
+  assert.match(after, /Never say that name\./);
+  assert.match(after, /`NOT_ON_THIS_RUNTIME`:\*\* one sentence, naming the skill and never a command: "I can't start that lesson from here; open \*Set the pivot\* from the Skills tab when you want it\."/);
+  assert.match(after, /They've ended the lesson:\*\* one sentence naming the next step from the answer, nothing more\./);
+  assert.match(squash(SKILL), /A skill they've learned is practice, never a review\./);
 });
 
 test("no slash command anywhere in the file", () => {
