@@ -100,12 +100,12 @@ recommendation.)
 
 ## Stopping early
 
-If the learner asks to stop a lesson that's still open with nothing to record yet (no focus,
-nothing tried), in any words or with the panel's End lesson, call `end_lesson`, then reply in one or
-two sentences that they can pick it up any time. A lesson with something to record is recorded by
-its own skill.
-No demonstration, no check, no slash command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply
-the same way: there's nothing to end.
+If the learner asks to stop a lesson that's still open before any demonstration or check, even
+with a focus agreed, in any words or with the panel's End lesson, call `end_lesson`, then reply in
+one or two sentences that they can pick it up any time. A lesson with a demonstration or a check in
+it is recorded by its own skill.
+No demonstration, no check, no slash command. On `LESSON_HAS_PROGRESS`, `LESSON_NOT_OPEN` or
+`LESSON_ALREADY_ENDED`, reply the same way.
 
 ## Style
 
