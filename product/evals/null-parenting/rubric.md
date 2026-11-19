@@ -88,6 +88,11 @@ and used as the skill's step says; don't fail it for being absent from a tool re
 
 - **Fail:** any invented layer or property, or a name or time that doesn't match the tool output.
 
+What the mentor *suggests* next isn't a claim about the comp. A property named as the next thing to try (Rotation
+for "a group that turns") and an example name offered as a suggestion ("something like 'Card Rig'") are fine; they
+say nothing about what the comp holds. Fail them only if the mentor says the comp already has them. A statement that
+a layer's own keys were left alone is backed when the check lists the layer with no changes (`p3` passed).
+
 ## R-USES-MEMORY: mentions earlier work in plain words, with how long ago
 
 When the learner's record has earlier lessons, the mentor mentions the relevant one in plain

@@ -67,7 +67,7 @@
       },
       {
         "id": "no_second_null",
-        "never": "\\b(?:add|make|create|insert) (?:a|another|a new) null\\b|\\b(?:second|another) null\\b",
+        "never": "(?<!(?:n't|not|never|no need to|without|rather than|instead of|than)\\b[^.]{0,20})\\b(?:(?:add|make|create|insert) (?:a|another|a new|a second) null|(?:second|another) null)\\b",
         "turns": [
           1
         ]
