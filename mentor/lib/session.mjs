@@ -187,8 +187,13 @@ export function openMode(skill, compId, snapshot, { fresh = false } = {}) {
 // describe the comp as it is now; targets always come from the baseline, so earlier edits keep
 // their credit.
 export function start(snapshot, opts = {}) {
-  const { skill = EASING, analyze = easingAnalyze, focus_layers, mode = "lesson", skill_options, fresh = false } = opts;
+  const { skill = EASING, analyze = easingAnalyze, focus_layers, mode = "lesson", skill_options, fresh = false, hand_in } = opts;
   if (!MODES.includes(mode)) throw new Error(`mode must be one of: ${MODES.join(", ")}`);
+  // Spec 014 K6: a lesson opened from a hand-in starts new on this read, whatever was open.
+  const handInStart = hand_in !== undefined && hand_in !== null;
+  if (handInStart && (mode !== "lesson" || typeof hand_in !== "object" || Array.isArray(hand_in) || !isPlainData(hand_in))) {
+    throw new Error("hand_in must be plain JSON data, on a lesson.");
+  }
   if (skill_options !== undefined && (skill_options === null || typeof skill_options !== "object" || Array.isArray(skill_options) || !isPlainData(skill_options))) {
     throw new Error("skill_options must be plain JSON data (an object of text, numbers, true/false, lists and objects).");
   }
@@ -198,8 +203,13 @@ export function start(snapshot, opts = {}) {
   const key = keyFor(skill, compId);
   const existing = state.lessons[key];
   const open = existing && !existing.passed && (existing.mode || "lesson") === mode ? existing : null;
-  if (open && fresh && (open.demo || open.checked || open.status === "checked")) throw new MentorError("LESSON_UNDERWAY");
-  const continuing = open && !fresh && !isStale(open, currentKey(state) !== key, snapshot) ? open : null;
+  if (open && fresh && !handInStart && (open.demo || open.checked || open.status === "checked")) throw new MentorError("LESSON_UNDERWAY");
+  const continuing = open && !fresh && !handInStart && !isStale(open, currentKey(state) !== key, snapshot) ? open : null;
+  // The hand-in this lesson carries (spec 014 K6): the one given, a continued lesson's, or, on a fresh
+  // restart of the same unpassed lesson, the one it had. Undefined for every lesson not opened from one.
+  const lessonHandIn = handInStart ? hand_in
+    : continuing ? continuing.hand_in
+      : fresh && existing && !existing.passed ? existing.hand_in : undefined;
 
   // What the learner record says, read without changing it: an unreadable record means no marks
   // and no past targets, never an error from here.
@@ -210,6 +220,7 @@ export function start(snapshot, opts = {}) {
   const analyzerOpts = (snap) => {
     const o = { focus_layers, exclude, kept_linear: kept(marks, snap) };
     if (options !== undefined) o.skill_options = options;
+    if (lessonHandIn) o.hand_in = lessonHandIn;
     return o;
   };
 
@@ -251,6 +262,7 @@ export function start(snapshot, opts = {}) {
     };
     if (mode === "review") lesson.exclude = exclude;
     if (options !== undefined) lesson.skill_options = options;
+    if (lessonHandIn) lesson.hand_in = structuredClone(lessonHandIn);
   }
 
   // Rules the session enforces for every skill, whatever its analyzer proposed: no demo in a review
@@ -421,4 +433,46 @@ export function askStartedAt({ now = Date.now() } = {}) {
   const ask = read().ask;
   if (!ask || typeof ask !== "object" || !inWindow(ask.started_at, now)) return null;
   return ask.started_at;
+}
+
+// Spec 014 K6 (data-model § 2, research R5): the hand-in go_deeper saves for one lesson to open on.
+// `{ skill, comp_id, layer, step_number, steps, goal, place_named, at, used }`, one per session file.
+// No learner words: the steps are the answer's own lines and the goal is in general terms (FR-045).
+// Taken once, by that skill's snapshot tool on the same comp (a how-to's, with no comp, on any comp),
+// and lapses after the session window. Additive: no lesson reads it, and nothing else changes it.
+const HAND_IN_FIELDS = ["skill", "comp_id", "layer", "step_number", "steps", "goal", "place_named"];
+
+export function saveHandIn(handIn, { now = Date.now() } = {}) {
+  if (!handIn || typeof handIn !== "object" || typeof handIn.skill !== "string") throw new Error("saveHandIn needs a skill.");
+  const state = read();
+  const saved = {};
+  for (const k of HAND_IN_FIELDS) saved[k] = handIn[k] === undefined ? null : handIn[k];
+  saved.steps = Array.isArray(saved.steps) ? saved.steps : [];
+  saved.place_named = saved.place_named === true;
+  saved.at = new Date(now).toISOString();
+  saved.used = false;
+  if (!isPlainData(saved)) throw new Error("The hand-in must be plain JSON data.");
+  state.hand_in = structuredClone(saved);
+  write(state);
+  return saved;
+}
+
+const handInFits = (h, skill, compId, now) => !!h && typeof h === "object" && !Array.isArray(h) && h.used !== true &&
+  h.skill === skill && (h.comp_id === null || h.comp_id === compId) && inWindow(h.at, now);
+
+// The hand-in for this skill and comp, marked used, or null (none, another skill's or comp's, used,
+// or lapsed). Reads only when there's nothing to take, so a snapshot without one writes nothing.
+export function takeHandIn(skill, compId, { now = Date.now() } = {}) {
+  const state = read();
+  if (!handInFits(state.hand_in, skill, compId, now)) return null;
+  state.hand_in.used = true;
+  state.hand_in.used_at = new Date(now).toISOString();
+  write(state);
+  return structuredClone(state.hand_in);
+}
+
+// The saved hand-in as it is, used or not, or null. For tests and the ask tools.
+export function peekHandIn() {
+  const h = read().hand_in;
+  return h && typeof h === "object" && !Array.isArray(h) ? structuredClone(h) : null;
 }
