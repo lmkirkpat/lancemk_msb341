@@ -144,3 +144,36 @@ turns were over SC-005's $0.10 aim ($0.12 and $0.16; median $0.028). B1 cost isn
 Tokens (R16) aren't logged on B1, so they're measured on A at T089.
 
 **What it changes:** T106 to T108 added; finding 2 goes on the sessions' watch list; finding 3 goes to T089.
+
+## Phase 2 (2026-11-19)
+
+Built on two branches (mentor `014-p2-mentor`, panel `014-p2-panel`), reviewed (T060 reviewer, T061
+design-reviewer), fixed in one round each, eval cases T058 and T108 on a third branch, trial-merged in a scratch
+worktree and merged to `main` at `4370e67` (T062). Tests on `main`: mentor 1956 pass (1960 with 4 todo), panel 876,
+helper 294, hooks 39.
+
+**Review fixes the builder decided (2026-11-19):** "something to record" means a demo was made or a check run;
+`end_lesson` refuses a lesson with either (`LESSON_HAS_PROGRESS`), so a go-deeper lesson stopped before any demo or
+check writes no record. A Set the pivot offer on a layer the pivot finder rules out is refused in the tool on A.
+The design review's must-fix 1 (Back or Home skips the return) was a false positive (`settleDeeper` runs at turn
+end); checking it found a real race (a follow-up between the record saving and the turn ending), now fixed.
+
+### T059: anchor set on B1
+
+Full run at `4370e67`: 63/68 (93%), $57.87, `results/2026-11-19-145824.json`. Every hard-rule check passed.
+- **60 (new, case bug):** the record and hand-back come after the learner answers the understanding check; the
+  case ended at the pass. Turn 5 added; the hand-back regex takes the skill's and the panel's wording. 3/3.
+- **62 (new, regex):** the skill has no verbatim trace sentence; the regex now takes the model's right wording. 3/3.
+- **45 (case ambiguity):** "I set it. Done." after "tell me when the playhead is there" read as the playhead, so
+  the check was skipped. Turn 3 now says what was set. 2/3; the miss left is the `away_from_rest` hint not saying
+  the pivot did move. Watch list.
+- **51 (mentor, not phase 2):** `/anchor-mentor lesson` sent no `mode`, so a due review opened as a review. Step 0
+  led with "no options and no `mode`" and put the exceptions after it. Fixed by leading with the exception in
+  anchor, null, offset and key types (`3248d21`). 3/3; null 49 (the same button) 3/3.
+- **21a (mentor):** named Layer > Transform for a place other than the centre about 1 run in 3. One line added
+  (`3248d21`). 21a and 21b 3/3.
+- Triage and fixes $27.30 (`a29eed8`, `3248d21`). **Anchor meets T059's bar.** Offset and key types got the step 0
+  fix unrun: check their lesson-button cases at the next full run.
+
+**What it changes:** a rule followed by its exceptions reads as the rule; lead with the exception. A learner line
+that could answer the mentor's last ask will be taken as that answer, so case turns say what was done.
