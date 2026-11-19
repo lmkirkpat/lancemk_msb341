@@ -9,7 +9,7 @@
 
 import { MentorError, registerErrors } from "../errors.mjs";
 import { compPosition, footprint, layerMatrix, sampleAt } from "./comp-space.mjs";
-import { expressionDrives, expressionsRead } from "./expressions.mjs";
+import { expressionDrives, expressionReads, expressionsRead } from "./expressions.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { sourcesOf } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
@@ -66,6 +66,11 @@ const PLACE_FRACTIONS = {
   "bottom-left": [0, 1], "bottom-middle": [0.5, 1], "bottom-right": [1, 1],
 };
 export const isPlace = (p) => Object.hasOwn(PLACE_FRACTIONS, p);
+
+// Spec 014 rule 2 (FR-034, research R7): a place the learner named in their own words, from a
+// hand-in. Taken as given: the check never grades it, and it never decides the pass. Only the tool
+// sets it (handInFocus), never the model, and only on the hand-in's layer.
+export const YOUR_CALL = "your_call";
 
 export function placePoint(rect, place) {
   if (!isPlace(place)) throw new Error(`Not one of the nine places: ${place}`);
@@ -342,6 +347,50 @@ function structural(snapshot, entry, flags, cls, kl = null, opts = {}) {
   return ["default", null];
 }
 
+// ---- K7 (spec 014 FR-027, research R7): a null with children as a hand-in focus
+
+// The hand-in's layer, when a lesson carries one: { layer, place_named, ... } or null.
+const handInLayer = (hand_in) => (hand_in && typeof hand_in.layer === "string" ? hand_in.layer : null);
+
+// A null that parents at least one layer (the motion-sources map's children).
+function isNullParent(cls, entry, src) {
+  return (cls === "null" || entry.kind === "null") && !!(src && Array.isArray(src.children) && src.children.length);
+}
+
+// Pan Behind on a null holds its children still only when its Position builds on its own value
+// (TD 014 SB-2): a Position expression that sets its own value, or one the read can't tell, can't
+// take it. Without read R2, any expression on Position or Anchor Point over keys counts.
+function positionExpressionBlocks(snapshot, index, flags) {
+  if (expressionsRead(snapshot) !== "all") return flags.expression_anchor_position;
+  return expressionReads(snapshot).list.some((x) => x.layer_index === index && x.active && POSITION_PATHS.includes(x.path) && x.builds_on !== "builds_on");
+}
+
+// A hand-in null's bucket and reason. Its own Rotation and Scale expressions are fine: the check
+// grades its children on base values (015 K2). Its Anchor Point keyed or driven, a Position it can't
+// move with Pan Behind, 3D, or Position keys at two or more times leave it out, as for any layer.
+function nullFocus(snapshot, entry, flags, kl) {
+  if (entry.three_d === true) return ["never", "three_d"];
+  if (flags.anchor) return ["never", "anchor_keyed"];
+  if (expressionDrives(snapshot, entry.index, [ANCHOR], kl ? kl.properties : [])) return ["never", "expression_anchor_position"];
+  if (positionExpressionBlocks(snapshot, entry.index, flags)) return ["never", "expression_anchor_position"];
+  if (flags.position && positionRule(snapshot, kl) === "position_moves") return ["never", "position_moves"];
+  if (entry.locked === true) return ["if_named", "locked"];
+  return ["if_named", "hand_in_null"];
+}
+
+// The focus a hand-in opens on: its layer at the learner's own place, when they named one or the
+// layer is a null that parents others (a null has no art of its own to put a place on). Undefined
+// otherwise (the lesson asks for the place) or when the name isn't one layer's.
+export function handInFocus(snapshot, hand_in) {
+  const name = handInLayer(hand_in);
+  if (!name || !layerInfo(snapshot).known) return undefined;
+  const matches = byName(snapshot, name);
+  if (matches.length !== 1) return undefined;
+  const e = matches[0];
+  const asNull = isNullParent(classOf(snapshot, e.index), e, sourcesOf(snapshot, e.index));
+  return asNull || hand_in.place_named === true ? { focus: [{ layer: name, place: YOUR_CALL }] } : undefined;
+}
+
 const shoelace = (c) => Math.abs(c.reduce((s, p, i) => { const q = c[(i + 1) % c.length]; return s + p[0] * q[1] - q[0] * p[1]; }, 0)) / 2;
 
 function fullFrame(snapshot, bounds) {
@@ -366,9 +415,10 @@ const turnedFar = (sample, flags) => !flags.rotation && !!sample && isNum(sample
 
 // Every layer of layer_info, in index order, each in exactly one bucket with one reason, and the
 // default ones ranked. `rest_times` maps a layer name to the learner's own rest pose.
-export function candidates(snapshot, { rest_times = {} } = {}) {
+export function candidates(snapshot, { rest_times = {}, hand_in = null } = {}) {
   const { known, layers } = layerInfo(snapshot);
   if (!known) return [];
+  const hiName = handInLayer(hand_in);
   const out = layers.map((entry) => {
     const kl = keyedLayer(snapshot, entry.index);
     const flags = keyFlags(kl, { snapshot, index: entry.index });
@@ -378,7 +428,9 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
     const ct = checkTime(snapshot, entry.index, { rest_time: rest_times[entry.name] });
     const sample = isNum(ct.time) ? sampleAt(entry, ct.time) : null;
     const rect = rectOf(sample, entry.kind);
-    let [bucket, reason] = structural(snapshot, entry, flags, cls, kl, { rest_time: rest_times[entry.name] });
+    let [bucket, reason] = hiName === entry.name && isNullParent(cls, entry, src)
+      ? nullFocus(snapshot, entry, flags, kl)
+      : structural(snapshot, entry, flags, cls, kl, { rest_time: rest_times[entry.name] });
     const fp = isNum(ct.time) ? footprint(snapshot, entry.index, ct.time, footprintOpts(entry.kind)) : { corners: null, bounds: null, reason: "not_sampled" };
     const readable = !fp.reason && fp.corners && shoelace(fp.corners) > 1e-6 && !!rect && !!pair(sample && sample.anchor);
     const ff = readable ? fullFrame(snapshot, fp.bounds) : null;
@@ -389,6 +441,7 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
     return {
       layer: entry.name, index: entry.index, bucket, reason, rank: null, ...moves,
       class: cls, kind: entry.kind,
+      ...(reason === "hand_in_null" ? { children: src.children.map((c) => c.layer) } : {}),
       parent: parents.length ? parents[0].layer : null,
       has_children: !!(src && src.children && src.children.length),
       keyed: { anchor: flags.anchor, position: flags.position, rotation: flags.rotation, scale: flags.scale, any: flags.any, position_times: positionTimes(snapshot, kl) },
@@ -534,6 +587,8 @@ function notesFor(snapshot, c) {
   // A focus layer's or the proposal's pivot outside it, with the side it's on as seen on screen
   // (FR-019a; null when it can't be read, and then the mentor names no side).
   if (c.place_now === "outside") notes.push({ layer: c.layer, note: "pivot_outside", side: c.outside_side ?? null });
+  // K7: a hand-in null, with the layers it carries (what the check looks at).
+  if (c.reason === "hand_in_null") notes.push({ layer: c.layer, note: "null_focus", children: c.children });
   return notes;
 }
 
@@ -566,7 +621,7 @@ export function watchOffer(snapshot, list, focusLayer, focusTime, { exclude = []
 
 // The analyzer session.start() calls (spec 004 contract › 4). `skill_options.focus`: one or two
 // { layer, place, rest_time? }, entry 0 the learner's layer, entry 1 the one they care less about.
-export function analyze(snapshot, { focus_layers, exclude = [], skill_options = {} } = {}) {
+export function analyze(snapshot, { focus_layers, exclude = [], skill_options = {}, hand_in = null } = {}) {
   const info = layerInfo(snapshot);
   const empty = {
     known: info.known, candidates: [], proposal: null, focus: null, places: {}, check_times: {},
@@ -586,7 +641,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
 
   const rest_times = {};
   for (const f of focus || []) if (f && typeof f.layer === "string" && f.rest_time !== undefined) rest_times[f.layer] = f.rest_time;
-  const list = candidates(snapshot, { rest_times });
+  const list = candidates(snapshot, hand_in ? { rest_times, hand_in } : { rest_times });
   const only = Array.isArray(focus_layers) ? focus_layers : null;
   const proposal = proposalFrom(list, { exclude, only });
 
@@ -612,16 +667,18 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
     names.push(name);
     if (matches.length > 1) { result.focus_problems.push({ layer: name, problem: "name_not_unique" }); continue; }
     const c = list.find((x) => x.index === matches[0].index);
-    if (!isPlace(entry.place)) { result.focus_problems.push({ layer: name, problem: "no_place" }); continue; }
+    // Rule 2 (spec 014): on the hand-in's layer, a null it carries always, or the learner's own spot.
+    const yourCall = name === handInLayer(hand_in) && (c.reason === "hand_in_null" || (entry.place === YOUR_CALL && hand_in.place_named === true));
+    if (!yourCall && !isPlace(entry.place)) { result.focus_problems.push({ layer: name, problem: "no_place" }); continue; }
     if (WHY_NOT_TARGET.has(c.bucket)) { result.focus_problems.push({ layer: name, problem: "not_a_candidate", reason: c.reason, ...movesFields(c) }); continue; }
     if (isExcluded(name, exclude)) { result.focus_problems.push({ layer: name, problem: "past_target" }); continue; }
     if (entry.rest_time !== undefined && c.check_time.rest_time_not_a_key) result.rest_time_not_a_key = [...(result.rest_time_not_a_key || []), name];
     const sample = sampleAt(byIndex(snapshot, c.index), c.check_time.time);
     const rect = rectOf(sample, c.kind);
-    result.places[name] = { place: entry.place, point: placePoint(rect, entry.place) };
+    result.places[name] = yourCall ? { place: YOUR_CALL, point: null } : { place: entry.place, point: placePoint(rect, entry.place) };
     result.check_times[name] = { time: c.check_time.time, basis: c.check_time.basis };
     result.notes.push(...notesFor(snapshot, c));
-    if (inPlace(sample.anchor, rect, entry.place)) {
+    if (!yourCall && inPlace(sample.anchor, rect, entry.place)) {
       result.already_there.push({ layer: name, place: entry.place });
       continue;
     }

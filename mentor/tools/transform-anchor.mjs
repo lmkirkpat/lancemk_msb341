@@ -20,7 +20,7 @@ import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
 import {
-  analyze, demoRefusal, demoValues, finder, missingTimes, movesFields, neededTimes, PLACES, rectOf, refused,
+  analyze, demoRefusal, demoValues, finder, handInFocus, missingTimes, movesFields, neededTimes, PLACES, rectOf, refused,
   REFUSED_MESSAGE, reviewProposal, SKILL,
 } from "../lib/anchor.mjs";
 import { check, checkSampleTimes } from "../lib/anchor-check.mjs";
@@ -57,7 +57,23 @@ function ownLesson() {
   return lesson;
 }
 
-const baseOpts = (s) => ({ exclude: s.exclude || [], skill_options: s.skill_options || {} });
+const baseOpts = (s) => ({ exclude: s.exclude || [], skill_options: s.skill_options || {}, ...(s.hand_in ? { hand_in: s.hand_in } : {}) });
+
+// Spec 014 K6 (data-model § 4): what the lesson keeps from a hand-in (no learner words), and the
+// reply's slice of it. `practice` when the record has this skill learned (FR-023).
+const lessonHandIn = (h) => ({
+  layer: h.layer, step_number: Number.isInteger(h.step_number) ? h.step_number : null,
+  steps: (Array.isArray(h.steps) ? h.steps : []).map((x) => (x && typeof x.text === "string" ? x.text : typeof x === "string" ? x : "")),
+  place_named: h.place_named === true,
+});
+export function handInSlice(h, learner) {
+  const kept = lessonHandIn(h);
+  return {
+    layer: kept.layer, step_number: kept.step_number,
+    steps_after: kept.step_number ? kept.steps.slice(kept.step_number) : [],
+    place_named: kept.place_named, practice: !!learner && learner.status === "learned",
+  };
+}
 
 // FR-013: read 1, and a second, sampled read when a time the check will compare is missing.
 async function lessonRead() {
@@ -84,7 +100,19 @@ async function anchorSnapshot({ mode: asked, focus_layers, skill_options, fresh 
   if (focus_layers) opts.focus_layers = focus_layers;
   if (skill_options !== undefined) opts.skill_options = skill_options;
   if (fresh) opts.fresh = true;
+  // K6: a hand-in opens a new lesson on its layer, at the learner's own place when they named one
+  // or it's a null that carries others (K7). Its layer gone (hand_in_lost): a lesson as from Skills.
+  const taken = open.mode_source === "hand_in" && open.hand_in && open.hand_in.layer ? open.hand_in : null;
+  if (taken) {
+    opts.hand_in = lessonHandIn(taken);
+    if (skill_options === undefined) {
+      const focus = handInFocus(read, opts.hand_in);
+      if (focus) opts.skill_options = focus;
+    }
+  }
   const { lesson, session: s } = session.start(read, opts);
+  const handInFields = s.hand_in ? { hand_in: handInSlice(s.hand_in, open.learner) }
+    : open.hand_in ? { hand_in: handInSlice(open.hand_in, open.learner) } : {};
 
   // Everything below is read on the lesson's baseline, which the targets come from.
   const base = analyze(s.baseline, { focus_layers, ...baseOpts(s) });
@@ -134,6 +162,7 @@ async function anchorSnapshot({ mode: asked, focus_layers, skill_options, fresh 
     // the demo is spent, whatever the analysis gave.
     watch_offer: review || s.demo ? null : base.watch_offer ?? null,
     reads,
+    ...handInFields,
   });
 }
 

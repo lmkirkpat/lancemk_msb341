@@ -26,7 +26,7 @@ import { baseViews, pairValues } from "./k2-changes.mjs";
 import { classOf } from "./visibility.mjs";
 import {
   analyze, anchorKeyCount, checkTime, DEMO_MATCH_PX, footprintOpts, inPlace, isPlace, keyedLayer, keyFlags, MOVE_PX, outsideSide, placeNow,
-  placePoint, positionKeyCount, positionKeyTimes, rectOf,
+  placePoint, positionKeyCount, positionKeyTimes, rectOf, YOUR_CALL,
 } from "./anchor.mjs";
 
 const isNum = (v) => typeof v === "number" && Number.isFinite(v);
@@ -227,7 +227,9 @@ export function hintCodes(r, others = []) {
   const wrongLayer = !r.anchor_changed && others.some((o) => o.kind === "anchor_changed");
   if (away) codes.push("away_from_rest");
   else if (!i2.passed) {
-    if (r.anchor_changed && !r.position_changed) codes.push("moved_with_pivot");
+    // K7: a null's own square isn't graded, its children are (item2.moved_children names them).
+    if (r.null_focus) codes.push(r.position_changed && !r.anchor_changed ? "layer_dragged" : "children_moved");
+    else if (r.anchor_changed && !r.position_changed) codes.push("moved_with_pivot");
     else if (r.position_changed && !r.anchor_changed) codes.push("layer_dragged");
     // What's drawn moved inside the layer while its own pivot didn't (a text layer's justification,
     // an edited path, a shape group's own Position), any layer kind (FR-019b; was group_anchor).
@@ -239,7 +241,10 @@ export function hintCodes(r, others = []) {
     else codes.push(r.anchor_changed ? "moved_with_pivot" : "layer_dragged");
   }
   if (wrongLayer) codes.push("wrong_layer");
-  else if (i2.passed && !i1.passed) {
+  // Rule 2 (spec 014): the learner's own place is never graded; only a pivot that didn't move is said.
+  else if (i1.your_call) {
+    if (i2.passed && !r.anchor_changed) codes.push("pivot_unchanged");
+  } else if (i2.passed && !i1.passed) {
     if (i1.place_now === "outside") codes.push("outside");
     else if (i1.place_now === "between" || (i1.place_now === "center" && i1.wanted !== "center")) codes.push("not_moved_enough");
     else if (i1.place_now) codes.push("neighbour_place");
@@ -256,9 +261,52 @@ export function hintCodes(r, others = []) {
   // Spec 015 FR-014a: a change on another layer that shifted it is reported in other_changes, with
   // the shift as its effect, and holds the pass the same way.
   const shifted = r.item5 && (r.item5.moved_layers.length || (r.item5.changed_layers || []).length);
-  if (!wrongLayer && i1.passed && i2.passed && (!r.item4 || r.item4.passed) && shifted) codes.push("other_layer_moved");
+  const placeOk = i1.your_call ? r.anchor_changed : i1.passed;
+  if (!wrongLayer && placeOk && i2.passed && (!r.item4 || r.item4.passed) && shifted) codes.push("other_layer_moved");
   if (others.some((o) => o.kind === "eye_changed" && o.was_class === "matte" && o.eye_on)) codes.push("matte_eye");
   return codes;
+}
+
+// ---- K7 (spec 014 FR-027, research R7): a hand-in null's children
+
+const nullFocusIndexes = (a, focusEntries) => focusEntries
+  .filter((e) => (a.candidates || []).some((c) => c.index === e.index && c.reason === "hand_in_null"))
+  .map((e) => e.index);
+
+// Every layer the null carries, compared at the same frames in both reads on base values (015 K2),
+// so its own expressions' motion is never theirs. At every frame both reads have, unless the null
+// has Rotation or Scale keys: then only at its rest key, since its children turn with the new pivot
+// at other times, which is the point. A child with no frame read in both is a can't-check.
+function childrenCheck(space, baseline, current, nullEntry, restTime, [bView, cView]) {
+  const f = keyFlags(keyedLayer(baseline, nullEntry.index));
+  const kids = descendantsOf(baseline, nullEntry.index);
+  const moved = [];
+  const unread = [];
+  for (const k of kids) {
+    const b = byIndex(baseline, k);
+    const c = b ? matchLayer(baseline, current, b) : null;
+    if (!b || !c) { unread.push({ layer: b ? b.name : null, reason: "not_found" }); continue; }
+    const times = f.rotation || f.scale ? (isNum(restTime) ? [restTime] : []) : common(timesOf(b), timesOf(c));
+    let worst = null;
+    let compared = 0;
+    for (const t of times) {
+      const cmp = compare(space, bView, b.index, cView, c.index, t, b.kind);
+      if (cmp.reason) continue;
+      compared += 1;
+      if (cmp.moved && (!worst || cmp.max > worst.max)) worst = { time: r3(t), max: cmp.max, dx: cmp.dx, dy: cmp.dy };
+    }
+    if (!compared) unread.push({ layer: b.name, reason: times.length ? "not_sampled" : "no_shared_time" });
+    if (worst) moved.push({ layer: b.name, time: worst.time, distance_px: r3(Math.hypot(worst.dx, worst.dy)), direction: direction(worst.dx, worst.dy) });
+  }
+  return { passed: kids.length > 0 && moved.length === 0 && unread.length === 0, children: kids.length, moved_children: moved, not_compared: unread, edges_px: null, direction: null, distance_px: null };
+}
+
+// The sample times a hand-in null's check needs: every frame its children were read at.
+function nullChildTimes(baseline, lesson) {
+  if (!lesson.hand_in) return [];
+  const a = analysisFor(baseline, lesson);
+  const focus = (lesson.targets || []).map((id) => byIndex(baseline, Number(String(id).split("/")[1]))).filter(Boolean);
+  return nullFocusIndexes(a, focus).flatMap((i) => descendantsOf(baseline, i).flatMap((k) => timesOf(byIndex(baseline, k))));
 }
 
 // ---- The check
@@ -269,7 +317,9 @@ export function hintCodes(r, others = []) {
 // from the learner's place and the same check-time rule, so item 4 stays unit tested on Sled's three
 // keys (FR-012, T246).
 function analysisFor(baseline, lesson) {
-  const a = analyze(baseline, { exclude: lesson.exclude || [], skill_options: lesson.skill_options || {} });
+  const opts = { exclude: lesson.exclude || [], skill_options: lesson.skill_options || {} };
+  if (lesson.hand_in) opts.hand_in = lesson.hand_in;
+  const a = analyze(baseline, opts);
   const focus = (lesson.skill_options && Array.isArray(lesson.skill_options.focus)) ? lesson.skill_options.focus : [];
   for (const id of lesson.targets || []) {
     const e = byIndex(baseline, Number(String(id).split("/")[1]));
@@ -308,6 +358,9 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
     }
   }
   const [bView, cView] = baseViews(baseline, current);
+  // K7: a hand-in null's children are its own item 2, so item 5 leaves them out.
+  const nullFocus = new Set(nullFocusIndexes(a, focusEntries));
+  const carried = new Set([...nullFocus].flatMap((i) => descendantsOf(baseline, i)));
   const fps = baseline.comp.frame_rate;
   const half = isNum(fps) && fps > 0 ? 0.5 / fps + 1e-6 : 0;
   const demoIndex = lesson.demo && lesson.demo.segment_id ? Number(String(lesson.demo.segment_id).split("/")[1]) : null;
@@ -317,12 +370,12 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
   const childrenAt = new Map(); // child index -> the focus layer's check time
   for (const e of focusEntries) {
     const t = a.check_times[e.name] ? a.check_times[e.name].time : null;
-    for (const d of descendantsOf(baseline, e.index)) if (!focusIndexes.includes(d)) childrenAt.set(d, t);
+    for (const d of descendantsOf(baseline, e.index)) if (!focusIndexes.includes(d) && !carried.has(d)) childrenAt.set(d, t);
   }
   const moved = [];
   const notCompared = [];
   for (const b of layerInfo(baseline).layers) {
-    if (focusIndexes.includes(b.index) || explained.has(b.index)) continue;
+    if (focusIndexes.includes(b.index) || explained.has(b.index) || carried.has(b.index)) continue;
     const c = matchLayer(baseline, current, b);
     if (!c) continue; // a removed layer is an other change
     const times = childrenAt.has(b.index) ? [childrenAt.get(b.index)] : common(timesOf(b), timesOf(c));
@@ -364,23 +417,34 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
     if (!bs || !cs) cant.push({ what: "pivot", reason: "not_sampled" });
     else if (!bRect || !cRect) cant.push({ what: "pivot", reason: "no_rect" });
 
-    // Item 1, in the layer's own space at the check time.
-    const item1 = cs && cRect && place ? { passed: inPlace(cs.anchor, cRect, place), place_now: placeNow(cs.anchor, cRect), wanted: place } : { passed: false, place_now: null, wanted: place };
+    // Item 1, in the layer's own space at the check time. The learner's own spot (rule 2): where it
+    // is now, and never a pass or fail.
+    const yourCall = place === YOUR_CALL;
+    const item1 = yourCall ? { passed: null, place_now: cs && cRect ? placeNow(cs.anchor, cRect) : null, wanted: null, your_call: true }
+      : cs && cRect && place ? { passed: inPlace(cs.anchor, cRect, place), place_now: placeNow(cs.anchor, cRect), wanted: place } : { passed: false, place_now: null, wanted: place };
     // FR-019a: outside, which side on screen; null otherwise, or when it can't be read (the mentor
     // then names no side).
     item1.outside_side = item1.place_now === "outside" ? outsideSide(current, c.index, t, c.kind) : null;
 
-    // Item 2, comp space at the check time.
+    // Item 2, comp space at the check time. For a hand-in null (K7), its children's footprints.
+    const isNull = nullFocus.has(b.index);
     const cmp = compare(space, baseline, b.index, current, c.index, t, b.kind);
-    if (cmp.reason) cant.push({ what: "footprint", reason: cmp.reason });
-    const item2 = cmp.reason ? { passed: false, edges_px: null, direction: null, distance_px: null }
-      : { passed: !cmp.moved, edges_px: cmp.edges_px, direction: cmp.moved ? direction(cmp.dx, cmp.dy) : null, distance_px: r3(Math.hypot(cmp.dx, cmp.dy)) };
+    if (cmp.reason && !isNull) cant.push({ what: "footprint", reason: cmp.reason });
+    let item2;
+    if (isNull) {
+      item2 = childrenCheck(space, baseline, current, b, t, [bView, cView]);
+      for (const n of item2.not_compared) cant.push({ what: "child", layer: n.layer, reason: n.reason });
+    } else {
+      item2 = cmp.reason ? { passed: false, edges_px: null, direction: null, distance_px: null }
+        : { passed: !cmp.moved, edges_px: cmp.edges_px, direction: cmp.moved ? direction(cmp.dx, cmp.dy) : null, distance_px: r3(Math.hypot(cmp.dx, cmp.dy)) };
+    }
 
     // Item 3: is the read's own time the rest key, and was the pivot set away from it?
     const now = current.comp.time;
     const atRest = isNum(now) && isNum(t) && Math.abs(now - t) <= half;
     let away = null;
-    if (isNum(now) && space.sampleAt(b, now) && space.sampleAt(c, now)) {
+    // Not for a hand-in null: its own square holding still says nothing about its children.
+    if (!isNull && isNum(now) && space.sampleAt(b, now) && space.sampleAt(c, now)) {
       const atNow = compare(space, baseline, b.index, current, c.index, now, b.kind);
       away = atNow.reason ? null : !item2.passed && !cmp.reason && !atNow.moved;
     }
@@ -422,7 +486,7 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
     // OA-11: Pan Behind between Rotation or Scale keys, where the first read has no sample to compare
     // with. Both values changed, the layer moved at its rest key and the read isn't at rest: set away
     // from rest, not "in place but moved".
-    if (item3.set_away_from_rest === null && !atRest && !cmp.reason && !item2.passed && anchorChanged && positionChanged &&
+    if (!isNull && item3.set_away_from_rest === null && !atRest && !cmp.reason && !item2.passed && anchorChanged && positionChanged &&
       isNum(now) && !space.sampleAt(b, now)) {
       const f = keyFlags(keyedLayer(baseline, b.index));
       if (f.rotation || f.scale) item3.set_away_from_rest = true;
@@ -444,7 +508,10 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
       kind: b.kind, anchor_changed: anchorChanged, position_changed: positionChanged, rect_shifted: rectShifted,
       locked: c.locked === true, cant_check: cant,
     };
-    r.passed = cant.length === 0 && item1.passed && item2.passed && (!item4 || item4.passed) && item5.passed;
+    if (isNull) r.null_focus = true;
+    // Rule 2: with the learner's own spot, the pivot has to have moved; where to is theirs.
+    const placeOk = yourCall ? anchorChanged : item1.passed;
+    r.passed = cant.length === 0 && placeOk && item2.passed && (!item4 || item4.passed) && item5.passed;
     r.hints = hintCodes(r, others);
     return r;
   });
@@ -468,6 +535,7 @@ export function checkSampleTimes(baseline, lesson) {
   for (const ct of Object.values(a.check_times)) if (isNum(ct.time)) times.push(ct.time);
   if (isNum(baseline.comp.time)) times.push(baseline.comp.time);
   for (const id of lesson.targets || []) times.push(...positionKeyTimes(keyedLayer(baseline, Number(String(id).split("/")[1]))));
+  times.push(...nullChildTimes(baseline, lesson));
   const out = [];
   for (const t of times.sort((x, y) => x - y)) if (!out.some((u) => Math.abs(u - t) <= TIME_TOL)) out.push(r3(t));
   return out;
