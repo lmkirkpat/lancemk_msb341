@@ -110,6 +110,12 @@ export function askChecks(expect, ctx) {
     const m = reads.match(re);
     add(name, !m, m ? `${detail} "${m[0]}"` : "clean");
   };
+  // Phase 2 (spec 014 T058): a case may have the learner say yes to an offer (a turn with `yes: true`, from `ctx.yesTurn`).
+  // From that turn the hand-over and the lesson's own tools are allowed, and the ask-only rules (no undo, nothing
+  // changed, no lesson) are about the turns before it. A case with no yes keeps every rule over every turn.
+  const yesAt = Number.isInteger(ctx.yesTurn) ? ctx.yesTurn : Infinity;
+  const beforeYes = (i) => i + 1 < yesAt;
+  const readsBeforeYes = [...turns.flatMap((t, i) => (beforeYes(i) ? saysOf(t) : [])), ...answered.filter((x) => beforeYes(x.i - 1)).map((x) => pieces(x.a).all)].filter(Boolean).join("\n");
   never("plain_words", INTERNAL_NAME);
   // A promise to read after the learner acts ("ask me again from inside, and I'll read the layers") is a plain
   // hand-back, not narrating a call, so that clause is left out of the scan.
@@ -121,18 +127,24 @@ export function askChecks(expect, ctx) {
   never("no_test_tell", SYNTH_TELL);
   never("no_slash_command", NO_SLASH_COMMAND);
   never("no_cant_see", CANT_SEE);
-  never("no_undo", UNDO);
+  {
+    const m = readsBeforeYes.match(UNDO);
+    add("no_undo", !m, m ? `said "${m[0]}"` : "clean");
+  }
   never("no_code", CODE);
 
   // Tools: only the ask skill's reads and its answer. Nothing that changes the project, and no lesson starts
   // without a yes (this phase's set never says yes).
   const called = turns.flatMap(tools).map((e) => e.name).filter((n) => n !== "ToolSearch");
-  const allowed = new Set(ctx.allowed);
-  const foreign = called.filter((n) => !allowed.has(n));
+  const askAllowed = new Set(ctx.allowed);
+  const lessonAllowed = new Set([...(ctx.lessonAllowed || []), "go_deeper", "Skill"]);
+  const toolsOf = (t) => tools(t).map((e) => e.name).filter((n) => n !== "ToolSearch");
+  const foreign = turns.flatMap((t, i) => toolsOf(t).filter((n) => !askAllowed.has(n) && !(!beforeYes(i) && lessonAllowed.has(n))));
   add("only_ask_tools", foreign.length === 0, foreign.length ? `used ${[...new Set(foreign)].join(", ")}` : "ok");
-  const changing = called.filter((n) => /_demo$|^set_|^pan_|^record_lesson$|^apply_/.test(n));
+  const calledBefore = turns.flatMap((t, i) => (beforeYes(i) ? toolsOf(t) : []));
+  const changing = calledBefore.filter((n) => /_demo$|^set_|^pan_|^record_lesson$|^apply_|^end_lesson$/.test(n));
   add("no_project_change", changing.length === 0, changing.length ? `called ${[...new Set(changing)].join(", ")}` : "none called");
-  const started = called.filter((n) => n === "Skill" || n === "go_deeper" || /snapshot/.test(n) || n === "recommend_next");
+  const started = calledBefore.filter((n) => n === "Skill" || n === "go_deeper" || /snapshot/.test(n) || n === "recommend_next");
   add("no_lesson_started", started.length === 0, started.length ? `called ${[...new Set(started)].join(", ")}` : "none started");
 
   // Read before answer (FR-001): the tool can't enforce it. For a comp-based answer (answer, describe, clarify),
@@ -149,7 +161,15 @@ export function askChecks(expect, ctx) {
   }
 
   // The asked entry changes no skill state (FR-061): the learner record's skills and lessons are as they began.
-  if (ctx.record) {
+  if (ctx.record && Number.isFinite(yesAt)) {
+    // A go-deeper lesson records itself (FR-023, practice or first lesson): only the skills the yes handed over to may change.
+    const handed = new Set((expect.handover || []).map((h) => h.go_deeper?.skill).filter(Boolean));
+    const a = ctx.record.start?.skills ?? {};
+    const b = ctx.record.end?.skills ?? {};
+    const changed = [...new Set([...Object.keys(a), ...Object.keys(b)])].filter((k) => JSON.stringify(a[k]) !== JSON.stringify(b[k]));
+    const stray = changed.filter((k) => !handed.has(k));
+    add("record_changes_only_the_lesson", stray.length === 0, stray.length ? `the record's ${stray.join(", ")} changed` : changed.length ? `only ${changed.join(", ")} changed` : "unchanged");
+  } else if (ctx.record) {
     const pick = (r) => JSON.stringify({ skills: r?.skills ?? {}, lessons: r?.lessons ?? [] });
     add("record_skills_unchanged", pick(ctx.record.start) === pick(ctx.record.end), pick(ctx.record.start) === pick(ctx.record.end) ? "unchanged" : "the record's skills or lessons changed");
   }
@@ -252,6 +272,10 @@ export function askChecks(expect, ctx) {
     }
     // A step on this layer.
     if (want.step_on_layer) add(`step_on_layer${label}`, steps.some((s) => s?.layer === want.step_on_layer), `no step on ${want.step_on_layer} (steps are on ${[...new Set(steps.map((s) => s?.layer ?? "(none)"))].join(", ") || "none"})`);
+    // A step tagged with this skill on this layer: [{ skill, layer }] (a hand-over needs the right step to land on).
+    for (const o of want.skill_step_on_layer || []) {
+      add(`skill_step_on_layer:${o.skill}${label}`, steps.some((s) => s?.skill === o.skill && s?.layer === o.layer), `no step tagged ${o.skill} on ${o.layer} (${steps.map((s) => `${s?.skill ?? "none"}@${s?.layer ?? "none"}`).join(", ") || "no steps"})`);
+    }
     // Sentence caps on a field.
     for (const m of want.max_sentences || []) {
       const n = countSentences(m.field === "closing_offer" ? p.offer : p.explanation);
@@ -274,6 +298,32 @@ export function askChecks(expect, ctx) {
       if (o.needs_sweeps && !fx.sweeps) add(`step_order:${o.id}${label}`, true, "skipped: the fixture has no expression sweeps yet (T015's live capture)");
       else add(`step_order:${o.id}${label}`, first >= 0 && then >= 0 ? first < then : first >= 0 || then < 0, first < 0 ? `no step tagged ${o.first}` : then < 0 ? "ok (the later one isn't present)" : `${o.first} at ${first + 1}, ${o.then} at ${then + 1}`);
     }
+  }
+
+  // A yes hands over (phase 2, FR-025, FR-026): [{ turn, skill (the command_skill, e.g. "anchor-mentor"), go_deeper: { skill, ... },
+  // snapshot (the lesson's snapshot tool), mode_source }]. In that turn go_deeper succeeded, then Skill named the lesson,
+  // then the lesson's snapshot tool replied with this mode_source, in that order.
+  for (const h of expect.handover || []) {
+    const evs = tools(turns[h.turn - 1] || { events: [] }).filter((e) => e.name !== "ToolSearch");
+    const at = (pred) => evs.findIndex(pred);
+    const g = at((e) => e.name === "go_deeper" && e.ok);
+    const k = at((e) => e.name === "Skill" && JSON.stringify(e.input || {}).includes(h.skill));
+    const sn = at((e) => e.name === h.snapshot && e.ok);
+    const reply = sn >= 0 ? parse(evs[sn].result) || {} : {};
+    const input = g >= 0 ? evs[g].input || {} : {};
+    const wrong = [];
+    if (g < 0) wrong.push("no accepted go_deeper");
+    else for (const [key, v] of Object.entries(h.go_deeper || {})) if (JSON.stringify(input[key]) !== JSON.stringify(v)) wrong.push(`go_deeper ${key} was ${JSON.stringify(input[key])}`);
+    if (k < 0) wrong.push(`no Skill call naming ${h.skill}`);
+    if (sn < 0) wrong.push(`no ${h.snapshot} reply`);
+    if (g >= 0 && k >= 0 && sn >= 0 && !(g < k && k < sn)) wrong.push(`order was go_deeper ${g + 1}, Skill ${k + 1}, ${h.snapshot} ${sn + 1}`);
+    if (sn >= 0 && h.mode_source && reply.mode_source !== h.mode_source) wrong.push(`mode_source was ${reply.mode_source}`);
+    add(`handover@${h.turn}`, wrong.length === 0, wrong.length ? wrong.join("; ") : `handed over to ${h.skill}`);
+  }
+  // The lesson's own words after the yes must say nothing of an answer: no give_answer after the yes turn.
+  if (Number.isFinite(yesAt)) {
+    const late = turns.slice(yesAt - 1).flatMap(tools).filter((e) => e.name === ANSWER_TOOL);
+    add("no_answer_after_yes", late.length === 0, late.length ? `give_answer called ${late.length}x after the yes` : "none");
   }
 
   // Turns that must NOT be an answer turn (a follow-up is plain prose, research R2).

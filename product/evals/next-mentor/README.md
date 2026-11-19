@@ -11,7 +11,7 @@ Written 2026-11-09 and dry-run only: nothing here has been run.
 
 ## Cases
 
-13 cases. Which runtime runs a case is its `runtimes`.
+14 cases. Which runtime runs a case is its `runtimes`.
 
 | Case | Runs on | What it covers | Source |
 |---|---|---|---|
@@ -28,6 +28,7 @@ Written 2026-11-09 and dry-run only: nothing here has been run.
 | 11-handover-null-crowded | A | `Yes, let's go.` hands over to null in a crowded comp | RQ-16, item 2 |
 | 12-handover-offset-due-review | A | `Yes, let's go.` hands over to offset as a due review | RQ-16, item 5 |
 | 13-handover-already-know | A | "I already know it" on key types, then Yes: a review hand-over | FR-020, item 5 |
+| 14-no-keyframe-skill-for-expression-motion | B1, A | K4: on the live Comp 1 with Easing learned, the suggestion is Set the pivot; key types, speed graph and offset aren't suggested or mentioned | spec 014 K4, FR-022 (T058) |
 
 - **B1 can't hand over** (spec 013 research R6): `--tools ToolSearch` leaves out `Skill`, and a lesson's tools
   are fixed at launch. So the four B1 Yes-path cases stop at the recommendation (turn 1, `/next-mentor`) and

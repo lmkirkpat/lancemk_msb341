@@ -113,6 +113,13 @@ export function fixtures() {
     const p = load("planted.json");
     out["matte-eye-off.json"] = subset(p, [1, 9, 10], { rename: { 9: "Window Matte", 10: "Photo" }, comp: "Intro" });
   }
+  // 7. Case 19 (spec 014 T058, situation 16): Comp 1 after a Pan Behind on Shake Control, as the anchor set plants
+  //    it (product/evals/anchor/fixtures/build.mjs), without the note that says so: this runner doesn't scrub.
+  {
+    const panned = JSON.parse(fs.readFileSync(path.join(HERE, "..", "..", "anchor", "fixtures", "synthetic", "comp1-shake-pivot-panned.json"), "utf8"));
+    delete panned.synthetic;
+    out["comp1-shake-pivot-panned.json"] = panned;
+  }
   return out;
 }
 

@@ -1,0 +1,72 @@
+{
+  "id": "14-no-keyframe-skill-for-expression-motion",
+  "title": "K4: on Comp 1, where the motion is a null moved by expressions and the only keys are on a control, with Easing learned, the suggestion is Set the pivot on the layers that can use it; key types, speed graph and offset aren't suggested, and nothing is said about easing the shake",
+  "covers": [
+    "spec014-K4",
+    "FR-022",
+    "T048",
+    "T058"
+  ],
+  "runtimes": [
+    "b1",
+    "a"
+  ],
+  "learner_record": "product/evals/next-mentor/records/easing-learned-none-due.json",
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/next-mentor"
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "recommend_next"
+    ],
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "transform.anchor",
+          "recommendation.kind": "lesson",
+          "recommendation.reason": "next_in_path",
+          "recommendation.focus_layers": [
+            "logo.png",
+            "General Logo Animation Graphics.png",
+            "rock.png"
+          ]
+        }
+      }
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "names_the_pivot_skill",
+        "must": "pivot",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_keyframe_skill_named",
+        "never": "key type|speed graph|\\boffset\\b|\\bstagger\\b|\\bease\\b|\\beasing\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-K4",
+    "R-NM-SUGGESTS"
+  ],
+  "note": "Spec 014 T058 (K4; the tool's side is mentor/test/recommend-k4.test.mjs). Uses the ask set's live Comp 1 capture. The record has only Easing learned and not due (the shared easing-learned record's review date is in the past, which would turn this into a review). Key types is next in the path, but Comp 1 has nothing it can use, so the tool skips it and the two after it; the case pins that, and that the words don't bring the skipped skills back. If the capture is re-taken and the pivot's focus list changes, update focus_layers."
+}

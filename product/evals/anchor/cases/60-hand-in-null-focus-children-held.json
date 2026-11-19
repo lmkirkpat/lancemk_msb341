@@ -1,0 +1,146 @@
+{
+  "id": "60-hand-in-null-focus-children-held",
+  "title": "From an answer, practice (Set the pivot already learned): Shake Control, a null that expressions move and that carries the rock and the letters, is the focus with no intent question; a Pan Behind that also moved rock.png gets a hint naming rock.png and its way (no fail words, no review); the clean Pan Behind passes on the layers it carries not moving, and the last line hands back to the next step",
+  "covers": [
+    "spec014-K7",
+    "AB-1",
+    "FR-023",
+    "FR-026",
+    "FR-027",
+    "T058"
+  ],
+  "hand_in": {
+    "skill": "transform.anchor",
+    "layer": "Shake Control",
+    "step_number": 3,
+    "steps": [
+      {
+        "text": "Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet.",
+        "skill": "not_taught",
+        "layer": "Shake Control"
+      },
+      {
+        "text": "Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet.",
+        "skill": "not_taught",
+        "layer": "Shake Control"
+      },
+      {
+        "text": "Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits.",
+        "skill": "transform.anchor",
+        "layer": "Shake Control"
+      },
+      {
+        "text": "Play it back and watch the turn.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "product/evals/anchor/records/anchor-passed-not-due.json",
+  "fixture_sources": {
+    "comp1.json": "live",
+    "synthetic/comp1-shake-pivot-panned-rock-moved.json": "synthetic",
+    "synthetic/comp1-shake-pivot-panned.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "comp1.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "comp1.json",
+      "say": "OK, both are showing."
+    },
+    {
+      "project": "synthetic/comp1-shake-pivot-panned-rock-moved.json",
+      "say": "I used Pan Behind on it. Done."
+    },
+    {
+      "project": "synthetic/comp1-shake-pivot-panned.json",
+      "say": "I undid that and did it again with Pan Behind. Done."
+    }
+  ],
+  "expect": {
+    "first_snapshot_reply": {
+      "mode": "lesson",
+      "mode_source": "hand_in"
+    },
+    "demo_calls_max": 0,
+    "tools_called": [
+      "anchor_check",
+      "record_lesson"
+    ],
+    "last_check": {
+      "passed": true,
+      "lacks": [
+        "children_moved",
+        "layer_dragged",
+        "pivot_unchanged"
+      ]
+    },
+    "say": [
+      {
+        "id": "opens_on_shake_control",
+        "must": "Shake Control",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_intent_question",
+        "never": "which layer|turn or grow|nothing comes to mind|want to try that one",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "hint_names_the_child",
+        "must": "rock\\.png[^.?!]*\\bmoved\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_fail_words",
+        "never": "\\b(?:fail(?:ed|s)?|wrong|not quite|incorrect|mistake)\\b",
+        "turns": [
+          1,
+          4
+        ]
+      },
+      {
+        "id": "practice_never_review",
+        "never": "\\breview\\b|\\btest\\b|\\bpassed the\\b",
+        "turns": [
+          1,
+          4
+        ]
+      },
+      {
+        "id": "never_grades_the_place",
+        "never": "right (?:place|spot)|correct (?:place|spot|position)|in the right",
+        "turns": [
+          3,
+          4
+        ]
+      },
+      {
+        "id": "hand_back_line",
+        "must": "That was step 3; next is Play it back and watch the turn",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-HAND-IN-OPENS",
+    "R-AN-NULL-FOCUS",
+    "R-AN-PRACTICE-WORDS",
+    "R-AN-HAND-BACK",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 014 T058 (AB held 1 through a hand-in, K7). B1 can't run go_deeper, so the run seeds the hand-in go_deeper would leave (product/evals/lib/hand-in.mjs); the lesson's own snapshot takes it. The record has Set the pivot learned and not due, so hand_in.practice is true (FR-023). Turn 3's fixture is the live Comp 1 with the Pan Behind planted on Shake Control and rock.png then moved 30 px right; turn 4's is the Pan Behind alone (fixtures/build.mjs). Turn 2 only answers the opening's ask. The steps are case 01's answer in the ask set, so step 3 is the pivot and the next step is Play it back."
+}

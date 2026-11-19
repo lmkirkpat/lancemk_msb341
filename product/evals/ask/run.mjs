@@ -65,10 +65,13 @@ function loadToolSet() {
   }
 }
 const TOOLS = loadToolSet();
+// The lesson skills a case can hand over to (phase 2: the two with a hand-in), with their own tool lists.
+const LESSON_SKILLS = ["anchor-mentor", "null-parenting-mentor"];
+const lessonTools = (skill) => ab.toolSets(REPO, skill).mentor;
 // Everything the runner recognizes as a mentor call; `Skill` appears in A's transcripts only.
-const MENTOR_TOOLS = [...new Set([...TOOLS.mentor, ...CONTRACT_TOOLS])];
-// What a phase-1 ask turn may call: the reads and the answer. The hand-over tools belong to phase 2, and this
-// set never says yes, so a call to one is a lesson started without a yes (`no_lesson_started`).
+const MENTOR_TOOLS = [...new Set([...TOOLS.mentor, ...CONTRACT_TOOLS, ...LESSON_SKILLS.flatMap(lessonTools)])];
+// What an ask turn may call: the reads and the answer. The hand-over and the lesson's tools are allowed from a case's yes turn on (checks.mjs), and this
+// is the only way to start a lesson: a call to one before it is a lesson started without a yes (`no_lesson_started`).
 const ASK_ALLOWED = ["describe_layers", "preview_frame", "give_answer"];
 const allowedB1 = () => TOOLS.allowed.filter((t) => t !== HAND_OVER);
 
@@ -106,9 +109,10 @@ const runsOn = (c, runtime) => (c.runtimes || ["b1", "a"]).includes(runtime);
 const readJson = (p) => JSON.parse(fs.readFileSync(repoFile(p), "utf8"));
 const factsOf = (c) => c.turns.map((t) => (t.project === "unreachable" || !fs.existsSync(repoFile(t.project)) ? {} : fixtureFacts(readJson(t.project))));
 
-const EXPECT_KEYS = ["answers", "no_answer_turns", "turn_first_tool", "tools_called", "tools_not_called", "text", "prose_max_sentences"];
-const ANSWER_KEYS = ["turn", "kind", "steps", "no_keyframe_skills", "step_skills_include", "step_skills_forbid", "offered_equals", "step_on_layer", "max_sentences", "step_order", "step_text_order"];
+const EXPECT_KEYS = ["answers", "no_answer_turns", "turn_first_tool", "tools_called", "tools_not_called", "text", "prose_max_sentences", "handover"];
+const ANSWER_KEYS = ["turn", "kind", "steps", "no_keyframe_skills", "step_skills_include", "step_skills_forbid", "offered_equals", "step_on_layer", "skill_step_on_layer", "max_sentences", "step_order", "step_text_order"];
 
+const e0 = (c) => c.expect || {};
 function validate(c) {
   const problems = [];
   for (const k of ["id", "title", "covers", "turns", "expect", "rubric"]) if (!(k in c)) problems.push(`missing ${k}`);
@@ -117,9 +121,22 @@ function validate(c) {
   for (const t of c.turns || []) {
     if (t.project !== "unreachable" && !fs.existsSync(repoFile(t.project))) problems.push(`no fixture ${t.project}`);
     if (typeof t.say !== "string" || !t.say) problems.push("a turn has no say");
-    else if (!/^\/ask-mentor /.test(t.say) && !t.followup) problems.push(`turn "${t.say.slice(0, 30)}" doesn't start with /ask-mentor (a follow-up turn says "followup": true)`);
+    else if (!/^\/ask-mentor /.test(t.say) && !t.followup && !t.yes) problems.push(`turn "${t.say.slice(0, 30)}" doesn't start with /ask-mentor (a follow-up turn says "followup": true)`);
   }
   if (c.learner_record && !fs.existsSync(repoFile(c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
+  // Phase 2 (T058): a turn with `yes: true` is the learner saying yes to an offer, sent as the panel's Go deeper request
+  // ("Yes, go deeper on [short name]."); the case then names the lesson skill the hand-over reaches. A only: go_deeper
+  // refuses on B1 (FR-017), and B1 never offers.
+  const yesTurns = (c.turns || []).map((t, i) => (t.yes ? i + 1 : 0)).filter(Boolean);
+  if (yesTurns.length > 1) problems.push("only one turn may say yes");
+  if (yesTurns.length && !LESSON_SKILLS.includes(c.lesson_skill)) problems.push(`a yes turn needs lesson_skill, one of ${LESSON_SKILLS.join(", ")}`);
+  if (yesTurns.length && !((c.runtimes || []).length === 1 && c.runtimes[0] === "a")) problems.push('a yes turn can only pass on A: set "runtimes": ["a"]');
+  if (yesTurns.length && !/^Yes, go deeper on .+\.$/.test(c.turns[yesTurns[0] - 1].say)) problems.push('a yes turn says exactly the panel\'s request: "Yes, go deeper on [short name]."');
+  if (!yesTurns.length && ((e0(c).handover || []).length || c.lesson_skill)) problems.push("handover and lesson_skill need a yes turn");
+  for (const h of e0(c).handover || []) {
+    if (!yesTurns.includes(h.turn)) problems.push(`handover: turn ${h.turn} isn't the yes turn`);
+    if (!h.skill || !h.snapshot) problems.push("handover needs skill and snapshot");
+  }
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const e = c.expect || {};
@@ -341,7 +358,8 @@ async function runCase(c, opts) {
   const rt = opts.runtime || "b1";
   const record = { start: startRecord, end: readRecord(path.join(home, "learner.json")) };
   const checks = error ? [{ check: "run", pass: false, detail: error }]
-    : askChecks(c.expect, { turns, c, runtime: rt, fixtures: factsOf(c), record, allowed: ASK_ALLOWED, waive: opts.waive || [] });
+    : askChecks(c.expect, { turns, c, runtime: rt, fixtures: factsOf(c), record, allowed: ASK_ALLOWED, waive: opts.waive || [],
+      yesTurn: c.turns.findIndex((t) => t.yes) + 1 || null, lessonAllowed: c.lesson_skill ? lessonTools(c.lesson_skill) : [] });
   const denied = turns.flatMap((t) => t.denials || []);
   if (!error && denied.length) checks.push({ check: "no_permission_denials", pass: false, detail: `denied ${denied.map((d) => d.tool_name).join(", ")}` });
   if (fin && (!error || !fin.allowlist.pass)) checks.push({ check: "allowlist", pass: fin.allowlist.pass, detail: fin.allowlist.detail });

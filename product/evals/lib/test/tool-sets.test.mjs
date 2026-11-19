@@ -17,12 +17,12 @@ const EVALS = path.join(REPO, "product", "evals");
 // The --allowedTools each runner passed when the 2026-10-29 baselines ran (runner source at 6bc4e4f
 // and before it; easing's list included read_learner_record, the other five filtered it out).
 const BASELINE = {
-  "ease-mentor": ["read_learner_record", "snapshot_project", "preview_frame", "set_ease", "diff_since_last", "record_lesson"],
-  "speed-graph-mentor": ["speed_graph_snapshot", "speed_graph_demo", "speed_graph_check", "preview_frame", "record_lesson", "recommend_next"],
-  "key-types-mentor": ["key_types_snapshot", "key_types_demo", "key_types_check", "preview_frame", "record_lesson", "recommend_next"],
-  "offset-mentor": ["offset_snapshot", "offset_demo", "offset_check", "preview_frame", "record_lesson", "recommend_next"],
-  "anchor-mentor": ["anchor_snapshot", "anchor_demo", "anchor_check", "preview_frame", "record_lesson", "recommend_next"],
-  "null-parenting-mentor": ["null_parent_snapshot", "null_parent_demo", "null_parent_check", "preview_frame", "record_lesson", "recommend_next"],
+  "ease-mentor": ["read_learner_record", "snapshot_project", "preview_frame", "set_ease", "diff_since_last", "record_lesson", "end_lesson"],
+  "speed-graph-mentor": ["speed_graph_snapshot", "speed_graph_demo", "speed_graph_check", "preview_frame", "record_lesson", "end_lesson", "recommend_next"],
+  "key-types-mentor": ["key_types_snapshot", "key_types_demo", "key_types_check", "preview_frame", "record_lesson", "end_lesson", "recommend_next"],
+  "offset-mentor": ["offset_snapshot", "offset_demo", "offset_check", "preview_frame", "record_lesson", "end_lesson", "recommend_next"],
+  "anchor-mentor": ["anchor_snapshot", "anchor_demo", "anchor_check", "preview_frame", "record_lesson", "end_lesson", "recommend_next"],
+  "null-parenting-mentor": ["null_parent_snapshot", "null_parent_demo", "null_parent_check", "preview_frame", "record_lesson", "end_lesson", "recommend_next"],
 };
 const RUNNERS = { easing: "ease-mentor", "speed-graph": "speed-graph-mentor", "key-types": "key-types-mentor", offset: "offset-mentor", anchor: "anchor-mentor", "null-parenting": "null-parenting-mentor" };
 
@@ -33,6 +33,7 @@ test("allowedToolsOf reads inline and list forms, strips the prefix, and tells n
   assert.equal(allowedToolsOf("no frontmatter"), null);
 });
 
+// The 2026-10-29 sets plus end_lesson, which spec 014 T106 added to each lesson skill (the only change).
 test("each B1 runner's tool set is the same set its 2026-10-29 baseline used", () => {
   for (const [skill, expected] of Object.entries(BASELINE)) {
     const { allowed, mentor } = toolSets(REPO, skill);

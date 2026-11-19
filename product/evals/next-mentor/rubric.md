@@ -168,3 +168,13 @@ Every skill name, layer and time the mentor mentions appears in a tool result fr
 plain words. The record is never recited back in detail.
 
 - **Fail:** an invented skill or layer, or a name that doesn't match the tool output.
+
+## R-NM-K4: no keyframe skill is suggested for motion that has no keys (spec 014 T058, case 14)
+
+The comp's motion comes from expressions on a parent null, with no keys of the layers' own. The mentor suggests the one skill
+the tool returned, with its reason, as an offer, and doesn't mention easing, key types, the speed graph or offset as a
+way to change that motion, even as a "not this" aside. It doesn't call the shake something to ease.
+
+- **Pass:** "Next up is Set the pivot, on rock.png and the logo. Ready?"
+- **Fail:** suggests or hints at easing, key types, the speed graph or offset, says the motion could be eased, or names
+  layers the tool didn't return.

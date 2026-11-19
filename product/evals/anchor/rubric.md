@@ -640,3 +640,79 @@ own to see turn"), which would read as "its pivot doesn't matter", and never say
 - **Pass:** "Shake Control is a null, so I can't check its pivot in this lesson yet."
 - **Fail:** the generic null line, "its pivot doesn't matter", teaches Shake Control's pivot as a lesson, or says
   nothing about it.
+
+## R-AN-HAND-IN-OPENS: a lesson from an answer opens as a continued lesson on the layer, with no intent question and no proposal (spec 014 T058, cases 60 and 61)
+
+The snapshot says the lesson came from an answer. The first turn is one sentence that picks the lesson up on that layer, then
+its first ask: select the layer and press A, then Shift+P. It asks no "which layer, and where" question, makes no proposal,
+has no memory clause, lists no other layers and states no idea yet.
+
+- **Pass:** "We're on Shake Control, so the shake turns from where the hammer hits. Select Shake Control in the timeline and press A, then Shift+P, so both show."
+- **Fail:** asks which layer or where it should turn from (a first lesson's opening), proposes another layer, opens with a
+  memory clause ("Last time..."), or explains the idea before the learner has done the first ask.
+
+## R-AN-NULL-FOCUS: a null with children is graded on its children, and a miss is a hint (spec 014 T058, case 60)
+
+The focus is Shake Control, which carries the rock and the letters. After a try that moved rock.png with the pivot, the
+mentor says Shake Control's pivot moved but rock.png moved with it and which way (at most two layers named), tells them to
+undo with Edit > Undo and try Pan Behind with Shake Control selected, and doesn't fix it. After a try that left every
+carried layer where it was, it says so and calls it done. It never grades where on the art the pivot sits and never asks
+for a nine-place spot for the null.
+
+- **Pass (the miss):** "Shake Control's pivot moved, but rock.png moved with it, to the right. Edit > Undo, then try Pan Behind (Y) with Shake Control selected."
+- **Fail:** blames the expression or the parent, names more than two layers or none, says the pivot is in the wrong
+  place, offers to fix it, calls the miss a failure, or passes it.
+
+## R-AN-PRACTICE-WORDS: a learned skill's lesson is practice, never a review (spec 014 T058, case 60)
+
+The record says Set the pivot is learned. Nothing in the lesson is called a review, a test or a pass of one. A try that
+doesn't pass is told as what's still off and where, in plain words, with no "failed", "wrong" or "not quite", and no
+"you already learned this", "remember" or "as we covered".
+
+- **Pass:** the miss in case 60 said as "Shake Control's pivot moved, but rock.png moved with it, to the right."
+- **Fail:** "review", "test", "passed the review", "you already know this", "not quite", "wrong", or a lecture on what
+  the learner should remember.
+
+## R-AN-HAND-BACK: the lesson's last line hands back to the answer's next step (spec 014 T058, case 60)
+
+After the pass and the record, the lesson ends on one line that names the step just done and the step after it, taken from
+the answer's steps, and says nothing after it, not even a slash command. The step numbers and the next step's text match
+the steps the case gave (the tool's `hand_back`).
+
+- **Pass:** "That was step 3; next is Play it back and watch the turn."
+- **Fail:** no such line, a different step number than the record's `hand_back`, text that isn't the next step, more words
+  after it, or an offer of another lesson in its place.
+
+## R-AN-OWN-PLACE: the learner's own spot on the art is theirs, ungraded and never coached toward (spec 014 T058, case 61)
+
+rock.png is a padded PNG and the learner named a spot on the art that the nine places can't hold. In the explanation turn
+the mentor says once what it can check (that the layer doesn't move) and that where the pivot sits on the art is theirs.
+After the try it says the pivot moved and the layer didn't. It never asks them to put the pivot somewhere else (not even
+to nudge it back), never names a nine-place spot for it, never says the place is right, close or wrong, and says nothing
+was undone.
+
+- **Pass:** "I can check that rock.png doesn't move, but not where the pivot sits on the art; that part's yours."
+- **Fail:** asks for a corner, an edge or the middle instead, says it's in the right place, says "outside" or "not
+  quite", or asks them to move it so the check passes.
+
+## R-AN-TRACE-FIRST: when the turn they want is the parent's, the lesson says so and doesn't teach the child's pivot as the fix (spec 014 T058, case 62)
+
+rock.png rides on Shake Control (a null that an expression moves) and the learner says the shake is the turn they want.
+The mentor says, in the explanation turn, that Shake Control moves rock.png and that where it turns is set on Shake
+Control, not on rock.png, and that Shake Control is a null whose pivot this lesson can't check yet. It doesn't teach
+rock.png's pivot as the fix for the shake, doesn't suggest opening the expression, and doesn't call anything a change the
+learner made.
+
+- **Pass:** "rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion." then "Where it turns is set on Shake Control, not here. Shake Control is a null, so I can't check its pivot in this lesson yet."
+- **Fail:** goes on to teach rock.png's pivot as how to turn the shake, offers to teach Shake Control's pivot as part of
+  this lesson, says Undo, or says nothing about where the turn is set.
+
+## R-STOP-WITH-NOTHING-TO-SAVE: "end lesson" before anything is tried ends the lesson plainly (spec 014 T108, case 63)
+
+The learner asked to stop before any demonstration was made or any check was run. The mentor ends the lesson without recording it and answers in
+one or two sentences: the lesson is closed and they can pick it up any time. It starts no step, asks no question,
+demonstrates nothing, checks nothing, and names no command.
+
+- **Pass:** "Okay, I've closed this lesson. You can pick it up any time."
+- **Fail:** a third sentence, a question, a new step or offer, a demonstration or check, praise for progress that didn't
+  happen, a summary of what was saved, or a command to run.
