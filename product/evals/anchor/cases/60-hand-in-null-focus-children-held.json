@@ -60,6 +60,10 @@
     {
       "project": "synthetic/comp1-shake-pivot-panned.json",
       "say": "I undid that and did it again with Pan Behind. Done."
+    },
+    {
+      "project": "synthetic/comp1-shake-pivot-panned.json",
+      "say": "The hammer end stays still. That's all for now."
     }
   ],
   "expect": {
@@ -107,7 +111,8 @@
         "never": "\\b(?:fail(?:ed|s)?|wrong|not quite|incorrect|mistake)\\b",
         "turns": [
           1,
-          4
+          4,
+          5
         ]
       },
       {
@@ -115,7 +120,8 @@
         "never": "\\breview\\b|\\btest\\b|\\bpassed the\\b",
         "turns": [
           1,
-          4
+          4,
+          5
         ]
       },
       {
@@ -128,9 +134,9 @@
       },
       {
         "id": "hand_back_line",
-        "must": "That was step 3; next is Play it back and watch the turn",
+        "must": "That was step 3[;.] [Nn]ext is (?:step 4: )?(?:to )?[Pp]lay it back and watch the turn",
         "turns": [
-          4
+          5
         ]
       }
     ]
@@ -142,5 +148,5 @@
     "R-AN-HAND-BACK",
     "R-NAMES-REAL"
   ],
-  "note": "Spec 014 T058 (AB held 1 through a hand-in, K7). B1 can't run go_deeper, so the run seeds the hand-in go_deeper would leave (product/evals/lib/hand-in.mjs); the lesson's own snapshot takes it. The record has Set the pivot learned and not due, so hand_in.practice is true (FR-023). Turn 3's fixture is the live Comp 1 with the Pan Behind planted on Shake Control and rock.png then moved 30 px right; turn 4's is the Pan Behind alone (fixtures/build.mjs). Turn 2 only answers the opening's ask. The steps are case 01's answer in the ask set, so step 3 is the pivot and the next step is Play it back."
+  "note": "Spec 014 T058 (AB held 1 through a hand-in, K7). B1 can't run go_deeper, so the run seeds the hand-in go_deeper would leave (product/evals/lib/hand-in.mjs); the lesson's own snapshot takes it. The record has Set the pivot learned and not due, so hand_in.practice is true (FR-023). Turn 3's fixture is the live Comp 1 with the Pan Behind planted on Shake Control and rock.png then moved 30 px right; turn 4's is the Pan Behind alone (fixtures/build.mjs). Turn 2 only answers the opening's ask. The steps are case 01's answer in the ask set, so step 3 is the pivot and the next step is Play it back. Round 2 (T059 triage, 2026-11-19): turn 5 added. A pass is followed by the understanding check, and the record and the hand-back come only when the learner answers and stops, so turn 4 could never carry them. The hand-back regex accepts the skill's wording and the panel's ('That was step 3. Next is step 4: ...'). Round 3: the hand-back regex also takes 'to play it back' (a lower-cased paraphrase of next_step's text, seen 1 in 3); the step number and the next step are still pinned."
 }

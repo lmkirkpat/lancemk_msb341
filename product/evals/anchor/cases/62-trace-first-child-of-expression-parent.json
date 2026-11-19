@@ -40,7 +40,7 @@
       },
       {
         "id": "set_on_the_parent",
-        "must": "where it turns[^.?!]*(?:Shake Control|parent)|(?:Shake Control|parent)[^.?!]*where it turns",
+        "must": "where it turns[^.?!]*(?:Shake Control|parent)|(?:Shake Control|parent)[^.?!]*where it turns|turns? from[^.?!]*(?:Shake Control|parent)|(?:Shake Control|parent)['’]?s? pivot[^.?!]*(?:turn|swing|shake)|(?:turn|swing|shake)[^.?!]*(?:Shake Control|parent)['’]?s? pivot",
         "turns": [
           2
         ]
@@ -73,5 +73,5 @@
     "R-NAMES-REAL",
     "R-ONE-IDEA"
   ],
-  "note": "Spec 014 T058 (rule 1 on a child of an expression-driven parent; TD 10.1 rule 1, the pivot's 'Trace first' line). Case 57 pins the parent note when the learner doesn't say the shake is the parent's; this case is the same rig with the learner saying it, so the note gains the trace sentence. No hand-in: the line lives in the parent note of step 2, for any lesson on a child. The null sentence is the skill's own; if the model words it differently the judge item R-AN-TRACE-FIRST still decides."
+  "note": "Spec 014 T058 (rule 1 on a child of an expression-driven parent; TD 10.1 rule 1, the pivot's 'Trace first' line). Case 57 pins the parent note when the learner doesn't say the shake is the parent's; this case is the same rig with the learner saying it, so the note gains the trace sentence. No hand-in: the line lives in the parent note of step 2, for any lesson on a child. The null sentence is the skill's own; if the model words it differently the judge item R-AN-TRACE-FIRST still decides. Round 2 (T059 triage, 2026-11-19): set_on_the_parent also accepts 'turns from wherever Shake Control's pivot is'. The skill gives no verbatim sentence for the trace line, so the model's own wording of the same idea is right; R-AN-TRACE-FIRST still judges it."
 }
