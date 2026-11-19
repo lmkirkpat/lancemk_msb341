@@ -223,6 +223,30 @@ test("R3 R13: on A, an offered skill that can't take a hand-in is OFFER_NOT_READ
   assert.deepEqual(checkAnswer(td16(), b1({ handInReady: () => false })).offered, ["transform.anchor"]);
 });
 
+test("FR-022, FR-024 (review of T060): on A, a pivot offer on a layer the lesson can't take is OFFER_NOT_READY, with the reason in words", () => {
+  const on = (layer, snap = SNAP) => [edit((a) => { a.steps[2] = { text: `Select ${layer} and Pan Behind its pivot to the left edge.`, skill: "transform.anchor", layer }; }), snap];
+  const msg = (input, snap) => { try { checkAnswer(input, onA({ snapshot: snap })); } catch (e) { return [e.code, e.message]; } return null; };
+  // Position keyed to move (position_moves).
+  const [code, text] = msg(...on(TITLE));
+  assert.equal(code, "OFFER_NOT_READY");
+  assert.match(text, /Step 3 is on DISCOVER the past to INSPIRE the future/);
+  assert.match(text, /Position is keyed to move\. Keep the step and leave out the offer\.$/);
+  assert.doesNotMatch(text, /[a-z]_[a-z]|`/, "no field names");
+  // A null that carries nothing.
+  assert.match(msg(...on("Sweep Control"))[1], /a null that carries no other layer/);
+  // 3D, planted on rock.png.
+  const threeD = comp1(); threeD.layer_info.find((l) => l.name === "rock.png").three_d = true;
+  assert.match(msg(...on("rock.png", threeD))[1], /a 3D layer/);
+  // The lesson can take these: rock.png as it is, and Shake Control, a null that carries others.
+  assert.equal(msg(...on("rock.png")), null);
+  assert.equal(msg(td16(), SNAP), null);
+  // B1 never runs it; the offer is checked as data and stripped.
+  assert.deepEqual(checkAnswer(on(TITLE)[0], b1()).offered, ["transform.anchor"]);
+  // Two pivot steps, one the lesson can take: accepted.
+  const two = edit((a) => { a.steps[0] = { text: `Select ${TITLE} and Pan Behind its pivot to the left edge.`, skill: "transform.anchor", layer: TITLE }; });
+  assert.equal(msg(two, SNAP), null);
+});
+
 test("R3 FR-014, FR-016: clarify, outside and no_comp with a step, an offer or a closing offer are NOT_ACTIONABLE", () => {
   const base = { explanation: "Do you mean G Shakers on layer 7 or the one on layer 14?", steps: [], offered_skills: [], closing_offer: null };
   refuses({ ...base, kind: "clarify", steps: [td16().steps[3]] }, b1(), "NOT_ACTIONABLE");

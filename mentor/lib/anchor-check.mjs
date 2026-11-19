@@ -228,7 +228,12 @@ export function hintCodes(r, others = []) {
   if (away) codes.push("away_from_rest");
   else if (!i2.passed) {
     // K7: a null's own square isn't graded, its children are (item2.moved_children names them).
-    if (r.null_focus) codes.push(r.position_changed && !r.anchor_changed ? "layer_dragged" : "children_moved");
+    // children_moved only when its pivot moved; with the pivot as it was, a carried layer moved by
+    // itself or with another change on the null (carried_layer_moved; review of T060).
+    if (r.null_focus) {
+      if (r.anchor_changed) codes.push("children_moved");
+      else codes.push(r.position_changed ? "layer_dragged" : "carried_layer_moved");
+    }
     else if (r.anchor_changed && !r.position_changed) codes.push("moved_with_pivot");
     else if (r.position_changed && !r.anchor_changed) codes.push("layer_dragged");
     // What's drawn moved inside the layer while its own pivot didn't (a text layer's justification,

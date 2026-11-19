@@ -138,6 +138,15 @@ test("a planted child move fails, naming the child", () => {
   assert.ok(row.hints.includes("children_moved"));
 });
 
+test("a child moved with the null's pivot as it was: carried_layer_moved, never children_moved", () => {
+  const now = moveLayer(BASE, ROCK, 30);
+  const row = check(BASE, now, lessonOf(NULL_IN)).layers[0];
+  assert.equal(row.passed, false);
+  assert.equal(row.anchor_changed, false);
+  assert.deepEqual(row.item2.moved_children.map((m) => m.layer), ["rock.png"]);
+  assert.deepEqual(row.hints, ["carried_layer_moved"]);
+});
+
 test("dragging the null (Position only) moves its children: fails, layer_dragged", () => {
   const now = clone(BASE);
   for (const smp of now.layer_info.find((l) => l.index === SHAKE).samples) { smp.position[0] += 50; smp.base.position[0] += 50; }
