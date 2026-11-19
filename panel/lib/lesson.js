@@ -36,6 +36,7 @@ function initialLesson(opts) {
     null_stage: null,
     landing_hard: [],
     no_new_target: false,
+    hand_in: null, // spec 014 phase 2: { layer, step_number, practice } from a hand-in snapshot (MU ask-deeper-lesson)
     ended: false, // spec 014 T107: the mentor's end_lesson ended it, with nothing recorded
   };
 }
@@ -90,6 +91,12 @@ function onSnapshot(v, ev) {
     // FR-052: the tool's own code, on a review. Sticky: the screen it opens ends the lesson.
     no_new_target: v.no_new_target || (r.mode === "review" && r.no_demo_reason === "no_new_target"),
   });
+  // Spec 014 (contracts/hand-in.md): a lesson opened from an answer's step. Pick is done, since the
+  // answer made the choice; hand_in_lost opens as from Skills, so it sets nothing.
+  if (r.mode_source === "hand_in" && r.hand_in && typeof r.hand_in === "object") {
+    const h = r.hand_in;
+    next.hand_in = { layer: typeof h.layer === "string" ? h.layer : null, step_number: Number.isInteger(h.step_number) ? h.step_number : null, practice: h.practice === true };
+  }
   if (r.demo_used === true) { next.demo_made = true; next.demo_unknown = false; }
   if (r.demo_target) next.demo_unknown = false;
   // FR-015: rows from a check are only ever replaced by the next check.
@@ -169,7 +176,7 @@ function reduceLesson(view, ev) {
 // data-model › Stage: done if passed, else try on a reply, check, demo or a picked-up lesson.
 function stageOf(view) {
   const v = view || initialLesson();
-  const stage = v.passed ? "done" : v.replied || v.checks > 0 || v.demo_made || v.demo_unknown || v.picked_up ? "try" : "pick";
+  const stage = v.passed ? "done" : v.replied || v.checks > 0 || v.demo_made || v.demo_unknown || v.picked_up || !!v.hand_in ? "try" : "pick";
   const order = ["pick", "try", "done"];
   const at = stage === "done" ? order.length : order.indexOf(stage);
   const steps = order.map((name, i) => ({ name, label: COPY.lesson.stages[name], state: i < at ? "done" : i === at ? "current" : "upcoming" }));

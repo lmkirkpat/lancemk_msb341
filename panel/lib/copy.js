@@ -23,7 +23,10 @@ const COPY = {
     flip: "⇄ Flip", flip_aria: "Flip between the two frames", frame_bigger: "Show this frame bigger", frame_alt: "A frame from your comp",
     pressed: { start: "Starting…", check: "Checking…", hint: "Thinking…", show: "Showing…", find: "Looking…", try: "Trying…", open: "Opening…" },
   },
-  back: { lesson: "Back to Home. Your lesson stays open.", home: "Back to Home", skills: "Back to Skills" },
+  back: { lesson: "Back to Home. Your lesson stays open.", home: "Back to Home", skills: "Back to Skills",
+    // spec 014 MU › Going deeper: a go-deeper lesson's Back goes to its question. Once the lesson has
+    // closed it no longer stays open, so the label drops that (not in MU; for design review).
+    question: "Back to your question. Your lesson stays open.", question_closed: "Back to your question" },
   paused: {
     after_lesson: AFTER_LESSON, needs_ae: NEEDS_AE, needs_mentor: NEEDS_MENTOR, waiting_ae: "Waiting for After Effects.",
     hint_needs_ae: "Hint needs After Effects.", after_look: "Buttons turn on after the mentor looks at your comp.",
@@ -136,6 +139,13 @@ const COPY = {
     // with none known, the divider stops at "practiced".
     divider_practiced: (tag, layer) => (layer ? `${tag} · practiced on ${layer}` : `${tag} · practiced`),
     divider_ended: (tag) => `${tag} · ended, not saved`,
+    // MU › Going deeper (ask-deeper-lesson, ask-lessonopen, ask-deeper-passed, ask-back, home-lessonopen-deeper).
+    from_question: "From your question. Back returns you to it.",
+    back_to_lesson: "Back to your lesson ›",
+    lesson_is_open: (tag) => `Your ${tag} lesson is open.`,
+    back_to_steps: "Back to your steps ›",
+    question_and_answer: "Your question and its answer",
+    from_question_sub: "from your question",
   },
   quiet: {
     pick_up: (skill, focus) => (focus ? `Pick up ${skill} on ${focus}` : `Pick up ${skill}`),
@@ -150,6 +160,8 @@ const COPY = {
     picking_kicker: "What's next",
     picking_title: "One suggestion",
     review_tag: "↻ review",
+    practice_tag: "Practice", // spec 014 FR-023: a go-deeper lesson on a learned skill, never review
+    done_tag: "✓ Done", // spec 014 MU ask-deeper-passed
     passed_tag: "✓ passed",
     check_passed_tag: "✓ check passed",
     passed: "Lesson passed.",

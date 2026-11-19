@@ -16,11 +16,11 @@ const { skillOf } = require("./skill-tools.js");
 const { statusFor } = require("./activity.js");
 const { connectionFromTool } = require("./connection.js");
 const { shortDate } = require("./memory.js");
-const { COPY } = require("./copy.js");
+const { COPY, deeperDivider } = require("./copy.js");
 const { askView, fallbackText, ANSWER_TOOL } = require("./ask-result.js");
 const PHASE = require("./phase.js");
 const thr = require("./ask-thread.js");
-const { askRequest, followUpRequest, goDeeperRequest, contextRequest, ASK_COMMAND } = require("./requests.js");
+const { askRequest, followUpRequest, goDeeperRequest, endDeeperRequest, contextRequest, ASK_COMMAND } = require("./requests.js");
 
 const LOADING_AFTER_MS = 300; // FR-008
 const SENDING_MS = 600; // MU ask-sending: Asking… shows on Home before the thread takes over
@@ -104,7 +104,11 @@ function createApp(deps) {
     askFrames: {}, // entry index → frame data URLs, this panel session only
     steps_open: false,
     steps_list_open: false,
+    // Go deeper (spec 014 phase 2): the lesson on screen came from an answer, in the thread's own
+    // conversation. Stays true until the lesson screen is left, so its states stay MU's.
+    deeper_lesson: false,
   };
+  const lessonWired = new WeakSet(); // adapters wired as a lesson's, so a second hand-over doesn't wire twice
 
   const changed = () => deps.onChange();
   const reduce = (ev) => { state.lesson = reduceLesson(state.lesson, ev); };
@@ -289,8 +293,74 @@ function createApp(deps) {
       loadRecord();
     }
     if (e.name === "end_lesson" && state.lesson && state.lesson.ended && state.lesson_open) closeEnded();
+    if (state.deeper_lesson) deeperResult(e);
     persist();
     changed();
+  }
+
+  // A go-deeper lesson's results the thread keeps: the hand-in's layer and step (data-model § 4), and
+  // record_lesson's or end_lesson's hand_back for the line drawn on return (contracts/panel-ask.md).
+  function deeperResult(e) {
+    if (!state.thread || !thr.deeperOpen(state.thread) || !e.ok || !e.json || typeof e.json !== "object") return;
+    const j = e.json;
+    if (list.isSnapshot(e.name) && j.mode_source === "hand_in" && j.hand_in && typeof j.hand_in === "object") {
+      state.thread = thr.deeperHandIn(state.thread, { layer: j.hand_in.layer, step_number: j.hand_in.step_number });
+    }
+    if ((e.name === "record_lesson" || e.name === "end_lesson") && j.hand_back && typeof j.hand_back === "object") {
+      state.thread = Object.assign({}, state.thread, { deeper: Object.assign({}, state.thread.deeper, { hand_back: j.hand_back }) });
+    }
+    persistThread();
+  }
+
+  // The divider for the lesson that just closed: practiced on its layer when its record was saved,
+  // else ended, not saved (FR-051). The layer is the hand-in's, else the lesson's focus.
+  function deeperDividerNow(saved) {
+    const d = (state.thread && state.thread.deeper) || {};
+    const v = state.lesson || {};
+    const layer = d.layer || (v.hand_in && v.hand_in.layer) || (Array.isArray(v.focus) && v.focus.length ? v.focus.join(", ") : null);
+    const row = skillById(d.skill);
+    const name = row && deps.pathData && Array.isArray(deps.pathData.skills) ? (deps.pathData.skills.find((s) => s.id === row.id) || {}).name : null;
+    return deeperDivider(d.tag || name || "", { saved, layer });
+  }
+
+  // The go-deeper lesson has closed (record saved, end_lesson, or the mentor gone): the conversation
+  // goes back to the thread, which gets its return (MU ask-back, ask-ended). The lesson screen stays,
+  // with Back to your steps, until the learner leaves it. Only once the turn has ended, so its last
+  // words land in the lesson.
+  function settleDeeper() {
+    if (!state.thread || !thr.deeperOpen(state.thread)) return;
+    const a = state.adapter;
+    state.adapter = null;
+    if (a) {
+      if (state.threadAdapter && state.threadAdapter !== a) stopThreadAdapter();
+      state.threadAdapter = a;
+    }
+    const saved = !!state.lesson && state.lesson.saved === true;
+    const line = thr.handBackLine(state.thread.deeper.hand_back, COPY.ask);
+    state.thread = thr.backFromDeeper(state.thread, { divider: deeperDividerNow(saved), hand_back: line, saved, at: now().toISOString() });
+    state.steps_open = !!state.thread.latest_steps; // Your steps opens itself once, on the way back (FR-049)
+    state.steps_list_open = false;
+    persistThread();
+  }
+
+  function closeDeeperScreen() {
+    state.lesson_over = false;
+    state.lesson = null;
+    state.error = null;
+    state.session = null;
+    state.messages = [];
+    state.deeper_lesson = false;
+    resetPicking();
+  }
+
+  // Back to your steps › (MU ask-deeper-passed → ask-back): to the thread, where the return is.
+  function backToSteps() {
+    if (!state.deeper_lesson || state.busy || state.lesson_open) return;
+    settleDeeper();
+    closeDeeperScreen();
+    state.tab = "home";
+    state.home_view = "thread";
+    state.focus_tick++;
   }
 
   // Spec 014 T107: the mentor ended the lesson with nothing to record (end_lesson), in any words or
@@ -362,6 +432,7 @@ function createApp(deps) {
     state.turn = Object.assign({}, state.turn, { busy: false });
     stopAdapter();
     if (state.session) { state.session.ended = true; persist(); }
+    if (state.deeper_lesson) settleDeeper(); // nothing left to hand back: the thread gets "ended, not saved"
   }
 
   // A question asked after the pass went wrong (FR-046). The lesson's result doesn't change, so this
@@ -410,9 +481,10 @@ function createApp(deps) {
     persist();
     if (deps.appendTurn) {
       // FR-029: the runtime's fields as the adapter gives them; turns.js keeps only what's allowed.
-      deps.appendTurn({ at: state.sentAt || undefined, kind: e.kind, wait_ms: e.wait_ms, first_event_ms: e.first_event_ms, total_ms: e.total_ms, cost_usd: e.cost_usd, ok: e.ok, lesson_passed: !state.passedBefore && !!(state.lesson && state.lesson.passed),
+      deps.appendTurn({ at: state.sentAt || undefined, kind: e.kind, thread: state.deeper_lesson ? "ask" : undefined, wait_ms: e.wait_ms, first_event_ms: e.first_event_ms, total_ms: e.total_ms, cost_usd: e.cost_usd, ok: e.ok, lesson_passed: !state.passedBefore && !!(state.lesson && state.lesson.passed),
         runtime: e.runtime || runtime, model: e.model, effort: e.effort, settings_hash: e.settings_hash, tokens: e.tokens, other_model: e.other_model, error_kind: e.error_kind, start_ms: e.start_ms });
     }
+    if (state.deeper_lesson && !state.lesson_open) settleDeeper();
     state.focus_tick++;
     changed();
   }
@@ -476,6 +548,7 @@ function createApp(deps) {
     state.from_picking = false;
     state.pick_session = null;
     state.recommend = null;
+    state.deeper_lesson = false;
   }
 
   // The path's first skill: what Start lesson means with no skill named (FR-010).
@@ -664,6 +737,7 @@ function createApp(deps) {
 
   function endLessonNow() {
     if (!state.lesson_open || state.busy) return;
+    if (state.deeper_lesson) { endDeeperLesson(); return; }
     stopAdapter();
     session.clear();
     state.pending = null;
@@ -674,6 +748,29 @@ function createApp(deps) {
     state.messages = [];
     state.tab = "home";
     resetPicking();
+  }
+
+  // End lesson on a lesson from Go deeper (MU home-lessonopen-deeper → ask-ended): nothing is saved, the
+  // conversation goes back to the thread, and the thread sends End lesson's request so the mentor names
+  // the next step. The learner sees only the divider (contracts/panel-ask.md › Requests).
+  function endDeeperLesson() {
+    session.clear();
+    state.pending = null;
+    state.lesson_open = false;
+    const a = state.adapter;
+    state.adapter = null;
+    if (a) {
+      if (state.threadAdapter && state.threadAdapter !== a) stopThreadAdapter();
+      state.threadAdapter = a;
+    }
+    state.thread = thr.backFromDeeper(state.thread, { divider: deeperDividerNow(false), hand_back: null, saved: false, answered: false, at: now().toISOString() });
+    state.steps_open = !!state.thread.latest_steps;
+    state.steps_list_open = false;
+    closeDeeperScreen();
+    state.tab = "home";
+    state.home_view = "thread";
+    askSend(endDeeperRequest());
+    persistThread();
   }
 
   function resetPicking() {
@@ -692,6 +789,7 @@ function createApp(deps) {
   // What's next ›, See your skills, Back to Home after the lesson has ended.
   function leaveLesson(tab) {
     if (state.busy) return;
+    if (state.deeper_lesson) settleDeeper();
     stopAdapter();
     state.lesson_open = false;
     state.lesson_over = false;
@@ -700,6 +798,7 @@ function createApp(deps) {
     state.session = null;
     state.messages = [];
     state.tab = tab;
+    state.deeper_lesson = false;
     resetPicking();
   }
 
@@ -769,7 +868,7 @@ function createApp(deps) {
     state.steps_list_open = false;
     if (state.thread) {
       // amendment (e): the next follow-up or Try again carries the last question and answer.
-      state.thread = Object.assign({}, thr.setAfterLesson(state.thread, true), { claude_session_id: null });
+      state.thread = Object.assign({}, thr.setAfterLesson(thr.setAfterDeeper(thr.dropDeeper(state.thread), false), true), { claude_session_id: null });
       persistThread();
     }
   }
@@ -826,6 +925,62 @@ function createApp(deps) {
       t.fallback = t.view ? null : fallbackText(e);
       toThread();
     }
+    // FR-025 on A: the mentor took the yes (pressed or typed) and the lesson takes over in this same
+    // conversation. A refusal isn't a hand-over; the mentor says why in the thread.
+    if (t && e.name === "go_deeper" && e.ok && e.json && typeof e.json === "object" && runtime === "a") { handOver(e.json); return; }
+    changed();
+  }
+
+  // The thread's conversation becomes the lesson's (MU ask-deeper-starting → ask-deeper-lesson). The
+  // turn in flight carries on as the lesson's first: its words and tools land in the lesson, and it's
+  // logged as the thread's (FR-058). Nothing about what to teach is decided here.
+  function handOver(j) {
+    const a = state.threadAdapter;
+    const t = state.askTurn;
+    if (!a || !t || state.lesson_open) return;
+    const row = typeof j.command_skill === "string" ? skillOfCommand(`/${j.command_skill}`) : null;
+    const was = state.thread.deeper || {};
+    const skill = row ? row.id : was.skill || null;
+    const tag = typeof j.short_name === "string" && j.short_name ? j.short_name : was.tag || null;
+    state.thread = thr.openDeeper(state.thread, { skill, tag, practice: j.practice === true });
+    state.askTurn = null;
+    state.askSending = false;
+    state.threadAdapter = null;
+    if (state.adapter && state.adapter !== a) stopAdapter();
+    resetLessonFields();
+    state.adapter = a;
+    if (!lessonWired.has(a)) { lessonWired.add(a); wire(a); }
+    state.deeper_lesson = true;
+    state.turnsDone = 1; // the conversation is already going: a passing error isn't a failed start
+    state.pending = null;
+    state.saved = null;
+    state.aeclosed = false;
+    state.messages = [];
+    state.lesson = initialLesson({ skill });
+    state.lesson_open = true;
+    state.tab = "lesson";
+    state.home_view = "home"; // the Home tab shows home-lessonopen-deeper; the lesson's Back goes to the thread
+    state.steps_open = false;
+    state.steps_list_open = false;
+    const req = goDeeperRequest(tag || "");
+    state.start = row ? { skill: row.id, req: startRequest(row.command), status: COPY.status.lesson_ready } : null;
+    startSession(state.thread.claude_session_id, row ? row.skill : j.command_skill);
+    state.busy = true;
+    state.turn = { busy: true, kind: "go_deeper", pressed: null, status: COPY.status.lesson_ready };
+    state.mentorEntry = null;
+    state.committed = "";
+    state.block = "";
+    state.turnError = null;
+    state.error = null;
+    state.aeNoticed = false;
+    state.demoCallSeen = false;
+    state.demoResult = false;
+    state.passedBefore = false;
+    state.sentAt = t.sent_at || null;
+    state.last = { kind: "go_deeper", text: req.request, label: req.label };
+    persistThread();
+    persist();
+    state.focus_tick++;
     changed();
   }
 
@@ -859,6 +1014,7 @@ function createApp(deps) {
     }
     // FR-048: no view → the mentor's words; with no prose on an answer turn (PQ-1), the rejected
     // result's own explanation and closing offer.
+    state.thread = thr.dropDeeper(state.thread); // a press that didn't become a lesson
     const prose = (t.committed + t.block).trim() || (t.view ? null : t.fallback) || null;
     state.thread = thr.answer(state.thread, { view: t.view, prose, had_result: t.had_result });
     if (t.srcs.length) state.askFrames[state.thread.questions.length - 1] = t.srcs;
@@ -868,7 +1024,7 @@ function createApp(deps) {
     if (t.error && t.error.kind === "timeout" && runtime !== "a") stopThreadAdapter();
     // MU › States still missing: spec 007's notices, with "Your question's still here." in place of the lesson's line.
     if (err) state.thread = thr.notice(state.thread, { title: err.title, text: COPY.ask.question_still_here });
-    else state.thread = thr.setAfterLesson(state.thread, false); // the context went through: later sends are plain
+    else state.thread = thr.setAfterDeeper(thr.setAfterLesson(state.thread, false), false); // the context went through: later sends are plain
     if (deps.appendTurn && e) {
       deps.appendTurn({ at: t.sent_at || new Date(t.sent_ms).toISOString(), kind: t.kind, thread: "ask", wait_ms: e.wait_ms, first_event_ms: e.first_event_ms, total_ms: e.total_ms, cost_usd: e.cost_usd, ok: e.ok, lesson_passed: false,
         runtime: e.runtime || runtime, model: e.model, effort: e.effort, settings_hash: e.settings_hash, tokens: e.tokens, other_model: e.other_model, error_kind: e.error_kind, start_ms: e.start_ms });
@@ -931,23 +1087,23 @@ function createApp(deps) {
   function followUp(text) {
     const q = String(text || "").trim();
     if (!q || !state.thread || followOff()) return false;
-    const req = state.thread.after_lesson ? contextRequest(thr.contextEntry(state.thread), q) : followUpRequest(q);
+    const req = state.thread.after_lesson ? contextRequest(thr.contextEntry(state.thread), q) : followUpRequest(q, { afterDeeper: state.thread.after_deeper });
     state.thread = thr.addQuestion(state.thread, { text: q, kind: "followup", at: now().toISOString() });
     askSend(req);
     changed();
     return true;
   }
 
-  // Go deeper (FR-048, FR-050): only an offer drawn in an answer still in view. The lesson it opens
-  // is phase 2's (T054); this sends the press, once.
+  // Go deeper (FR-048, FR-050): only an offer drawn in an answer still in view, on A, once. The press
+  // shows in the thread; the mentor's go_deeper hands the conversation to the lesson (handOver).
   function goDeeper({ skill }) {
-    if (!PHASE.FLAGS.go_deeper || !state.thread || followOff()) return;
+    if (!PHASE.FLAGS.go_deeper || runtime !== "a" || !state.thread || followOff() || thr.deeperOpen(state.thread)) return;
     const entry = state.thread.questions.slice().reverse().find((q) => q.view && !q.folded);
     const offer = thr.offersOf(state.thread, entry).find((x) => x.skill === skill);
     if (!offer) return;
     const req = goDeeperRequest(offer.tag);
-    state.thread = thr.addQuestion(state.thread, { text: req.label, kind: "go_deeper", at: now().toISOString() });
-    askSend(req, { pressed: skill });
+    state.thread = thr.pressDeeper(thr.addQuestion(state.thread, { text: req.label, kind: "go_deeper", at: now().toISOString() }), offer);
+    if (!askSend(req, { pressed: skill })) state.thread = thr.dropDeeper(state.thread);
   }
 
   // Try again: the latest entry, as it was sent.
@@ -958,9 +1114,17 @@ function createApp(deps) {
     // question stands alone and goes as a question.
     const last = state.thread.questions.length - 1;
     const req = q.kind === "question" ? askRequest(q.text)
-      : q.kind === "followup" && state.thread.after_lesson ? contextRequest(thr.contextEntry(state.thread, last), q.text)
-        : { kind: q.kind, label: q.text, request: q.text };
+      : q.kind === "lesson_back" ? endDeeperRequest() // End lesson's request, never the divider's words
+        : q.kind === "followup" && state.thread.after_lesson ? contextRequest(thr.contextEntry(state.thread, last), q.text)
+          : q.kind === "followup" ? followUpRequest(q.text, { afterDeeper: state.thread.after_deeper })
+            : { kind: q.kind, label: q.text, request: q.text };
     state.thread = thr.retry(state.thread);
+    if (q.kind === "go_deeper") {
+      const offer = (thr.offersOf(state.thread, state.thread.questions.slice(0, last).reverse().find((x) => x.view && !x.folded)) || []).find((o) => req.request === goDeeperRequest(o.tag).request);
+      if (offer) state.thread = thr.pressDeeper(state.thread, offer);
+      askSend(req, { pressed: offer ? offer.skill : "try_again" });
+      return;
+    }
     askSend(req, { pressed: "try_again" });
   }
 
@@ -994,6 +1158,8 @@ function createApp(deps) {
       has_steps: !!th && !!th.latest_steps,
       steps_open: state.steps_open,
       notice: !!q && !!q.notice,
+      deeper: th && th.deeper ? th.deeper.state : null,
+      back_saved: !!th && !!th.deeper && th.deeper.saved === true,
     };
   }
 
@@ -1033,6 +1199,7 @@ function createApp(deps) {
     back_question: () => { if (state.thread) { state.tab = "home"; state.home_view = "thread"; } },
     toggle_steps: ({ short }) => toggleSteps(short),
     go_deeper: goDeeper,
+    back_steps: backToSteps,
     ask_try_again: askRetry,
     see_covered: () => { state.tab = "skills"; state.skill_detail = null; },
   };
@@ -1082,6 +1249,7 @@ function createApp(deps) {
     const detail = state.skill_detail ? skillDetail(state.skill_detail, viewArgs) : null;
     m.skills_state = state.review_saved && skills_view.due_count > 0 ? "after_review" : skills_view.due_count > 0 ? "due" : skills_view.state;
     m.home_view = state.home_view;
+    m.deeper_lesson = state.deeper_lesson;
     m.draft = !!state.draft.trim();
     m.ask = askModel();
     const lessonSkill = state.lesson && state.lesson.skill;
@@ -1106,6 +1274,7 @@ function createApp(deps) {
       runtime,
       draft_text: state.draft,
       thread: state.thread,
+      deeper: state.thread ? state.thread.deeper : null,
       ask_turn: state.askTurn ? { committed: state.askTurn.committed + state.askTurn.block, view: state.askTurn.view, srcs: state.askTurn.srcs } : null,
       ask_frames: state.askFrames,
       ask_off: askOff(),

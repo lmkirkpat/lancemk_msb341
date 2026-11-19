@@ -138,6 +138,10 @@ button.back:hover:not(:disabled) { border-color: var(--line); color: var(--text-
 .resuming { margin: 0 0 12px; padding: 4px 8px; border-left: 2px solid #555; color: var(--text-strong); }
 .divider { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; margin: 4px 0 10px; }
 .divider::before, .divider::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
+/* spec 014 MU › Going deeper: where a go-deeper lesson came from, and what its check saw */
+.fromq { margin: 0; padding: 0 12px 8px; color: var(--muted); font-size: 11px; flex: none; }
+.passline { margin: 0 0 12px; color: var(--ok); font-weight: 600; }
+.passline small { display: block; color: var(--muted); font-weight: 400; }
 .skel { height: 10px; background: #333; border-radius: 3px; margin: 6px 0; animation: pulse 1.4s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: .45; } }
 .skel-30 { width: 30%; } .skel-40 { width: 40%; } .skel-55 { width: 55%; } .skel-60 { width: 60%; } .skel-70 { width: 70%; } .skel-80 { width: 80%; } .skel-85 { width: 85%; }

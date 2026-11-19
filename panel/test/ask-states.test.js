@@ -69,7 +69,7 @@ const CASES = {
   "ask-sending": [async () => { const h = await panel(); askFromHome(h); return h; }, [A.pressed, A.reading, A.after_answer], []],
   "ask-reading": [async () => { const h = await panel(); askFromHome(h); h.fire(600); return h; }, [Q, A.reading, A.thread_title, A.answering], ["/ask-mentor"]],
   "ask-reading-long": [async () => { const h = await panel(); askFromHome(h); h.fire(600); h.fire(6000); return h; }, [A.reading_long], [A.reading + "<"]],
-  "ask-answer": [() => answered(), ["In Comp 1, rock.png rides on Shake Control", A.steps, "Set the pivot", A.your_steps(4), A.steps_note, "Try them, or want to go deeper"], ["/ask-mentor", "✓", "Go deeper:"]],
+  "ask-answer": [() => answered(), ["In Comp 1, rock.png rides on Shake Control", A.steps, "Set the pivot", A.your_steps(4), A.steps_note, "Try them, or want to go deeper", A.go_deeper("Set the pivot")], ["/ask-mentor", "✓"]],
   "ask-followup": [async () => {
     const h = await answered();
     assert.equal(h.app.followUp("Why the null?"), true);
@@ -145,8 +145,13 @@ test("FR-048: explanation, then Steps and the numbered list, then the closing of
   assert.doesNotMatch(msg, /Not something I teach yet\.\s*<em/, "the not-taught words are the mentor's own, never said twice");
 }));
 
-test("T035 item 2: in phase 1 an answer that offers a skill draws no Go deeper, and a press does nothing; the closing offer still shows", async () => {
-  assert.equal(PHASE.FLAGS.go_deeper, false, "off until phase 2");
+test("T035 item 2: with Go deeper switched off, an answer that offers a skill draws none, and a press does nothing; the closing offer still shows", async () => {
+  assert.equal(PHASE.FLAGS.go_deeper, true, "on since phase 2 (T057)");
+  PHASE.FLAGS.go_deeper = false;
+  try { await offSwitch(); } finally { PHASE.FLAGS.go_deeper = true; }
+});
+
+async function offSwitch() {
   const h = await answered();
   assert.ok(COMP1.offered_skills.length > 0);
   const { html } = screen(h);
@@ -155,7 +160,7 @@ test("T035 item 2: in phase 1 an answer that offers a skill draws no Go deeper, 
   h.app.act("go_deeper", { skill: "transform.anchor" });
   assert.equal(h.adapter().sent.length, 1, "nothing sent");
   assert.equal(h.app.followUp("Why the null?"), true, "the bar isn't held by a press that didn't happen");
-});
+}
 
 test("PQ-1, R2: prose beside a valid result isn't drawn; nothing is said twice", async () => {
   const h = await panel();

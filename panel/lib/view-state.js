@@ -8,8 +8,7 @@
 // The README's ids that draw the same screen as another: the gallery view of a lesson state, and
 // MU's home-review-due, identical to home-return on purpose (the review is in Skills).
 const ALIASES = Object.freeze({ "skill-easing-check": "lesson-partial", "home-review-due": "home-return" });
-// MU's go-deeper ids: spec 014 phase 2 (T054) draws them. Named here so the MU test can tell them
-// from a state this phase forgot.
+// MU's go-deeper ids: spec 014 phase 2 (T054) draws them. Named on their own so tests can find them.
 const DEEPER_IDS = Object.freeze(["home-lessonopen-deeper", "ask-deeper-starting", "ask-deeper-lesson", "ask-deeper-notyet", "ask-deeper-passed", "ask-lessonopen", "ask-back", "ask-ended"]);
 const INTERIM_IDS = Object.freeze([]);
 
@@ -27,6 +26,7 @@ const STATE_IDS = Object.freeze([
   "home-unreachable", "home-busy", "home-unreadable", "home-unreadable-why", "home-thread",
   "ask-typing", "ask-sending", "ask-reading", "ask-reading-long", "ask-answer", "ask-followup", "ask-steps-open",
   "ask-clarify", "ask-outside", "ask-unreachable", "ask-nocomp", "ask-busy", "ask-new-question",
+  ...DEEPER_IDS,
   "skills-empty", "skills-few", "skills-many", "skills-after-review", "skills-due",
   "skill-detail", "skill-detail-noreview", "skill-detail-new",
   "lesson-none", "lesson-starting", "lesson-picking", "lesson-picking-starting", "lesson-picked",
@@ -50,7 +50,7 @@ const askOf = (m) => m.ask || {};
 function homeState(m) {
   if (m.error && m.error.blocks_home) return m.error.state;
   if (m.record && m.record.status === "loading") return "home-loading";
-  if (m.lesson_open) return "home-lessonopen";
+  if (m.lesson_open) return m.deeper_lesson ? "home-lessonopen-deeper" : "home-lessonopen";
   if (askOf(m).sending) return "ask-sending";
   if (m.saved === "waiting") return "home-inprogress";
   if (m.saved === "aeclosed") return "home-aeclosed";
@@ -64,13 +64,17 @@ function homeState(m) {
   return "home-return";
 }
 
-// The thread on the Home tab (MU › Asking). m.ask: { thread, busy, long, answered, latest_kind,
-// view_kind, earlier_count, has_steps, steps_open }.
+// The thread on the Home tab (MU › Asking, › Going deeper). m.ask: { thread, busy, long, answered,
+// latest_kind, view_kind, earlier_count, has_steps, steps_open, deeper, back_saved }; deeper is the
+// thread's go-deeper state ("starting", "open", "passed", "ended") or null.
 function threadState(m) {
   const a = askOf(m);
   const conn = m.connection && m.connection.state;
   if (conn === "not_connected") return "ask-unreachable";
   if (conn === "busy") return "ask-busy";
+  if (m.lesson_open && a.deeper === "open") return "ask-lessonopen";
+  if (a.latest_kind === "lesson_back") return a.back_saved ? "ask-back" : "ask-ended";
+  if (a.busy && !a.answered && a.deeper === "starting") return "ask-deeper-starting";
   if (a.busy && !a.answered) return a.long ? "ask-reading-long" : "ask-reading";
   if (a.view_kind === "no_comp") return "ask-nocomp";
   if (a.view_kind === "clarify") return "ask-clarify";
@@ -114,6 +118,7 @@ function openSkillState(slug) {
 function passedState(m, v) {
   if (v.saved === false) return "lesson-passed-unsaved";
   if (v.saved !== true) return "lesson-passed-asking";
+  if (m.deeper_lesson) return "ask-deeper-passed"; // MU: spec 007's passed screen, from a question
   if (v.mode === "review") return "practice-passed";
   return m.review_date ? "lesson-passed-pivot" : "lesson-passed";
 }
@@ -135,6 +140,8 @@ function lessonState(m) {
   if (v.passed) return passedState(m, v);
   if (v.snapshots === 0 && v.checks === 0 && m.turn && m.turn.busy) return "lesson-starting";
   if (m.from_picking && !v.replied) return "lesson-picked";
+  // A lesson from Go deeper (MU › Going deeper): never a review (FR-023), so these come first.
+  if (m.deeper_lesson) return v.checks > 0 ? "ask-deeper-notyet" : "ask-deeper-lesson";
   if (v.mode === "review") return v.checks > 0 ? "practice-check" : "practice";
   const slug = SKILL_SLUGS[v.skill];
   const resumed = v.picked_up && !v.continued;

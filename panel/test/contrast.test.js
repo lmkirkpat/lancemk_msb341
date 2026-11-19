@@ -141,6 +141,9 @@ const SITS_ON = {
   ".cutoff": [RAISED],
   ".resuming": [BG],
   ".divider": [BG],
+  ".fromq": [BG], // spec 014 MU › Going deeper
+  ".passline": [BG],
+  ".passline small": [BG],
   ".frame-missing": [RAISED],
   "details.earlier": [BG],
   "details.earlier summary::before": [BG],
