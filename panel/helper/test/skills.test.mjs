@@ -47,8 +47,8 @@ for (const name of MENTORS) {
 }
 
 test("ease-mentor and next-mentor tool lists (next-mentor keeps Skill)", () => {
-  assert.deepEqual(readSkill(SKILLS, "ease-mentor").allowedTools, ["read_learner_record", "snapshot_project", "preview_frame", "set_ease", "diff_since_last", "record_lesson"]);
-  assert.deepEqual(readSkill(SKILLS, "next-mentor").allowedTools, ["read_learner_record", "recommend_next", "Skill"]);
+  assert.deepEqual(readSkill(SKILLS, "ease-mentor").allowedTools, ["read_learner_record", "snapshot_project", "preview_frame", "set_ease", "diff_since_last", "record_lesson", "end_lesson"]);
+  assert.deepEqual(readSkill(SKILLS, "next-mentor").allowedTools, ["read_learner_record", "recommend_next", "end_lesson", "Skill"]);
 });
 
 test("only *-mentor names; builder skills and paths are refused", () => {

@@ -890,7 +890,7 @@ test("Haiku 5.5: the as-built swap, drop_block from the hand-over on, no tool-ch
   await s.turn("/offset-mentor");
   await s.turn("Next?");
   const b = bodies(s.svc);
-  assert.deepEqual(b[0].tools.map((t) => t.name), ["read_learner_record", "recommend_next", "Skill"]);
+  assert.deepEqual(b[0].tools.map((t) => t.name), ["read_learner_record", "end_lesson", "recommend_next", "Skill"]); // end_lesson since spec 014 T106
   assert.deepEqual(b[1].tools.map((t) => t.name).sort(), allowedOf("ease-mentor"));
   assert.deepEqual(b[2].tools.map((t) => t.name).sort(), allowedOf("offset-mentor"));
   assert.equal(JSON.stringify(b[3].tools), JSON.stringify(b[2].tools));
