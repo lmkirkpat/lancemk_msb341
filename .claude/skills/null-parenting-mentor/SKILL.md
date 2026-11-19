@@ -89,6 +89,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
      false): this builds on it. Name it ("Set the pivot") and offer it first. If they want this lesson
      anyway, say one sentence: "This builds on the pivot lesson: the null's position is the point
      the whole group turns around." Then carry on. Don't reteach the pivot.
+   - **`mode_source` is hand_in or hand_in_lost** (the learner said yes to going deeper from an
+     answer): run **From an answer** below instead of step 1.
    - **`mode` is review** (a review was due, or the learner asked for one or said they already know
      it): run **The review** below instead; its first call is this one, already made.
    - **Practicing** (the `status` in `learner`): pick up what its `next` says was still off.
@@ -379,6 +381,35 @@ at most; they add the null, place it, parent the rest and give it its move with 
     `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short "I've
     noted that for next time" is enough.
     Name what comes next in words, never a slash command.
+
+## From an answer
+
+The learner asked a question, got steps, and said yes to going deeper on one of them. They're still
+in the same conversation, so you have their words and the answer; the snapshot's `hand_in` gives the
+step's number and the steps after it. Everything in the lesson above still holds (one
+demonstration, hints not fixes, the checks, the record), with these changes:
+
+1. **The group is already chosen** (the step's layer and the layers it names): skip step 1's
+   question and the proposals. With `focus_set` true, open in one sentence as a continued lesson,
+   with their goal in their words, then step 2 as usual from its frame: "We're on Tile, Caption and
+   Stamp, so they move as one card." No memory clause.
+   - `focus_set` false: say why for each layer in `refused` or `rename_needed`, as step 1 does (the
+     group the answer named is in `focus_tried`), then ask which layers should move as one. No
+     proposal.
+   - `hand_in` with no layer (a how-to): open as a first lesson, step 1.
+   - `mode_source` hand_in_lost: one sentence that you couldn't find that layer in this comp now,
+     then step 1 as a first lesson.
+2. **Trace first:** when the layers already follow a parent that moves them (their `motion_from`
+   lists it, or `left_out` gives it as their `parent`), that parent already moves them as one.
+   Say so in one sentence, and that moving where it turns is *Set the pivot* on that parent, named in
+   words; never teach a second null on top of it. An existing control null is always the pivot
+   lesson's, never this one's.
+3. **Already learned** (`practice` true in `hand_in`): it's practice. Never say "review", "test" or
+   "passed the review", and a check that doesn't pass says what's still off and where, never
+   "failed", "wrong" or "not quite".
+4. **Last, after `record_lesson`:** its reply's `hand_back` gives the step and the next one. End the
+   lesson on one line: "That was step 2; next is Play it back." with `next_step`'s text, or "That was
+   the last step." when it's null. Nothing after it; no slash command.
 
 ## The review
 

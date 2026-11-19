@@ -534,7 +534,7 @@ demonstration, hints not fixes, the check, the record), with these changes:
    they all turn from. Say that once in the explanation turn, in place of step 2's "where the pivot is
    now" and its frame; the sentence from "The words the lesson uses" stays. No watch offer is made
    on another layer unless `watch_offer` has one.
-4. **Already learned** (`hand_in.practice` true): it's practice. Never say "review", "test" or
+4. **Already learned** (`practice` true in `hand_in`): it's practice. Never say "review", "test" or
    "passed the review", and a check that doesn't pass says what's still off and where, never "failed",
    "wrong" or "not quite".
 5. **The check** (step 7) reads the same, with three hints of its own:
