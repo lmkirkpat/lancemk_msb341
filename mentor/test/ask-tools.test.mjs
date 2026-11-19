@@ -64,7 +64,8 @@ test("give_answer is registered from its own file, with TOOLS only: no skill ID 
   assert.equal(askModule.SKILLS, undefined);
   assert.equal(askModule.FINDERS, undefined);
   assert.ok(!SKILLS.some((s) => s.startsWith("ask")));
-  assert.ok(!Object.values(FINDERS).some((f) => f.hand_in === true), "phase 1: no lesson takes a hand-in yet (R13)");
+  // Phase 2 (R13): pivot and null take a hand-in; the other four wait for phase 3.
+  assert.deepEqual(Object.keys(FINDERS).filter((id) => FINDERS[id].hand_in === true).sort(), ["parenting.null", "transform.anchor"]);
 });
 
 test(`reply shape on B1 (${LIVE ? "live" : "derived"} Comp 1): the accepted fields plus comp, runtime and tags; no offer`, async () => {
@@ -110,13 +111,24 @@ test("the session's ask block holds the checked offer and the goal, even on B1",
   assert.equal(ask.entry_date, null);
 });
 
-test("on A, an offer needs a lesson that takes a hand-in: none does in phase 1, so it's refused; no offer is fine", async () => {
+test("on A, an offer needs a lesson that takes a hand-in: Set the pivot does (phase 2), Speed graph doesn't yet; no offer is fine", async () => {
   process.env.AE_MENTOR_RUNTIME = "a";
-  await refuses(td16(), "OFFER_NOT_READY");
-  assert.equal(fs.existsSync(SESSION), false, "a refusal saves nothing");
-  const r = await call({ ...td16(), offered_skills: [], closing_offer: "Try them?" });
+  const r = await call(td16());
   assert.equal(r.runtime, "a");
-  assert.deepEqual(r.offered_skills, []);
+  assert.deepEqual(r.offered_skills, ["transform.anchor"]);
+  fs.rmSync(SESSION);
+  use(PRACTICE);
+  await refuses({
+    kind: "answer",
+    explanation: "In Mentor Practice, Title moves on its own Position keys.",
+    steps: [{ text: "Select Title's last two Position keys and open the speed graph.", skill: "Speed graph", layer: "Title" }],
+    offered_skills: ["easing.speed_graph"],
+    closing_offer: "Try it, or want to go deeper with *Speed graph*?",
+  }, "OFFER_NOT_READY");
+  assert.equal(fs.existsSync(SESSION), false, "a refusal saves nothing");
+  use(COMP1);
+  const none = await call({ ...td16(), offered_skills: [], closing_offer: "Try them?" });
+  assert.deepEqual(none.offered_skills, []);
 });
 
 test("read-only: one default snapshot, no other snippet, no edits, no learner record (phase 1)", async () => {

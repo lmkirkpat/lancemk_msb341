@@ -143,7 +143,8 @@ function keysOverridden(snapshot, map, index) {
   return keyed.every((k) => sets.has(k.path));
 }
 
-function nullWithChildren(snapshot, map, index) {
+// Exported for go_deeper's ROUTE_TO_PIVOT check on the same rule.
+export function nullWithChildren(snapshot, map, index) {
   const info = layerInfo(snapshot).layers.find((l) => l.index === index);
   const e = map.layers.find((l) => l.layer_index === index);
   return !!info && info.is_null === true && !!e && Array.isArray(e.children) && e.children.length > 0;

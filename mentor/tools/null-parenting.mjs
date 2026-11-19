@@ -40,6 +40,10 @@ export const FINDERS = {
     // Spec 004 FR-049: SKILL.md mentions easing, which isn't a hard prerequisite; it shows in the
     // snapshot's learner.other_skills with hard false.
     mentions: ["easing.basic"],
+    // Spec 014 K6 (R13): a lesson can open from an answer's hand-in; skill_command is its skill
+    // folder, for the ask's Skill call.
+    hand_in: true,
+    skill_command: "null-parenting-mentor",
   },
 };
 

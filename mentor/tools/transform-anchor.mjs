@@ -36,6 +36,10 @@ export const FINDERS = {
       return finder(snapshot, { exclude });
     },
     review: true,
+    // Spec 014 K6, K7 (R13): a lesson can open from an answer's hand-in; skill_command is its
+    // skill folder, for the ask's Skill call.
+    hand_in: true,
+    skill_command: "anchor-mentor",
   },
 };
 
