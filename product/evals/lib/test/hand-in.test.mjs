@@ -17,7 +17,7 @@ test("a hand-in with a skill, a layer, a step number and steps is valid; absent 
 });
 
 test("each way a hand-in can be wrong is named", () => {
-  assert.match(handInProblems({ ...GOOD, skill: "easing.basic" })[0], /skill must be one of/);
+  assert.match(handInProblems({ ...GOOD, skill: "color.grade" })[0], /skill must be one of/);
   assert.match(handInProblems({ ...GOOD, step_number: 3 })[0], /past the last step/);
   assert.match(handInProblems({ ...GOOD, steps: [] })[0], /needs the answer's steps/);
   assert.match(handInProblems({ ...GOOD, layer: 4 })[0], /layer name or null/);

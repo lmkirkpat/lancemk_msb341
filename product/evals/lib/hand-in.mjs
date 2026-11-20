@@ -12,7 +12,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export const HAND_IN_SKILLS = ["transform.anchor", "parenting.null"]; // phase 2: the skills with `hand_in: true`
+export const HAND_IN_SKILLS = ["transform.anchor", "parenting.null", "easing.basic", "keyframes.types", "easing.speed_graph", "timing.offset"]; // the skills with `hand_in: true` (phase 2: pivot and null; phase 3: the other four)
 
 export function handInProblems(h) {
   if (h === undefined) return [];

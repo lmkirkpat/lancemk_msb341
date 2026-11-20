@@ -30,6 +30,8 @@ import { fileURLToPath } from "node:url";
 import { parseJudgeReply } from "../lib/judge-reply.mjs"; // lenient judge reply (fences, stray text); unreadable = plumbing
 import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
 import { turnChecks, turnProblems, TURN_KEYS } from "../lib/turn-checks.mjs"; // last_turn_* and say_max_sentences (spec 007)
+import { handInProblems, seedHandIn } from "../lib/hand-in.mjs"; // a case's seeded hand-in (spec 014 T079)
+import { phase3Checks, phase3Problems, PHASE3_KEYS } from "../lib/phase3-checks.mjs"; // turn_tools, record_text_never, say_ends_with (spec 014 T079)
 import { blankFrame } from "../lib/blank-frame.mjs"; // flat 1920 x 1080 preview frame
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
@@ -176,10 +178,13 @@ function validate(c) {
   if (c.learner_record && !fs.existsSync(recordFile(c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
-  const known = [...TURN_KEYS, "first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
+  problems.push(...handInProblems(c.hand_in));
+  for (const r of c.runtimes || []) if (!["b1", "a"].includes(r)) problems.push(`runtimes: "${r}" isn't b1 or a`);
+  const known = [...TURN_KEYS, ...PHASE3_KEYS, "first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
     "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "snapshot_reply", "focus_stable", "focus_named", "first_snapshot_without_options", "snapshot_in_turn_lacks"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   problems.push(...turnProblems(c.expect, (c.turns || []).length));
+  problems.push(...phase3Problems(c.expect, (c.turns || []).length));
   for (const s of (c.expect || {}).say || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
     try { new RegExp(s.must || s.never); } catch (e) { problems.push(`say ${s.id}: bad regex`); }
@@ -380,6 +385,7 @@ function check(expect, turns, c) {
   ];
   const add = (name, pass, detail) => out.push({ check: name, pass, detail });
   out.push(...turnChecks(expect, turns, MENTOR_TOOLS));
+  out.push(...phase3Checks(expect, turns, MENTOR_TOOLS));
   const calls = mentorCalls(turns);
   const demos = calls.filter((e) => e.name === DEMO);
   const checks = calls.filter((e) => e.name === CHECK);
@@ -589,6 +595,7 @@ async function runCase(c, opts) {
   fs.mkdirSync(snaps);
   fs.writeFileSync(path.join(snaps, "frame.png"), blankFrame());
   if (c.learner_record) fs.copyFileSync(recordFile(c.learner_record), path.join(home, "learner.json"));
+  if (c.hand_in) seedHandIn(home, c.hand_in); // what go_deeper leaves on A (spec 014 T079)
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
   const mentor = opts.runtime === "a" ? ab.openCase({ repo: REPO, home, env, opts }) : null;
   const runtime = mentor ? null : ensureRuntime(REPO, path.join(home, "runtime"));
@@ -695,6 +702,10 @@ async function main() {
   const bad = cases.map((c) => [c.id, validate(c)]).filter(([, p]) => p.length);
   for (const [id, p] of bad) console.error(`${id}: ${p.join("; ")}`);
   if (bad.length) process.exit(1);
+  // A case with `runtimes` runs only there (spec 014 T079: a hand-in opening is an A case, since B1 never offers a lesson).
+  for (const c of cases.filter((x) => !(x.runtimes || ["b1", "a"]).includes(opts.runtime))) console.log(`${c.id}  not run on ${opts.runtime} (${c.runtimes.join(", ")} only)`);
+  cases = cases.filter((x) => (x.runtimes || ["b1", "a"]).includes(opts.runtime));
+  if (!cases.length) throw new Error(`No case runs on ${opts.runtime} for ${opts.only || "this set"}`);
   if (opts.dryRun) {
     if (opts.runtime === "a") {
       const a = await ab.dryRunA({ repo: REPO, cases, opts });
