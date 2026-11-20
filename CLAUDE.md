@@ -258,33 +258,37 @@ a brand new session act like a colleague who already knows what you are working 
     `d748984`), ask fixes (a) to (g) merged `bcd6867`, T105 (the turn ends after an accepted `give_answer`,
     B1 hook and A helper) merged `59e7368`, triage 2 `261fe52`. Second full run 9/18 at `542626f`'s parent;
     since then 02, 11 and 12 pass alone, and 05, 09 and 18 failed reruns made before triage 2.
-  - **Next (sprint ends 2026-11-24; phase 2, Go deeper, is on the sessions' critical path):**
-    1. **T037 met 2026-11-18** at `91fd9c7`: 18/18 with `--repeat 3` (majority pass; single runs flip, so
-       this is the bar), $11.04, no hard-rule failure, refusals 3 of 60. Case 01 was 5 of 6 (an ordering
-       miss, accepted and on the watch list). Logged in `ask-build.md` › Phase 1 and the set's README. T039
-       finishes after T038. Follow-ups:
-       - Curriculum designer: TD § 5.1a, § 16 and line 210.
-       - Spec-writer at T040: round 4 and round 5's spec 015 edits, FR-011 and US2's "target", OQ-8.
-       - A live Comp 1 recapture, so `over_1px` reaches the fixtures.
-    2. T038, the live smoke test (builder), with the panel-builder's checks: keyboard focus on Your steps; a
-       close while reading shows "Your question's still here."; a lesson keeps the thread; a new question in
-       the follow-up bar folds the earlier one; Pick up names the comp; a follow-up after a lesson picks up
-       from the earlier answer.
-    3. T040's fold-in: three contract gaps the panel-builder resolved its own way (the wrapper uses the latest
-       entry with something under it, and a fallback sends no wrapper; Try again on a question resends it
-       plain; a bulleted answer spans several lines), the undefined FR-063, the task count (case 18), and the
-       activity line "Writing the answer…" (not in the mockup; a design-reviewer look). **Asking works on B1.**
-    4. Phase 2, Go deeper (T041 to T063): mentor hand-in and hand-back for pivot and null (T042 to T052), the
-       panel's Go deeper states (T053 to T057), eval cases and B1 runs (T058, T059), reviews and merge (T060 to
-       T063). Phase 3 (T064 on) must land before session 3.
-    5. Ship step and sessions: free checks (T088), the paid A run of the ask set (T089, recommended T090),
-       `install.sh --runtime a` (T091), then sessions 1 to 3 on my own comps (T092 to T094), logged with
-       `/usage-session`.
-    6. **Paid, on the builder's go:** the A evals re-run at the merge commit, since the new `mentor/` files
-       move the settings hash.
-    7. **Later:** FR-020 for an asked record entry (phase 3; the skill-builder suggests recording what each
-       answer saw, for the K5 guard). Server rule 4 ("start with the lesson's own snapshot tool") doesn't fit
-       the ask mode; change it at the next six-set re-baseline, since it moves every hash.
+  - **Phases 1 and 2 done (2026-11-16 to 11-19):** asking works on B1 (T037 18/18 at repeat 3, T038 live), Go
+    deeper merged at `4370e67` (T059 met on B1 for anchor, null, next-mentor and ask), folded in as spec
+    amendment (i) (`a548314`: FR-063 `end_lesson`, OQ-9 keep R-NAMES-REAL's exemption, OQ-10 end-lesson cases
+    in T079).
+  - **Ship step (2026-11-19, `fe13477`):** T088 free checks pass. A runs at `051ebc2` (about $9 credit): anchor
+    65/68, null 53/58, both meet FR-033; ask 15/20, because `main` refuses offers of the four skills without a
+    hand-in until phase 3, so SC-006's A half re-runs on phase 3's merge commit. Case 19 (situation 16, the
+    whole go-deeper on A) 3/3 after the A adapter learned `skill_loaded` (a hand-over isn't a `Skill` call on
+    A). **The panel is on A** (T091); restart AE before a sitting. Logged in `ask-build.md` › Ship step.
+  - **Phase 3 built and reviewed, not merged** (branches `014-p3-mentor`, `014-p3-panel`, `014-p3-evals`;
+    worktrees removed, recut with `git worktree add` if needed): asked-question memory, `note_said`, K5
+    (`RECORD_UNATTRIBUTED`), hand-ins for the other four skills, turn 4, 49 new eval cases. T081 and T082
+    fixed. Builder decisions: an asked suggestion ranks **below** a due review; a new `FOLLOW_UP_NOT_ANSWER`
+    guard refuses a repeated answer card. A trial merge of all three passed every suite (mentor 2036, panel
+    894, helper 294, hooks 39, evals 166). `014-p3-evals` predates the mentor's last fix (`4058096`: pivot
+    and null go-deeper lessons record and hand back in the turn after the understanding check), so merge
+    `014-p3-mentor` last or re-merge it.
+  - **Next (sprint ends 2026-11-24):**
+    1. Session 1 on A on my own comp (T092), on `main` as it is; log with `/usage-session` in
+       `discovery/usage-notes/ask-sessions.md`. Watch: a go-deeper that stalls after "try it" (fixed on phase 3).
+    2. Between sittings: merge phase 3 (T083), then T080 on B1 at the merge commit, one set at a time (about
+       $190 to $230 of subscription; two or three usage windows). Ask 21 and 22 may need case 30's tolerance
+       for a refused repeat. Then the ask set on A again (SC-006's A half, case 19 at repeat 3) and T084.
+    3. Session 2 (T093); session 3 (T094) after phase 3 is merged; T095 to T098; T099 (paid A re-runs of every
+       changed set) before any tester; T100 closes the spec.
+    4. Open for the builder at T084 (else the design reviewer's picks): hide "Welcome to Knack." once a
+       question is saved; the divider "· practiced on [layer], not saved"; six lines into MU › Copy.
+    5. Eval follow-ups: `practice.json`'s 140° beside `time * 30` (ask 13); keep 3,000 characters of an
+       unreadable judge reply; log a refused closing's text.
+    6. **Later:** server rule 4 ("start with the lesson's own snapshot tool") doesn't fit the ask mode; change
+       it at the next six-set re-baseline, since it moves every hash.
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),
