@@ -35,8 +35,8 @@ function write(record) {
   fs.renameSync(tmp, LEARNER_FILE);
 }
 
-function isUnsafe(text) {
-  return EMAIL.test(text) || PHONE.some((re) => re.test(text));
+export function isUnsafe(text) {
+  return typeof text === "string" && (EMAIL.test(text) || PHONE.some((re) => re.test(text)));
 }
 
 // Every text argument holding an email or phone number, the refused one and any other. Exported for
@@ -169,4 +169,30 @@ function updateMarks(record, lesson, newMarks) {
     marks.push(m);
   }
   record.marks = marks;
+}
+
+// Spec 014 (data-model § 3, research R8): the record's `asked` list, beside `skills` and `lessons`, so
+// no reader of either changes. A record without the key has none. The entries themselves are built
+// and checked in asked-record.mjs; this is the only place that writes them to the file.
+//
+// A malformed `asked` never makes the record unreadable (the record's validity is `skills` and
+// `lessons`, as before, and the panel ignores `asked`): a value that isn't a list reads as empty, and
+// an entry that isn't an asked entry is skipped by every reader.
+const isAskedEntry = (e) => !!e && typeof e === "object" && !Array.isArray(e) && e.kind === "asked" && typeof e.date === "string";
+export const askedOf = (record) => (record && Array.isArray(record.asked) ? record.asked.filter(isAskedEntry) : []);
+
+// Applies `change` to the record's asked list and saves the record, with every other field as it was.
+// `change` gets the list as stored (junk entries kept in place, so nothing is lost); an `asked` that
+// isn't a list is replaced by a new one. Null, writing nothing, when the record can't be read: an
+// answer never sets the learner's notes aside. A change that returns null or undefined (nothing to
+// change) writes nothing. Returns change()'s value.
+export function updateAsked(change) {
+  if (!peekRecord()) return null;
+  const record = read();
+  const list = Array.isArray(record.asked) ? record.asked.slice() : [];
+  const out = change(list);
+  if (out === null || out === undefined) return null;
+  record.asked = list;
+  write(record);
+  return out;
 }
