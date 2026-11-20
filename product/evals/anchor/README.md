@@ -730,3 +730,7 @@ A case may carry a `hand_in`: the run writes `session.json` with the hand-in `go
 - **Stop rule (cockpit, 2026-11-19):** "something to record" means a demo was made or a check was run. Case 63 stops before either. Proposed, not written: a stop after a check expects `record_lesson` and no `end_lesson`; a stop in a go-deeper lesson ends on the hand-back line.
 - **Fixtures** `synthetic/comp1-shake-pivot-panned.json`, `comp1-shake-pivot-panned-rock-moved.json` and `comp1-rock-pivot-panned.json` are Pan Behind planted on the live Comp 1 by `fixtures/build.mjs` (the same planting `mentor/test/anchor-hand-in.test.mjs` uses); verified with the tool: the first and third pass, the second fails with `children_moved` naming rock.png 30 px right. A live Pan Behind capture would replace them.
 - **Record** for 60: `records/anchor-passed-not-due.json` (pivot learned, review not due), so the hand-in is practice.
+
+## Phase 3 cases (spec 014 T079, written 2026-11-19, dry-run only)
+
+1 case, id 64: K5, a refused record is rewritten and saved, and the learner hears nothing of it (`R-RECORD-REWRITE-SILENT`). It uses the shared keys `record_text_never`, `record_recovers` and `say_never_when_called` (`../lib/phase3-checks.mjs`). Dry-run only until T080.

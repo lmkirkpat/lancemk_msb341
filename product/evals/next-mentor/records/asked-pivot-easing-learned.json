@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "learned",
+      "last_practiced": "2026-11-05T17:00:00.000Z",
+      "times_passed": 1,
+      "next": "Keep going.",
+      "review_due": "2099-01-01",
+      "reviews_passed_in_row": 0
+    }
+  },
+  "lessons": [],
+  "asked": [
+    {
+      "kind": "asked",
+      "date": "2026-11-12T16:00:00.000Z",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Comp 1",
+      "layers": [
+        "Shake Control"
+      ],
+      "goal": "turn a shake from a point on the art",
+      "skills": [
+        "transform.anchor"
+      ],
+      "after_learning": [],
+      "went_deeper": null
+    }
+  ]
+}

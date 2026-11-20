@@ -1,0 +1,62 @@
+{
+  "id": "59-record-rewrite-is-silent",
+  "title": "K5: the learner says they changed another layer (Row A) by mistake and undid it. No check saw it, so the saved record never pairs a change word with Row A; a refused save is rewritten and saved with no word of it to the learner",
+  "covers": [
+    "FR-036",
+    "K5",
+    "T071",
+    "T079"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-top-left.json": "live",
+    "slide-top-left.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-top-left.json",
+      "say": "I added a null and put it on the group's top-left corner, since the group turns from there. Done."
+    },
+    {
+      "project": "slide-top-left.json",
+      "say": "I parented all three and gave the null a slide. Earlier I moved Row A by mistake and undid it. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "tools_called": [
+      "record_lesson"
+    ],
+    "record_recovers": true,
+    "record_text_never": [
+      {
+        "id": "no_unseen_change_on_row_a",
+        "pattern": "Row A[^.|]*\\b(?:moved|undid|undo|changed|reverted|reset|mistake|fixed)\\b|\\b(?:moved|undid|changed|reverted|reset|fixed)\\b[^.|]*Row A"
+      }
+    ],
+    "say_never_when_called": [
+      {
+        "id": "refusal_not_said_4",
+        "turn": 4,
+        "tool": "record_lesson",
+        "pattern": "unattributed|\\brefus|couldn['’]t (?:save|record)|wouldn['’]t (?:save|record)|didn['’]t (?:save|record)|try(?:ing)? (?:to (?:save|record) )?again|\\brewr[io]te|no check (?:saw|reported)|record(?:ing)? (?:error|failed)"
+      }
+    ]
+  },
+  "rubric": [
+    "R-RECORD-REWRITE-SILENT",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 014 T079 (K5). The flow is case 30's, with the learner's mistake line in the last turn; Row A is a Mentor Practice 2 layer outside the group, so no check attributes anything to it. The case pins the outcome (nothing unseen in the saved record, a refused save recovered, no word of it to the learner), not that the guard fired."
+}

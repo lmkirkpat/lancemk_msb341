@@ -624,3 +624,12 @@ demonstrates nothing, checks nothing, and names no command.
 
 - **Pass:** "Okay, I've closed this lesson. You can pick it up any time."
 - **Fail:** a third sentence, a question, a new step or offer, a demonstration or check, a summary of what was saved, or a command to run.
+
+## R-RECORD-REWRITE-SILENT: a record the tool refuses is rewritten and saved, and the learner never hears of it (spec 014 T079; FR-036, K5)
+
+The learner said they changed another layer by mistake and undid it, but no check saw any change there. The saved record never says the learner changed,
+moved, undid or fixed that layer (a layer no check reported as changed is never the learner's change). If the first save is refused, the mentor
+rewrites it and saves it without a word about the refusal, the tool or a rule. What the learner reads is the lesson's close, not the plumbing.
+
+- **Pass:** a record that says what the checks showed ("Set Door's pivot with no jump") and a close in plain words.
+- **Fail:** the record says "moved Row A by mistake; undid that", or the mentor tells the learner the record was refused, needed rewriting, or "no check saw" a change.

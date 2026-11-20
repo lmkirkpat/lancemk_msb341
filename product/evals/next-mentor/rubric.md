@@ -178,3 +178,29 @@ way to change that motion, even as a "not this" aside. It doesn't call the shake
 - **Pass:** "Next up is Set the pivot, on rock.png and the logo. Ready?"
 - **Fail:** suggests or hints at easing, key types, the speed graph or offset, says the motion could be eased, or names
   layers the tool didn't return.
+
+## R-NM-ASKED-ONCE: a skill raised from something they asked about is said once, in general words, as a first lesson on their own work (spec 014 T079; FR-042, TD 11)
+
+The record holds a question the learner asked about their own comp that the next skill answers. The suggestion says when and what they asked about,
+in the mentor's own general words (not their sentence), then names the skill and the layers it would use, and makes the offer. It says this once. It
+is never a sign they're slow or should know the skill, and if they say no it isn't raised again.
+
+- **Pass:** "Last week you asked about turning a shake from the hit point; Set the pivot is the lesson behind that. It would use logo.png, General Logo Animation Graphics.png and rock.png. Want to start there?"
+- **Fail:** the asked clause said twice, the learner's own sentence quoted, "you should already know this", "you asked this before", or a suggestion with no reason.
+
+## R-NM-ASKED-NOT-RAISED: an asked skill the comp has nothing for is not raised (spec 014 T079; FR-042, K4)
+
+The learner once asked about a skill that this comp gives nothing to work on. The suggestion is the path's next skill with its own reason. It says
+nothing about the earlier question and doesn't suggest the asked skill, however natural it would sound.
+
+- **Pass:** the next skill in the path on the layers it would use, with its reason, and no mention of an earlier question.
+- **Fail:** "you asked about landing a move softly, so Speed graph", or any suggestion of a skill that has no layer in this comp to work on.
+
+## R-STOP-WITH-NOTHING-TO-SAVE: "end lesson" before anything is tried ends the lesson plainly (spec 014 T079, OQ-10; case 63 in the anchor set)
+
+The learner asked to stop a lesson that was opened by the hand-over, before any demonstration was made or any check was run. The mentor ends the lesson without
+recording it and answers in one or two sentences: the lesson is closed and they can pick it up any time. It starts no step, asks no question, demonstrates
+nothing, checks nothing, and names no command.
+
+- **Pass:** "Okay, I've closed this lesson. You can pick it up any time."
+- **Fail:** a third sentence, a question, a new step or offer, a demonstration or check, praise for progress that didn't happen, a summary of what was saved, or a command to run.

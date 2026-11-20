@@ -30,6 +30,7 @@ import { blankFrame } from "../lib/blank-frame.mjs"; // flat 1920 x 1080 preview
 import { parseJudgeReply } from "../lib/judge-reply.mjs"; // lenient judge reply (fences, stray text); unreadable = plumbing
 import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
 import { turnChecks, turnProblems, TURN_KEYS } from "../lib/turn-checks.mjs"; // last_turn_* and say_max_sentences (spec 007)
+import { phase3Checks, phase3Problems, PHASE3_KEYS } from "../lib/phase3-checks.mjs"; // turn_tools, record_text_never, record_recovers, say_never_when_called (spec 014 T079)
 import { handInProblems, seedHandIn } from "../lib/hand-in.mjs"; // a case's seeded hand-in (spec 014 T058)
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
@@ -188,11 +189,12 @@ function validate(c) {
   problems.push(...handInProblems(c.hand_in));
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
-  const known = [...TURN_KEYS, "first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
+  const known = [...TURN_KEYS, ...PHASE3_KEYS, "first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
     "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks",
     "proposal_named", "named_layers", "first_snapshot_mode", "first_snapshot_reply", "demo_not_in_turns"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   problems.push(...turnProblems(c.expect, (c.turns || []).length));
+  problems.push(...phase3Problems(c.expect, (c.turns || []).length));
   for (const s of (c.expect || {}).say || []) {
     if (s.at_most !== undefined && !(s.must && Number.isInteger(s.at_most))) problems.push(`say ${s.id}: at_most needs a must regex and a whole number`);
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
@@ -394,6 +396,7 @@ function check(expect, turns, c) {
   ];
   const add = (name, pass, detail) => out.push({ check: name, pass, detail });
   out.push(...turnChecks(expect, turns, MENTOR_TOOLS));
+  out.push(...phase3Checks(expect, turns, MENTOR_TOOLS));
   const calls = mentorCalls(turns);
   const demos = calls.filter((e) => e.name === DEMO);
   const checks = calls.filter((e) => e.name === CHECK);

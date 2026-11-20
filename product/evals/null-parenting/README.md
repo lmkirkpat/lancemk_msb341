@@ -681,3 +681,7 @@ Cases 56 to 58. Nothing here has run. The first run is spec 014 T059. A case may
 
 - **57 is the second guard.** On A, `go_deeper` refuses a null with children (`ROUTE_TO_PIVOT`) before it saves a hand-in, so the ask mentor names *Set the pivot* itself. The case runs the skill's own line, which is what a stale or hand-built hand-in would reach.
 - **The skill's routing sentence sits under "From an answer"**, so the case seeds a hand-in. Whether the line also holds without one is not tested.
+
+## Phase 3 cases (spec 014 T079, written 2026-11-19, dry-run only)
+
+1 case, id 59: K5, as anchor's case 64 (`R-RECORD-REWRITE-SILENT`). Shared keys from `../lib/phase3-checks.mjs`. Dry-run only until T080.

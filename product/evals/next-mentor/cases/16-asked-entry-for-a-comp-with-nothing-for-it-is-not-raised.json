@@ -1,0 +1,64 @@
+{
+  "id": "16-asked-entry-for-a-comp-with-nothing-for-it-is-not-raised",
+  "title": "FR-042: the learner asked something that touches Speed graph, but this comp has no eased pairs for it. The asked candidate isn't raised: the suggestion is the path's next skill, and nothing says they asked",
+  "covers": [
+    "FR-042",
+    "K4",
+    "T068",
+    "T069",
+    "T079"
+  ],
+  "learner_record": "product/evals/next-mentor/records/asked-speed-graph-easing-learned.json",
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/next-mentor"
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "recommend_next"
+    ],
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "transform.anchor",
+          "recommendation.kind": "lesson",
+          "recommendation.reason": "next_in_path"
+        }
+      }
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "names_the_pivot_skill",
+        "must": "pivot",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "never_says_they_asked",
+        "never": "\\basked\\b|speed graph|\\b(?:land|lands|landing)\\s+(?:soft|softly|softer)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-ASKED-NOT-RAISED",
+    "R-NM-SUGGESTS"
+  ],
+  "note": "Spec 014 T079 (FR-042: raised only when the skill's focus finder finds something on this comp). Comp 1's motion is expressions and one control's keys, so the keyframe skills have nothing to work on there (case 14), and the entry stays unraised. A case about a keyless layer's own skill: the asked skill's finder returns no focus, so the suggestion is next_in_path (checked in fixture mode)."
+}

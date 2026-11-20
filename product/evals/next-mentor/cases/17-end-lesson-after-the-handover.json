@@ -1,0 +1,73 @@
+{
+  "id": "17-end-lesson-after-the-handover",
+  "title": "OQ-10 (A): after 'Yes, let's go.' hands over and the pivot lesson opens, the learner says 'end lesson' before any demonstration or check. end_lesson is called, nothing is recorded, and the reply is one or two sentences with no new step",
+  "covers": [
+    "T106",
+    "T108",
+    "OQ-10",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "learner_record": "product/evals/next-mentor/records/four-learned-none-due.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/key-types/practice-now.json",
+      "say": "/next-mentor"
+    },
+    {
+      "project": "mentor/test/fixtures/key-types/practice-now.json",
+      "say": "Yes, let's go."
+    },
+    {
+      "project": "mentor/test/fixtures/key-types/practice-now.json",
+      "say": "end lesson"
+    }
+  ],
+  "expect": {
+    "handover": [
+      {
+        "turn": 2,
+        "skill": "anchor-mentor"
+      }
+    ],
+    "last_turn_tools_called": [
+      "end_lesson"
+    ],
+    "last_turn_tools_not_called": [
+      "record_lesson",
+      "anchor_demo",
+      "anchor_check"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "at_most_two",
+        "turns": [
+          3
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "no_new_step",
+        "never": "\\?",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-STOP-WITH-NOTHING-TO-SAVE"
+  ],
+  "note": "Spec 014 T079 (OQ-10). Case 10's flow (a hand-over to the pivot lesson on the named layers) plus a stop; A only because a hand-over can't happen on B1. Which skill's prompt answers turn 3 is the helper's: the lesson skill is the one in the conversation, and both it and next-mentor list end_lesson."
+}
