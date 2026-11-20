@@ -81,7 +81,8 @@ function resultWord(result) {
 }
 
 // → { empty: true, text } or { empty: false, date, skill, result, next }, for the latest lesson. A
-// field the record doesn't have is "", and the card leaves it out.
+// field the record doesn't have is "", and the card leaves it out. The record's `asked` list (spec 014
+// data-model § 3) is the mentor's scheduling data and never shows here or anywhere (FR-043).
 function memoryView(record, opts) {
   const names = (opts && opts.names) || { "easing.basic": "Easing" };
   const lessons = record && Array.isArray(record.lessons) ? record.lessons.filter((l) => l && typeof l === "object") : [];
