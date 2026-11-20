@@ -424,9 +424,11 @@ demonstration, hints not fixes, the checks, the record), with these changes:
 3. **Already learned** (`practice` true in `hand_in`): it's practice. Never say "review", "test" or
    "passed the review", and a check that doesn't pass says what's still off and where, never
    "failed", "wrong" or "not quite".
-4. **Last, after `record_lesson` (or `end_lesson` on a stop):** its reply's `hand_back` gives the step and the next one. End the
-   lesson on one line: "That was step 2; next is Play it back." with `next_step`'s text, or "That was
-   the last step." when it's null. Nothing after it; no slash command.
+4. **Last, in the same turn as the pass:** step 8's comments are one sentence each in that turn, and
+   none of them waits for a reply (a comment that asks is left for them to answer later). Call
+   `record_lesson` (or `end_lesson` on a stop), then end on its `hand_back` line: "That was step 2;
+   next is Play it back." with `next_step`'s text, or "That was the last step." when it's null.
+   Nothing after it; no slash command.
 
 ## The review
 

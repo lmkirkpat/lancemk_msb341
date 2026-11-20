@@ -559,9 +559,11 @@ demonstration, hints not fixes, the check, the record), with these changes:
    - `pivot_unchanged`: "[null]'s pivot hasn't moved yet." Then the pending action again.
    A pass on a your_call focus: say the pivot moved and the layers didn't, never that it's in the
    right place.
-6. **Last, after `record_lesson` (or `end_lesson` on a stop):** its reply's `hand_back` gives the step and the next one. End the
-   lesson on one line: "That was step 3; next is Play it back and watch the turn." with `next_step`'s
-   text, or "That was the last step." when it's null. Nothing after it; no slash command.
+6. **Last, in the same turn that answers the understanding check (step 8):** the try-it invitation
+   (step 9) is one sentence in that turn, or left out; never wait for them to try it. Call
+   `record_lesson` (or `end_lesson` on a stop), then end on its `hand_back` line: "That was step 3;
+   next is Play it back and watch the turn." with `next_step`'s text, or "That was the last step."
+   when it's null. Nothing after it; no slash command.
 
 ## The review
 
