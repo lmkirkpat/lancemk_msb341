@@ -329,18 +329,18 @@ must land before session 3 (T094).
 
 ## User Story 5: remembered without judging (P2)
 
-- [ ] T065 [US5] (skill-builder) `mentor/lib/asked-record.mjs` (new) and `mentor/lib/learner-store.mjs`: the
+- [x] T065 [US5] (skill-builder) `mentor/lib/asked-record.mjs` (new) and `mentor/lib/learner-store.mjs`: the
   `asked` list (data-model § 3; research R8): `recordAsked`, `markWentDeeper`, `setSaid`, `markRaised`; the
   personal-detail check on every text field (FR-044). Tests in `mentor/test/asked-record.test.mjs` (SC-008): no
   skill field changes; an old record without `asked` reads as empty; reviews, `pastTargets`, marks and the
   practice rule unchanged.
-- [ ] T066 [US5] (skill-builder) `give_answer` writes one asked entry for `kind: "answer"` with `after_learning`
+- [x] T066 [US5] (skill-builder) `give_answer` writes one asked entry for `kind: "answer"` with `after_learning`
   from the record; `go_deeper` sets `went_deeper` (`mentor/tools/ask.mjs`). Tests in `mentor/test/ask-tools.test.mjs`.
-- [ ] T067 [P] [US5] (skill-builder) `note_said` (contracts/ask-tools.md). Tests in `mentor/test/ask-note-said.test.mjs`.
-- [ ] T068 [US5] (skill-builder) FR-042: `mentor/lib/recommend.mjs` raises an unlearned skill from an asked entry
+- [x] T067 [P] [US5] (skill-builder) `note_said` (contracts/ask-tools.md). Tests in `mentor/test/ask-note-said.test.mjs`.
+- [x] T068 [US5] (skill-builder) FR-042: `mentor/lib/recommend.mjs` raises an unlearned skill from an asked entry
   when its finder finds something on this comp, below a lesson in progress, once per entry (`raised`); the reply
   carries the entry's goal in general terms. Tests in `mentor/test/recommend-asked.test.mjs`.
-- [ ] T069 [P] [US5] (skill-builder) `.claude/skills/next-mentor/SKILL.md`: the asked-candidate line ("last
+- [x] T069 [P] [US5] (skill-builder) `.claude/skills/next-mentor/SKILL.md`: the asked-candidate line ("last
   week you asked about …", once); K4 respected.
 - [ ] T070 [P] [US5] (panel-builder) FR-043: `panel/lib/memory.js` and the Skills view never show asked entries
   or "asked again"; turn 4's answer changes nothing to ✓ or ✗. Tests in `panel/test/memory.test.js`,
@@ -348,28 +348,28 @@ must land before session 3 (T094).
 
 ## User Story 6: every lesson traces the motion first (P2)
 
-- [ ] T071 [US6] (skill-builder) K5 (FR-036, research R9): the session's `attributed` list from every check;
+- [x] T071 [US6] (skill-builder) K5 (FR-036, research R9): the session's `attributed` list from every check;
   `record_lesson` refuses `RECORD_UNATTRIBUTED` (`mentor/tools/common.mjs`, `mentor/lib/session.mjs`). Tests in
   `mentor/test/record-k5.test.mjs`: AB 6's summary refused; a summary naming a change a check attributed saved.
-- [ ] T072 [US6] (skill-builder) FR-032: `mentor/lib/opening.mjs` picks no due review when an ask started in the
+- [x] T072 [US6] (skill-builder) FR-032: `mentor/lib/opening.mjs` picks no due review when an ask started in the
   session window (research R6). Tests in `mentor/test/opening-hand-in.test.mjs`.
-- [ ] T073 [US6] (skill-builder) K3 and K6 for the other four: `motion_from` (spec 015's shape) and `hand_in: true`
+- [x] T073 [US6] (skill-builder) K3 and K6 for the other four: `motion_from` (spec 015's shape) and `hand_in: true`
   with a hand-in focus in `mentor/tools/easing.mjs`, `key-types.mjs`, `speed-graph.mjs`, `offset.mjs` (FR-026,
   FR-033). Tests in `mentor/test/motion-from-four.test.mjs` and `mentor/test/hand-in-four.test.mjs`; easing's
   findings unchanged (015's easing-unchanged test re-run).
-- [ ] T074 [US6] (skill-builder) The four `SKILL.md` files (`ease-`, `key-types-`, `speed-graph-`, `offset-mentor`):
+- [x] T074 [US6] (skill-builder) The four `SKILL.md` files (`ease-`, `key-types-`, `speed-graph-`, `offset-mentor`):
   rule 1 in one sentence from `motion_from`; rule 4 wording; rule 5; rule 6 (hand-in opening, hand-back last
   line); a learned skill's lesson from a hand-in says no "review".
-- [ ] T075 [P] [US6] (skill-builder) `anchor-mentor` and `null-parenting-mentor` `SKILL.md`: rule 3's wording on
+- [x] T075 [P] [US6] (skill-builder) `anchor-mentor` and `null-parenting-mentor` `SKILL.md`: rule 3's wording on
   spec 015's K2 ("looks different from my last read; that may be its expression moving it"), rule 4, rule 5.
 
 ## User Story 4: follow up, try, say how it went (P2)
 
-- [ ] T076 [US4] (skill-builder) `.claude/skills/ask-mentor/SKILL.md` phase 3: turn 3 (one or two sentences, then
+- [x] T076 [US4] (skill-builder) `.claude/skills/ask-mentor/SKILL.md` phase 3: turn 3 (one or two sentences, then
   the pending step), turn 4 (a fresh `describe_layers` read of the same layers at the same time; rule 3; where a
   change landed, as a hint; no pass or fail), "just the steps" (FR-030), a new question (FR-031), asking again
   is normal (FR-041's banned phrases; a crediting bridge allowed), `note_said`; `allowed-tools` adds `note_said`.
-- [ ] T077 (skill-builder) Mentor and hooks suites; all pass.
+- [x] T077 (skill-builder) Mentor and hooks suites; all pass.
 - [ ] T078 [P] (eval-engineer) Ask cases: situations 2, 8, 17, 19, a new question, a learned skill asked about
   (SC-010's phrase check plus rubric); record checks (FR-061: the asked entry changes no skill state; no question
   text in `goal`, checked as no run of 5 words from the question).
