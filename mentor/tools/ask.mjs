@@ -24,7 +24,7 @@ import { copiesExpression } from "./common.mjs";
 
 // Data-model § 8's messages for go_deeper, word for word, plus WRONG_STEP, which this build adds.
 registerErrors({
-  NOT_OFFERED: "Only a skill the last answer offered can start from it.",
+  NOT_OFFERED: "Only a skill the last answer offered, or one its steps are tagged with, can start from it.",
   NOT_ON_THIS_RUNTIME: "The lesson can't start from here. Say so in one sentence and name where to start it.",
   NO_ANSWER: "There's no answer in this session yet.",
   WRONG_STEP: "Name the step that skill goes deeper on, by its number in the answer.",
@@ -156,7 +156,10 @@ export async function goDeeper(input = {}) {
   if (!ask) throw new MentorError("NO_ANSWER");
   const { skills, handInReady, commandOf } = await skillModules();
   const skill = skillIdOf(args.skill, skills);
-  if (!skill || skill === NOT_TAUGHT || !(ask.offered_skills || []).includes(skill)) throw new MentorError("NOT_OFFERED");
+  // T081 review: turn 4 may offer to go deeper on the step that didn't land, which the answer may not
+  // have offered, so any skill a step of the latest answer is tagged with counts too.
+  const tagged = (Array.isArray(ask.steps) ? ask.steps : []).some((s) => s && s.skill === skill);
+  if (!skill || skill === NOT_TAUGHT || !((ask.offered_skills || []).includes(skill) || tagged)) throw new MentorError("NOT_OFFERED");
   if (!handInReady(skill) || !commandOf(skill)) throw new MentorError("OFFER_NOT_READY");
   const hit = stepFor(ask, skill, args.step);
   const layer = hit && typeof hit.s.layer === "string" ? hit.s.layer : null;

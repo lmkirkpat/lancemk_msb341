@@ -122,9 +122,12 @@ test("NO_ANSWER: no answer in the session, or one from before the window", async
   await refuses({ skill: "transform.anchor" }, "NO_ANSWER");
 });
 
-test("NOT_OFFERED: a skill the answer didn't offer, a step's tag that wasn't offered, not-taught, or a name that isn't a skill", async () => {
+test("NOT_OFFERED: a skill neither offered nor on a step, not-taught, or a name that isn't a skill; a step's tag that wasn't offered is accepted (T081, turn 4's offer)", async () => {
   await callGive({ ...td16(), offered_skills: [], closing_offer: "Try them?" });
-  await refuses({ skill: "transform.anchor", step: 3 }, "NOT_OFFERED");
+  const r = await call({ skill: "transform.anchor", step: 3 });
+  assert.equal(r.command_skill, "anchor-mentor");
+  assert.equal(onDisk().hand_in.step_number, 3);
+  fs.rmSync(path.join(home, "session.json"));
   await callGive(td16());
   await refuses({ skill: "parenting.null" }, "NOT_OFFERED");
   await refuses({ skill: "not_taught" }, "NOT_OFFERED");
@@ -200,7 +203,7 @@ test("read-only: no fixture edit; the record gains only the answer's asked entry
 });
 
 test("the refusal messages are data-model § 8's, with no field names", () => {
-  assert.equal(MESSAGES.NOT_OFFERED, "Only a skill the last answer offered can start from it.");
+  assert.equal(MESSAGES.NOT_OFFERED, "Only a skill the last answer offered, or one its steps are tagged with, can start from it.");
   assert.equal(MESSAGES.NOT_ON_THIS_RUNTIME, "The lesson can't start from here. Say so in one sentence and name where to start it.");
   assert.equal(MESSAGES.NO_ANSWER, "There's no answer in this session yet.");
   for (const code of ["NOT_OFFERED", "NOT_ON_THIS_RUNTIME", "NO_ANSWER", "WRONG_STEP", "OFFER_NOT_READY", "ROUTE_TO_PIVOT"]) {
