@@ -4,9 +4,12 @@
 
 **Created**: 2026-11-14
 
-**Status**: **Phase 1 done 2026-11-19 (T040): asking works on B1.** Phase 1 merged at `e0ed02f` (T036), the ask
-set met its B1 bar at `91fd9c7` (T037) and the live B1 smoke is logged (T038); details in amendment (g). Phase 2
-(Go deeper) is next: T042 on.
+**Status**: **Phase 2 done 2026-11-19 (T063): Go deeper is ready for A.** Phase 2 merged at `4370e67` (T062),
+and T059 met on B1 for anchor, null, next-mentor and ask; details in amendment (i). FR-063 (ending a lesson in
+words) is now written in full. The MVP (phases 1 and 2) is ready for the ship step (T088 on); what the ship step
+must check is in amendment (i) item 5. Phase 3 (T064 on) is next and must land before session 3.
+**Phase 1 done 2026-11-19 (T040): asking works on B1.** Phase 1 merged at `e0ed02f` (T036), the ask
+set met its B1 bar at `91fd9c7` (T037) and the live B1 smoke is logged (T038); details in amendment (g).
 Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended; OQ-1's
 constitution amendment was 1.5.0, removed in 1.6.0 below). Plan and tasks approved 2026-11-14 (PQ-1 to PQ-5 as
 recommended; FR-006 and FR-016 amended for PQ-5 and PQ-4, FR-019 to match PQ-4, FR-009 points at
@@ -117,6 +120,92 @@ cases included; every FR-061 hard-rule check must still pass on every run. T037 
 `quickstart.md` Phase 1 step 1 says the same. (2) Spec 015's other "target" mentions (SC-002, E14 to E16, the
 Link entity) stay as written; 015 Amendment 10's note covers them. Changed here: SC-006, amendment (g) item 1,
 quickstart. T037's task line still says "3 of 3" and is aligned at T063. No approved decision changes.
+
+**Amended 2026-11-19 (i), T063: phase 2 as built, relayed by the cockpit; add only.** Sources:
+[`ask-build.md`](../../discovery/usage-notes/ask-build.md) › Phase 2 and both "T059" sections, git `7d28e6c` to
+`051ebc2` (and the phase 2 build commits before it, from `be5be84`), and `mentor/`, `panel/` and the skills on
+`main`.
+1. **Phase 2 results.**
+   - **Built and merged.** T042 to T057 and T106 to T108 were built on two branches (`014-p2-mentor`,
+     `014-p2-panel`), with the eval cases (T058, T108) on a third. Each branch was reviewed (T060 reviewer, T061
+     design-reviewer) and fixed in one round. They were trial-merged in a scratch worktree, then merged to `main`
+     at `4370e67` (T062). Tests on `main`: mentor 1956 pass (4 todo), panel 876, helper 294, hooks 39.
+   - **T059 on B1, one set at a time** (bars: SC-006 for the ask set, as amended (h); each lesson set's own
+     SC-006):
+     - **Anchor:** full run at `4370e67` 63/68 (93%), $57.87, no hard-rule check failed. Cases 60 and 62 (new;
+       a case bug and a regex), 51 and 21a (the mentor) were fixed and went 3/3. Case 45 is 2/3 and on the
+       watch list. Triage and fixes $27.30 (`a29eed8`, `3248d21`).
+     - **Null:** full run at `08b7729` 52/58 (90%), $46.68, no hard-rule check failed. New cases 56 and 57 and
+       old case 43 were fixed and went 3/3 (`1e21e8f`, `4d2964b`, `3cf759b`, `45bdca5`). 08 and 30 failed on
+       R-NAMES-REAL (item 4). 11 and 55 were noise.
+     - **Next-mentor:** `--repeat 3` at `4d2964b`, 6/10 at first (02 and 09 failed the same way on 2026-11-09,
+       so not a regression). After the fixes (`f06c59b`, `64377de`): 8/10, with 07 and 08 the known FR-082
+       gaps. New case 14 (K4) 3/3; case 05 5 of 6.
+     - **Ask:** `--repeat 3` at `64377de` 19/19 (100%), $12.36, no FR-061 check failed. Case 19 (situation 16)
+       is A only and wasn't run. Single-run misses: 02 and 03 R-ONE-IDEA, 11 one run with prose next to the
+       answer (plumbing, not FR-061) and 3 refusals.
+     - B1 spend for T059: about $165.
+   - **SC-007's B1 half for pivot and null** is met as the cockpit logged it: both sets meet their SC-006 with
+     every hard-rule check passing. Of T058's new cases, the ones that failed (anchor 60 and 62, null 56 and 57)
+     are 3/3 after fixes. Anchor 61 and 63 and null 58 passed in the full run but weren't repeated, so
+     "3 of 3" isn't shown for them yet (item 5).
+2. **FR-063, ending a lesson in words, is now written in full** (it was reserved at (g)). It covers T106 to
+   T108 and the builder's review decision: "something to record" means a demonstration was made or a check
+   was run. The `end_lesson` tool and its three refusals are in contracts/ask-tools.md › `end_lesson` and
+   data-model § 8. The panel side (T107) was already in contracts/panel-ask.md › Inputs. No other FR number is
+   used.
+3. **Rules the reviews (T060, T061) and T059's triage added, as built.** No approved FR changes; notes are
+   added to FR-024, FR-026 and FR-027.
+   - **A pivot offer on a ruled-out layer is refused on A** (the builder's decision). `give_answer` refuses
+     `OFFER_NOT_READY` when every Set the pivot step sits on a layer the pivot lesson can't take (FR-024's
+     note). Group with a null has no such check.
+   - **`go_deeper` refuses `WRONG_STEP`** when the step number doesn't name a step with that skill. The mentor
+     fixes it and tries again without saying so (contracts/ask-tools.md, data-model § 8).
+   - **A stop in a go-deeper lesson hands back too.** `end_lesson`'s reply carries `hand_back` the way
+     `record_lesson`'s does, and pivot and null end on the hand-back line (FR-026's note, contracts/hand-in.md).
+   - **Pivot on a null (K7):** the children-moved hint fires only when the null's pivot moved. A child that
+     moved while the pivot didn't gets its own hint (`carried_layer_moved`). A place the learner named that is
+     one of the nine spots goes straight to the lesson with that spot; `place_named` is only for a spot the
+     nine can't hold (contracts/hand-in.md).
+   - **Null routing (FR-027):** a null-focus refusal says when the layer's parent is a null, so the skill
+     routes a control null's child to Set the pivot. A lesson from an answer stops there, without asking for
+     another group (FR-027's note).
+   - **Panel (T061):** the go-deeper state survives a restart, and one conversation has one owner, so a
+     closed go-deeper lesson that is still answering pauses the follow-up bar. The design review's must-fix
+     1 (Back or Home skips the return) was a false positive. Checking it found a real race, a follow-up sent
+     between the record saving and the turn ending, which that same rule fixes. Copy in go-deeper lessons has no
+     pass or fail words. Lines added that aren't in MU are listed in contracts/panel-ask.md › Phase 2 lines, as
+     built, for a design-reviewer look.
+   - **Skill wording from T059's triage** (`SKILL.md` only, no FR): step 0 leads with the lesson and review
+     modes before "no options" (anchor, null, offset, key types); anchor never names the centre menu item for
+     another place; null's prompt never says "second null"; next-mentor never calls a review "due", asks one
+     question that holds "all hands-on, no demo", and suggests nothing else when nothing is left.
+4. **R-NAMES-REAL's exemption (builder to confirm).** In T059's triage the eval-engineer changed null's rubric:
+   a property suggested as the next thing to try (Rotation for "a group that turns") and an example name
+   offered as a suggestion ("something like 'Card Rig'") aren't claims about the comp, so R-NAMES-REAL doesn't
+   fail them. It still fails them if the mentor says the comp already has them (`1e21e8f`;
+   `product/evals/null-parenting/rubric.md`). It's in the null set only. It fits FR-061, since a suggestion
+   says nothing about the comp, but it loosens a judge rule, so it's open as OQ-9.
+5. **Open for the ship step.**
+   - **Skills changed without a run.** The step 0 fix reached offset and key types, and the new stop rule
+     reached easing, key types, speed graph and offset, with no eval run. Both are checked at the six-set A run
+     at the ship step (CLAUDE.md's paid A re-run at the merge commit; T099), and on B1 at T080 if phase 3 runs
+     first.
+   - **T108 covers two sets, not "one per lesson set".** Only anchor (63) and null (58) have an end-lesson
+     case. Easing, key types, speed graph, offset and next-mentor have none, so the six-set run can show only
+     that nothing else broke, not that the stop rule holds there. OQ-10.
+   - **Stop cases not written** (proposed by the eval-engineer in the anchor README): a stop after a check
+     calls `record_lesson` and not `end_lesson`; a stop in a go-deeper lesson ends on the hand-back line.
+   - **"3 of 3" for anchor 61 and 63 and null 58** (item 1): run them at `--repeat 3`, with T090 on A or before.
+   - **A only, not yet run:** ask case 19 (situation 16, the hand-in and hand-back) at T089, and anchor and null
+     on A at T090. SC-013's eval half waits on them.
+   - **Live, in session 1 on A:** the T038 repro (stop in words, then a Home follow-up goes to the thread);
+     the hand-back line after a go-deeper. Restart AE first, since `panel/` merged.
+   - **Settings hash:** `end_lesson` and the other `mentor/` changes moved it, so every A result before
+     `4370e67` is stale (CLAUDE.md › Next 6).
+   - **`ask-mentor/SKILL.md` is at 2,495 words** of about 2,500. Phase 3's T076 adds turns 3 and 4, so trim
+     first.
+   No approved decision changes. FR-063 is new in full; notes added to FR-024, FR-026 and FR-027.
 
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
@@ -528,6 +617,13 @@ it happens in the three sessions; a fix needs its own amendment.
   target (TD § 7.2, § 7.3, H-4 decided as recommended): offer the lesson on the real layer with the uncheckable
   part ungraded when the rest is checkable, and say what isn't checked in the offer; offer a stand-in layer only
   when nothing on the real layer is checkable; otherwise no offer.
+  *Note 2026-11-19 (i), from review T060, the builder's decision:* on A, `give_answer` refuses an offer of *Set
+  the pivot* with `OFFER_NOT_READY` when **every** step tagged with it is on a layer the pivot lesson rules out
+  for good: a null with no children, a camera, a light, an adjustment layer, a 3D layer, Collapse on, Anchor
+  Point keyed, an expression on Rotation or Scale, an expression that sets Anchor Point or Position by itself,
+  or Position keyed to move. The refusal names the step, the layer and the reason in words, and the mentor keeps
+  the step and drops the offer. A layer the answer's read can't judge is never refused this way, since the
+  lesson reads again with more times. *Group with a null* has no such check; its lesson refuses for itself.
 - **FR-025**: **On A**, a yes (typed or pressed) MUST hand over in the same conversation with the answer's
   context: the layer that makes the motion, the learner's intent in their words and any place they named, and
   the goal sentence plus the saved steps (TD § 7.2; `/next-mentor` step 6's hand-over, never saying a command).
@@ -536,10 +632,22 @@ it happens in the three sessions; a fix needs its own amendment.
   first step, and keep its own rules (one demonstration, hints not fixes, the check, the record). Its last line
   MUST hand back: "That was step [n]; next is [step n+1]." from the saved steps (TD § 6 turns 5 and 6, § 10.1
   rule 6). Ended early, the mentor still names the next step (MU `ask-ended`).
+  *Note 2026-11-19 (i), as built:* a go-deeper lesson stopped in words before any demonstration or check calls
+  `end_lesson` (FR-063), whose reply carries the same `hand_back` as `record_lesson`'s. Pivot and null then end
+  on the hand-back line, as they do after a record. The End lesson button still sends "I've ended that lesson."
+  to the ask skill, which names the next step (contracts/panel-ask.md › Requests). The panel's own hand-back
+  line in the thread reads "That was step [n]. Next is step [n+1]: [text]." (contracts/panel-ask.md); the
+  mentor's last line keeps this FR's wording.
 - **FR-027**: **Pivot on a null (K7):** *Set the pivot* MUST accept a null with children as its focus when the
   answer names it as the parent carrying the motion, and grade "the children's comp-space footprints didn't
   move" plus the learner's named place as given. An existing control null's pivot routes to *Set the pivot*,
   never *Group with a null* (TD § 10.3, SW-2). The null skill keeps refusing already-parented layers.
+  *Note 2026-11-19 (i), as built (T060, T059):* in a null focus, "a child moved" is reported only when the
+  pivot moved; a child that moved while the pivot didn't gets its own hint. A null-focus refusal says when the
+  refused layer's parent is a null, and the null skill then routes it to *Set the pivot* in step 1, the same
+  for a step that names the control null itself. A lesson from an answer stops there and doesn't ask for
+  another group. On A, `go_deeper` refuses a null with children (`ROUTE_TO_PIVOT`) before any hand-in, so
+  the skill's routing is the second guard.
 
 **Turns after the answer (US4; TD § 6)**
 
@@ -720,13 +828,32 @@ it happens in the three sessions; a fix needs its own amendment.
 
 **Ending a lesson in words (added 2026-11-19 (g), from T038 finding 1)**
 
-- **FR-063** (**reserved**; the full requirement and its checks are written at T063, after T106 to T108 land):
-  When the learner asks to stop a lesson in their own words, the panel MUST close the lesson as it does for
-  the End lesson button. T038 found the lesson stayed open: Home's Ask stayed paused and follow-ups went into
-  the lesson. **The builder's decision (2026-11-19):** a stop with something to record still calls
-  `record_lesson`, as today. Only a stop with nothing to record calls the new `end_lesson` tool (T106), which
-  writes nothing to the learner record, and the panel treats it like End lesson (T107). Every lesson set gets
-  a case for it (T108).
+- **FR-063** (reserved at (g); written in full 2026-11-19 (i), as built by T106 to T108): When the learner asks
+  to stop a lesson before it's recorded, in any words ("end lesson", "let's stop here") or with the End lesson
+  request, the lesson MUST end and the panel MUST close it as it does for the End lesson button. T038 found the
+  lesson stayed open: Home's Ask stayed paused and follow-ups went into the lesson.
+  - **Something to record means a demonstration was made or a check was run** (the builder, 2026-11-19, from
+    review T060). A focus alone, a hand-in's included, isn't something to record.
+  - **With something to record**, every lesson skill MUST call `record_lesson` as today, so an unfinished
+    lesson is remembered (the builder, 2026-11-19).
+  - **With nothing to record**, every lesson skill (the six and `next-mentor`) MUST call `end_lesson` (T106),
+    even with a focus agreed. `end_lesson` writes nothing to the learner record, takes the lesson out of the
+    session so no later snapshot continues it, and changes nothing in AE.
+  - `end_lesson` MUST refuse `LESSON_HAS_PROGRESS` when a demonstration or check has run since the lesson was
+    last recorded, and the mentor records it instead, without saying so. It MUST refuse `LESSON_NOT_OPEN` with
+    no lesson open, and `LESSON_ALREADY_ENDED` once the lesson's pass is saved; the mentor replies the same way
+    either way. A lesson recorded as partial or not checked can still be ended, with no second record.
+  - Either way, the mentor replies in one or two sentences that the learner can pick it up any time: no
+    demonstration, no check, no new step, no slash command. A go-deeper lesson ends on its hand-back line
+    (FR-026's note).
+  - **The panel** (T107) MUST treat an `end_lesson` result like End lesson, keeping the mentor's last reply on
+    screen: the lesson closes, `panel-session.json` ends so it can't come back as Pick up, Home's Ask and the
+    follow-up bar open, and the next thread send carries the after-lesson wrapper (amendment (e)).
+  - *Checked by:* mentor tests (`mentor/test/end-lesson.test.mjs`: each refusal, nothing written to the
+    record); panel tests (`panel/test/end-lesson.test.js`, including T038's repro: a stop in words, then a Home
+    follow-up logs `thread: "ask"`); an eval case in **each** lesson set: `end_lesson` called, no
+    `record_lesson`, no demo or check after it, at most two sentences (T108; anchor 63 and null 58 so far,
+    amendment (i) item 5); and the live repro in session 1 on A.
 
 ### Key Entities
 
@@ -776,6 +903,10 @@ it happens in the three sessions; a fix needs its own amendment.
 - **SC-007**: **The six skills hold.** After the shared-rule changes, each set still meets its own SC-006 on B1
   with every hard-rule check passing, and the new rule cases (Eval plan) pass 3 of 3; sets whose skill changed
   re-run on A before the first tester (`decisions/011`). *Measured by:* eval runs.
+  *Note 2026-11-19 (i), T059:* the B1 half is met for pivot (anchor 63/68) and null (52/58), every hard-rule
+  check passing. T058's cases that failed are 3/3 after fixes; anchor 61 and 63 and null 58 passed once and
+  still need a `--repeat 3` run (amendment (i) item 5). Easing, key types, speed graph and offset got `SKILL.md`
+  changes in phase 2 with no run; they're checked at T080 (B1) and the six-set A run.
 - **SC-008**: **Memory is honest.** In unit tests and in the builder's record after the sessions: **0** asked
   entries change a skill's status or review fields; **0** hold the learner's question verbatim, expression
   text or a personal detail; **0** entries (asked or lesson) state as the learner's a change no check
@@ -795,6 +926,9 @@ it happens in the three sessions; a fix needs its own amendment.
 - **SC-013**: **Hand-in.** On A, a go-deeper from an answer opens on the moving layer with no intent question in
   **3 of 3** tries across at least two skills, and hands back to the next step at the end in 3 of 3.
   *Measured by:* the sessions and the eval case for TD § 17 situation 16 on A.
+  *Note 2026-11-19 (i):* that case is ask case 19 (`runtimes: ["a"]`); its first run is T089. On B1 the pivot
+  and null sets seed the hand-in `go_deeper` would leave (`product/evals/lib/hand-in.mjs`), so the lesson half is
+  checked there (anchor 60 to 62, null 56 and 57); the hand-over itself is A only.
 
 ## Eval plan (for the eval engineer; cases are theirs)
 
@@ -891,6 +1025,21 @@ it happens in the three sessions; a fix needs its own amendment.
   loosely, as whole words and ignoring case. One match resolves, and the entry carries `asked`. Two or more
   return `NAME_PARTIAL` with each candidate's index, name and parent, which FR-014's one clarifying question
   uses. No match is still `NOT_FOUND`. No FR here changes.
+- **OQ-9 (new 2026-11-19 (i)): keep R-NAMES-REAL's exemption for suggestions?** Null's rubric now passes a
+  property suggested as the next thing to try and an example name offered as a suggestion, and still fails
+  either if the mentor says the comp already has it (amendment (i) item 4). **Recommended: keep it, and have
+  the eval-engineer copy the same paragraph into the other sets' R-NAMES-REAL at their next edit**, so one
+  judge rule reads the same everywhere. If no: null 08 and 30 go back to failing on a right suggestion, and the
+  mentor would be pushed away from naming what to try next.
+  **Answered 2026-11-19 (builder): keep it, as recommended.**
+- **OQ-10 (new 2026-11-19 (i)): end-lesson cases for the other five sets?** T108 asked for one per lesson set;
+  only anchor (63) and null (58) have one. **Recommended: a cockpit-numbered eval-engineer task, before the
+  six-set A run, for one end-lesson case each in easing, key types, speed graph, offset and next-mentor, plus
+  the two the anchor README proposes (a stop after a check records; a stop in a go-deeper lesson ends on the
+  hand-back line).** Easing, key types, speed graph and offset got the stop rule with no run, so without
+  these, FR-063 is untested in four skills. If no: FR-063's "each lesson set" check narrows to pivot and null,
+  and the other four rest on the shared wording.
+  **Answered 2026-11-19 (builder): yes, as part of T079** (run with T080's B1 runs, re-checked at the six-set A run).
 
 ### For the curriculum designer (hand-off, not edits)
 
@@ -928,3 +1077,10 @@ it happens in the three sessions; a fix needs its own amendment.
 - Done 2026-11-19 (T040): amendment (g). Open for T063 (mine): `tasks.md` needs a T105 line (built and merged
   `59e7368`) and its count paragraph updated to 108; FR-063's full text. Open, not mine: a design-reviewer look
   at "Writing the answer…" (contracts/panel-ask.md › Activity lines).
+- Done 2026-11-19 (T063): amendment (i); FR-063 in full; notes on FR-024, FR-026, FR-027, SC-007 and SC-013;
+  OQ-9 and OQ-10; contracts/ask-tools.md (`end_lesson`, `WRONG_STEP`, the pivot offer check),
+  contracts/hand-in.md (stops, K7's hints, the named place), contracts/panel-ask.md (phase 2 lines as built),
+  data-model § 8 (four codes); quickstart's phase 2 step 2 (`--only 19`, not 16) and a ship-step stop check;
+  `tasks.md`: a T105 line, T037's line aligned with (h), T063 ticked, the count at 108. Open, not mine: a
+  design-reviewer look at the phase 2 lines not in MU (contracts/panel-ask.md › Phase 2 lines, as built), and
+  the ui-designer adding the ones it keeps to MU › Copy.

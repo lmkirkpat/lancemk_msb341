@@ -94,6 +94,9 @@ skill's `status`, `review_due` and `reviews_passed_in_row` (FR-023). Confirmed i
   when the skill is learned (the lesson's wording follows FR-023).
 - `record_lesson` reply, for a lesson started from a hand-in: `hand_back: { step_number, next_step: text |
   null }`. `null` when the go-deeper step was the last.
+- `end_lesson` reply (*added 2026-11-19 (i), spec FR-063*): `{ ended: true, skill_name, hand_back? }`, with the same
+  `hand_back` for a lesson started from a hand-in. `session.json`'s lesson gains a `recorded` mark, set by
+  `record_lesson` and cleared by a later demonstration or check, so a partial record can still be ended.
 
 ## 5. `motion_from` in the other four snapshot tools (FR-033, phase 3)
 
@@ -162,7 +165,7 @@ the mentor's read and its answer; the mentor reads again before answering (contr
 | `STEPS_IN_EXPLANATION` | give_answer | "Leave the steps out of the explanation; they go only in the steps." |
 | `KEYFRAME_SKILL_ON_KEYLESS` | give_answer | "That layer's motion has no keys, so a keyframe skill can't help with it." |
 | `ROUTE_TO_PIVOT` | give_answer, go_deeper | "That null already carries children; moving where it turns is Set the pivot." |
-| `OFFER_NOT_READY` | give_answer, go_deeper | "That lesson can't start from an answer yet; keep the step and leave out the offer." |
+| `OFFER_NOT_READY` | give_answer, go_deeper | "That lesson can't start from an answer yet; keep the step and leave out the offer." *Added 2026-11-19 (i):* for a Set the pivot offer whose every step is on a layer the pivot lesson rules out (on A), the message names the step, the layer and the reason, then says to keep the step and leave out the offer (contracts/ask-tools.md › Refusals) |
 | `NOT_ACTIONABLE` | give_answer | "A question back, an outside line or no comp has no steps and no offer." |
 | `ANSWER_SHAPE` | give_answer | "Give the answer as the tool describes it: a kind, an explanation, the steps as a list, the offered skills as a list, and a closing offer." *(added 2026-11-16 (b), from the build)* |
 | `KIND_MISMATCH` | give_answer | "An answer has one to four steps; a description or a how-to has none. Pick the kind that fits." *(added 2026-11-16 (b))* |
@@ -172,4 +175,8 @@ the mentor's read and its answer; the mentor reads again before answering (contr
 | `NOT_OFFERED` | go_deeper | "Only a skill the last answer offered can start from it." |
 | `NOT_ON_THIS_RUNTIME` | go_deeper | "The lesson can't start from here. Say so in one sentence and name where to start it." |
 | `NO_ANSWER` | go_deeper, note_said | "There's no answer in this session yet." |
+| `WRONG_STEP` | go_deeper | "Name the step that skill goes deeper on, by its number in the answer." *(added 2026-11-19 (i), from the build)* |
+| `LESSON_HAS_PROGRESS` | end_lesson | "This lesson has a demonstration or a check in it, so it isn't ended: record the lesson instead, as the record step says, without mentioning this." *(added 2026-11-19 (i), spec FR-063)* |
+| `LESSON_NOT_OPEN` | end_lesson | "There's no lesson open to end. Answer the learner plainly; nothing needs saving." *(added 2026-11-19 (i))* |
+| `LESSON_ALREADY_ENDED` | end_lesson | "This lesson is already saved, so it's already over. Answer the learner plainly; nothing more needs saving." *(added 2026-11-19 (i))* |
 | `RECORD_UNATTRIBUTED` | record_lesson | "The record says the learner changed something no check saw them change. Say only what a check saw or they said." |

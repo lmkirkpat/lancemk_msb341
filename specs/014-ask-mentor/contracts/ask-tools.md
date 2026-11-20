@@ -62,6 +62,15 @@ again. The codes in research R3: `TOO_MANY_STEPS`, `BAD_STEP_SKILL`, `BAD_OFFER`
 the mentor's read and its answer. The mentor then reads again before answering, and never answers from the
 earlier read.
 
+*Added 2026-11-19 (spec amendment (i)), from review T060, the builder's decision (spec FR-024's note):* on A,
+`OFFER_NOT_READY` also refuses an offer of *Set the pivot* when **every** step tagged with it is on a layer the
+pivot lesson rules out for good: a null with no children, a camera, a light, an adjustment layer, a 3D layer,
+Collapse on, Anchor Point keyed, an expression on Rotation or Scale, an expression that sets Anchor Point or
+Position by itself, or Position keyed to move (`pivotCantRun` in `mentor/lib/ask-answer.mjs`, from the pivot
+finder's own reasons). The message names the step, the layer and the reason in words, and says to keep the step
+and leave out the offer. A layer the answer's read can't judge isn't refused this way. No such check for *Group
+with a null*. B1 strips offers, so this never fires there.
+
 ## `go_deeper` (phase 2)
 
 **When:** the learner says yes to the offer (typed, or the panel's "Yes, go deeper on [short name].");
@@ -74,13 +83,45 @@ has that skill).
 1. B1: refuses `NOT_ON_THIS_RUNTIME`; the mentor says TD § 7.1's B1 line, naming the skill, never a
    command, and nothing hands over.
 2. Refuses `NO_ANSWER`, `NOT_OFFERED` (not in `session.ask.offered_skills`), `OFFER_NOT_READY`,
-   `ROUTE_TO_PIVOT`.
+   `ROUTE_TO_PIVOT`. *Added 2026-11-19 (spec amendment (i)), as built:* and `WRONG_STEP` when `step` is
+   missing while more than one step has that skill, or names a step that doesn't have it. The mentor fixes the
+   step number and calls again, without saying so to the learner.
 3. Saves `session.hand_in` (data-model § 2).
 4. Phase 3: sets `went_deeper` on the linked asked entry.
 
 **Reply:** `{ skill_name, short_name, command_skill (the *-mentor name for the Skill call), practice:
 bool, missing_prerequisite: skill_name | null }`. The mentor names a missing prerequisite in one sentence
 (FR-023) and then calls `Skill` with `command_skill`. It never says the name to the learner.
+
+## `end_lesson` (phase 2; spec FR-063, added 2026-11-19 (i))
+
+Not an ask tool: it's in `mentor/tools/common.mjs`, beside `record_lesson`, and in the `allowed-tools` of the six
+lesson skills and `next-mentor` (not `ask-mentor`). It's here because this spec adds it.
+
+**When:** the learner asks to stop a lesson before it's recorded (in any words, or the End lesson request), and
+no demonstration has been made and no check run. With either, the skill calls `record_lesson` instead.
+
+**Input:** none.
+
+**Does:** takes the current lesson out of `session.json` and clears `current`, so no later snapshot continues or
+resumes it. The `ask` and `hand_in` blocks stay. Writes nothing to the learner record. Changes nothing in AE.
+
+**Reply:** `{ ended: true, skill_name, hand_back? }`. `hand_back` is the same as `record_lesson`'s
+(contracts/hand-in.md), present only for a lesson opened from an answer.
+
+**Refusals** (data-model § 8):
+
+| Code | Refused when | The mentor then |
+|---|---|---|
+| `LESSON_HAS_PROGRESS` | A demonstration or check has run since the lesson was last recorded | Records it with `record_lesson`, without mentioning this |
+| `LESSON_NOT_OPEN` | No lesson is open | Replies as for a stop: nothing to end |
+| `LESSON_ALREADY_ENDED` | The lesson's pass is saved | Replies the same way |
+
+A lesson recorded as partial or not checked is marked recorded, so `end_lesson` can still end it, with no second
+record; a demonstration or check after that record clears the mark.
+
+**Tests:** `mentor/test/end-lesson.test.mjs`: each refusal; nothing written to the learner record; the lesson
+gone from the session; `hand_back` only with a hand-in.
 
 ## `note_said` (phase 3)
 
@@ -97,4 +138,5 @@ Reply: `{ saved: true }`.
 - The § 16 answer, as data, on spec 015's Comp 1 capture: accepted; reply equals the input plus `comp`,
   `runtime`, `tags`; on B1 `offered_skills: []`.
 - One refusal per row of research R3, each from a minimal change to the § 16 answer.
-- `go_deeper`: each refusal; on A, the hand-in saved with no learner words.
+- `go_deeper`: each refusal (with `WRONG_STEP`); on A, the hand-in saved with no learner words.
+- `give_answer` on A: a pivot offer refused when every pivot step's layer is ruled out, accepted when one isn't.

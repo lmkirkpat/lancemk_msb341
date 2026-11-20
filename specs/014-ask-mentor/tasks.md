@@ -215,11 +215,18 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   so the checks are: `describe_layers` is called first, then prose per FR-028, with **no** `give_answer`. A
   follow-up that is really a new question (its result kind `answer`, `describe` or `howto`) still uses
   `give_answer` (amendment (d)); that is not case 18.
+- [x] T105 (panel-builder; cockpit-numbered after T037's first triage, line added at T063) **The turn ends after an
+  accepted `give_answer`** (FR-009's "no prose in the answer turn", by tool): on B1 a hook in the runtime folder
+  (`panel/lib/runtime.js`), on A the helper (`panel/helper/lib/answer-end.mjs`). A refused call still goes back to
+  the mentor for a retry. Built `849aa8a` (B1) and `c192b57` (A), merged `59e7368`; tests in
+  `panel/test/runtime.test.js` and `panel/helper/test/answer-end.test.mjs`.
 - [x] T036 (cockpit) Merge both with `/merge-worktree` (skill-builder's shared owner named), between live
   sittings.
 - [x] T037 (eval-engineer) The ask set on B1 at the merge commit: at least 80% and every hard check passing;
   situations 1, 4 and 5 at 3 of 3 (SC-006's B1 half). Triage with `/eval-triage`; log in the set's README with
   the refusal counts (plan › Risks).
+  *Aligned 2026-11-19 (spec amendment (h)):* the bar is a whole-set run at `--repeat 3` with a majority pass per
+  case, for every situation (1, 4 and 5 included); every FR-061 hard check passes on every run. Met at `91fd9c7`.
 - [x] T038 (skill-builder reads, AE, **builder's hands**) Live B1 smoke in the panel (quickstart › Phase 1
   steps 2 to 4): the rock and sweep questions on Comp 1, `ask-nocomp` (quickstart step 3), `turns.js --ask` timing and one
   answer's tokens (research R16).
@@ -286,6 +293,8 @@ open, so Home's Ask stayed paused and follow-ups went into the lesson); cockpit 
 - [x] T108 [P] (eval-engineer) One case per lesson set (numbers from the cockpit): the learner says "end lesson"
   mid-lesson; checks: `end_lesson` called, no `record_lesson`, no demo or check after it, at most two sentences.
   Runs with T059's sets; the spec-writer adds the FR at T063.
+  *Note 2026-11-19 (T063):* written for anchor (63) and null (58) only. Easing, key types, speed graph, offset and
+  next-mentor have no end-lesson case yet (spec OQ-10). FR-063 is written in full.
 
 - [x] T053 [US2] (panel-builder) `panel/lib/ask-thread.js`: Go deeper per offer, inside its answer only; Back to
   your lesson while open; gone after (FR-050). Tests in `panel/test/ask-thread.test.js`.
@@ -307,6 +316,9 @@ open, so Home's Ask stayed paused and follow-ups went into the lesson); cockpit 
 - [x] T059 (eval-engineer) On B1 at the branch's merge commit, one set at a time: anchor, null-parenting,
   next-mentor, ask. Each meets its SC-006 with every hard check passing; T058's cases 3 of 3 (SC-007 for pivot
   and null).
+  *Result 2026-11-19 (spec amendment (i)):* anchor 63/68, null 52/58, next-mentor 8/10 (07 and 08 the known FR-082
+  gaps), ask 19/19 at `--repeat 3`; no hard check failed. T058's failing cases are 3/3 after fixes; anchor 61 and
+  63 and null 58 passed once and still need `--repeat 3`.
 
 ## Phase 2 gate
 
@@ -314,7 +326,7 @@ open, so Home's Ask stayed paused and follow-ups went into the lesson); cockpit 
   null, and contracts/hand-in.md.
 - [x] T061 (design-reviewer) Review the panel branch against MU › Going deeper and FR-050 to FR-052.
 - [x] T062 (cockpit) Merge both, between sittings; then T059's runs on the merge commit if they ran on the branch.
-- [ ] T063 (spec-writer) Fold T058 to T062 into the spec. **Go deeper is ready for A.**
+- [x] T063 (spec-writer) Fold T058 to T062 into the spec. **Go deeper is ready for A.** **Done 2026-11-19:** spec amendment (i), FR-063 in full, notes on FR-024, FR-026, FR-027, SC-007, SC-013, OQ-9 and OQ-10; contracts (`end_lesson`, `WRONG_STEP`, the pivot offer check, stops and K7 hints, phase 2 panel lines), data-model § 4 and § 8, quickstart; T105 line added; tasks 108.
 
 **Checkpoint:** the MVP (phases 1 and 2) is ready for the ship step.
 
@@ -375,6 +387,9 @@ must land before session 3 (T094).
   text in `goal`, checked as no run of 5 words from the question).
 - [ ] T079 [P] (eval-engineer) Cases in easing, key types, speed graph and offset: rule 1, rule 5, hand-in (K6,
   `runtimes: ["a"]` where it hands over); a K5 case in each of the six sets; next-mentor's FR-042 candidate.
+  *Added 2026-11-19 (OQ-10):* one end-lesson case each in easing, key types, speed graph, offset and next-mentor
+  (`end_lesson` called, no `record_lesson`, no demo or check after, at most two sentences), plus a stop after a
+  check (records) and a stop in a go-deeper lesson (ends on the hand-back line, `runtimes: ["a"]`).
 - [ ] T080 (eval-engineer) On B1 at the branch's merge commit, one set at a time: easing, key types, speed graph,
   offset, anchor, null-parenting, next-mentor, ask. Each meets its SC-006 with every hard check passing; new rule
   cases 3 of 3 (SC-006, SC-007).
@@ -399,8 +414,9 @@ must land before session 3 (T094).
 
 **Starts after T063** (phases 1 and 2 merged) **and spec 015's SC-001 to SC-003 passing** (015 T040).
 
-- [ ] T088 (eval-engineer) Free checks: `product/evals/lib/ready-for-a.mjs`, and `--runtime a --dry-run` on ask,
-  anchor, null-parenting and next-mentor.
+- [x] T088 (eval-engineer) Free checks: `product/evals/lib/ready-for-a.mjs`, and `--runtime a --dry-run` on ask,
+  anchor, null-parenting and next-mentor. **Done 2026-11-19 at `051ebc2` (cockpit):** all eight skills ready;
+  dry runs valid (ask 20 of 20 on A, 26 turns; anchor 68; null 58; next-mentor 10 of 14 on A, 15 turns).
 - [ ] T089 (eval-engineer, **paid**) One full A run of the ask set, situation 16 at `--repeat 3`; spec 013
   FR-033 against T037's (or T059's) B1 baseline (SC-006's A half; SC-013's eval half). Log cost.
 - [ ] T090 (eval-engineer, **paid**, recommended) Anchor and null-parenting on A, since every go-deeper in the
@@ -438,9 +454,10 @@ must land before session 3 (T094).
   (T015 withdrawn). **Phase 1, panel:** T008's panel cut (no 015 wait) → T017, T018, T024, T027, T028 in any order
   → T019 → T020, T021, T022 → T023, T025, T026 → T029 → T030 → T101. **Evals:** T031 after T008 (fixtures from 015 T015)
   → T032 → T033.
-- **Gate 1:** T016, T030, T033 → T034, T035; T101, T102, T103, T104 → T036 → T037, T038 → T039 → T040.
+- **Gate 1:** T016, T030, T033 → T034, T035; T101, T102, T103, T104 → T036 → T037 (T105 within its triage), T038 → T039 → T040.
 - **Phase 2:** T040 and 015 T023, T026 → T041 → T042 → T043, T044 → T045, T046 → T047 → T049, T050, T051 → T052.
-  Panel T053 to T057 in parallel with the mentor work. T058 after T041; T059 after T052 and T057.
+  Panel T053 to T057 in parallel with the mentor work. T106 after T052; T107 with the panel work; T108 with T058.
+  T058 after T041; T059 after T052, T057 and T106 to T108.
 - **Gate 2:** T060, T061 → T062 → T063.
 - **Phase 3:** after T040 (T076's turn 4 and T075's rule 3 after 015 T022 to T025). T065 → T066 → T067, T068 →
   T069. T071, T072, T073 → T074, T075 → T076 → T077. T070 any time after T064. T078, T079 → T080 after T077.
@@ -470,12 +487,15 @@ phase 1 (T017 to T030) and T001 to T007 run before 015 lands, so they're off the
    skills' hand-ins.
 3. T085 to T087 follow spec 015 phase 2, whenever it lands.
 
-**Task count:** 104 (103 active; T015 withdrawn 2026-11-16, T101 added, T102 to T104 added 2026-11-16 by amendment (e)). Phase 0: 7. Spec phase 1: 34 (setup
+**Task count:** 108 (107 active; T015 withdrawn 2026-11-16, T101 added, T102 to T104 added 2026-11-16 by amendment (e),
+T105 added after T037's first triage, T106 to T108 added 2026-11-19 from T038). Phase 0: 7. Spec phase 1: 38 (setup
 and foundational 5, US1 3, US3 12 with T015 withdrawn, suites and the runtime flag 3, evals 3, gate 8 with
-T101; plus T102 to T104). Spec phase 2: 23 (setup 1, US2 14, suites and evals 4, gate 4). Spec phase 3:
+T101; plus T102 to T105). Spec phase 2: 26 (setup 1, US2 14, ending a lesson in words 3, suites and evals 4, gate
+4). Spec phase 3:
 24 (setup 1, US5 6, US6 5, US4 1, suites 1, evals 3, gate 4, later 3). Ship: 13.
 
-**By owner:** skill-builder 36, 35 active (T001 and T038 on AE; with T103), panel-builder 23 (with T101 and T102), cockpit 15 (three of them logging the
-builder's sessions), eval-engineer 15 (with T104), spec-writer 8, reviewer 3, design-reviewer 3, the builder 1 (T097).
+**By owner:** skill-builder 37, 36 active (T001 and T038 on AE; with T103 and T106), panel-builder 25 (with T101, T102,
+T105 and T107), cockpit 15 (three of them logging the builder's sessions), eval-engineer 16 (with T104 and T108),
+spec-writer 8, reviewer 3, design-reviewer 3, the builder 1 (T097).
 Builder's hands in 6 (T038, T092 to T094, T097, and T001's panel-focus state). Paid: T089, T090 (recommended),
 T099.

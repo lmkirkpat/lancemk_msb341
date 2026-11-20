@@ -30,6 +30,18 @@ find the layer.
 |---|---|---|
 | Set the pivot (phase 2) | The layer, **including a null with children** (K7). A footage layer with padding is fine | For a null: Anchor Point changed, and every child's comp-space footprint at the same frames didn't move (spec 015 K2: base values for expression-driven properties). With `place_named`: the target row is `your_call` and never decides the pass (rule 2) |
 | Group with a null (phase 2) | The hand-in's group (the step's layer and the layers the step names). An existing null that already has children is never this skill's (FR-027; `ROUTE_TO_PIVOT`) | Unchanged; the jump check already gets K2 from spec 015 |
+
+*Added 2026-11-19 (spec amendment (i)), as built after review T060:*
+- **Pivot, null focus:** the children-moved hint fires only when the null's pivot moved. When the pivot didn't
+  move but a child did, the hint is `carried_layer_moved` ("[null]'s pivot hasn't moved, but [child] moved"),
+  and when the null itself was dragged it's `layer_dragged`. Each says what moved without blaming the pivot.
+- **Pivot, a named place:** the ask skill sets `place_named` only for a spot the nine places can't hold (such as
+  a point on padded art). A place already named among the nine goes straight to the lesson's snapshot with that
+  spot, so the lesson doesn't ask for it again.
+- **Null:** a null-focus refusal carries whether the refused layer's parent is a null. The skill then routes it
+  to Set the pivot in step 1, and does the same for a step that names the control null itself. A lesson from
+  an answer stops there, without asking for another group. On A, `go_deeper`'s `ROUTE_TO_PIVOT` stops this
+  before a hand-in is saved, so the skill's line is the second guard (spec FR-027's note).
 | Easing, key types, speed graph, offset (phase 3) | The hand-in's layer; its pairs or properties as the skill's finder sees them | Unchanged |
 
 ## Hand-back (FR-026)
@@ -39,6 +51,11 @@ hand-in. The lesson's last line is "That was step [n]; next is [step n+1]." with
 when `next_step` is `null`, "That was the last step." Ended early (End lesson in the panel), the panel
 sends "/ask-mentor I've ended that lesson." and the ask skill names the next step from the conversation;
 nothing is recorded (MU `ask-ended`).
+
+*Added 2026-11-19 (spec amendment (i)), as built:* a stop **in words** inside a go-deeper lesson follows spec
+FR-063. Before any demonstration or check, the skill calls `end_lesson`, whose reply carries the same
+`hand_back`; after either, it calls `record_lesson`. Pivot and null end on the hand-back line either way. The
+panel takes `hand_back` from either tool's result for the thread's own line (contracts/panel-ask.md).
 
 ## Rules the lesson keeps
 
@@ -54,3 +71,5 @@ One demonstration, hints not fixes, the check, the record (TD § 7.2). A learned
   still passes; a planted child move fails, naming the child. Padded PNG (AB held 3) with `place_named`:
   passes on "didn't move".
 - `record_lesson`: `hand_back` with the right step; absent without a hand-in.
+- `end_lesson` (added 2026-11-19 (i)): the same `hand_back` for a lesson opened from a hand-in
+  (`mentor/test/end-lesson.test.mjs`).

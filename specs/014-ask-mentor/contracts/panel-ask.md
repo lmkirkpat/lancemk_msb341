@@ -17,7 +17,7 @@ MU › Copy, plus the lines below.
 | `record_lesson`'s `hand_back` | `tool_result` | `ask-back`: the thread's hand-back line, drawn from data |
 | ~~`comp_active`~~ | ~~`GET /health`~~ | Withdrawn 2026-11-16 (FR-047): nothing read; Ask is always on, and no comp is `ask-nocomp` from the answer's `kind` |
 | `panel.json` runtime | config | Display guard: no Go deeper on `b1` |
-| `end_lesson` tool event (*added 2026-11-19, spec FR-063, reserved; built by T107*) | `tool_result` | The same as the End lesson button, keeping the mentor's last reply visible: the lesson closes, Home's Ask and the follow-up bar open, and the next thread send carries the wrapper (Context after a lesson) |
+| `end_lesson` tool event (*added 2026-11-19, spec FR-063, written in full at (i); built by T107*) | `tool_result` | The same as the End lesson button, keeping the mentor's last reply visible: the lesson closes, Home's Ask and the follow-up bar open, and the next thread send carries the wrapper (Context after a lesson) |
 
 ## Drawing an answer (FR-048, FR-049)
 
@@ -138,6 +138,44 @@ may revise before T056.
 Divider on return (`ask-back`): "[short name] · practiced on [layer]" for any lesson whose record was saved
 (first lesson or practice); "[short name] · ended, not saved" otherwise (`ask-ended`). Hand-back line in the
 thread: "That was step [n]; next is step [n+1]: [next_step]." or "That was the last step."
+*Corrected 2026-11-19 (spec amendment (i)), as built after review T061:* the hand-back line reads "That was step
+[n]. Next is step [n+1]: [next_step]." (two sentences, always ending in a period). The panel takes `hand_back`
+from `record_lesson`'s or `end_lesson`'s result. A third divider, "[short name] · not saved", is for a lesson
+whose check passed but whose record couldn't be saved; with no layer known, the practiced divider stops at
+"· practiced".
+
+## Phase 2 lines, as built (added 2026-11-19, spec amendment (i); open for design review)
+
+From `panel/lib/copy.js` and `panel/lib/activity.js` on `main` (`4370e67`). The first group is MU's or follows
+it; the second isn't in MU. This contract records them; it doesn't decide them.
+
+**In MU, or MU's wording with a small change:**
+
+| Where | Line | Note |
+|---|---|---|
+| `ask-deeper-starting` status | "Getting your lesson ready…" | MU says the status line "says what's happening" without a string |
+| `ask-lessonopen`, under Back to your lesson | "Your [short name] lesson is open." or "Your lesson is open." | MU's sentence is "Your lesson is open. Ask there, or end it first." (the follow-up bar's) |
+| Thread hand-back | "That was step [n]. Next is step [n+1]: [text]." | MU and FR-026 use a semicolon; changed in T061's copy fix |
+| Go-deeper lesson, passed but not saved | "Couldn't save this one. Your comp is fine." / "This lesson won't appear in your history, and the mentor won't remember it." | T061 item 3: no pass or fail words in a go-deeper lesson. Spec 007's lessons keep their lines |
+| Go-deeper lesson, one more question | "One more question before this is saved." | Same |
+
+**Not in MU (for a design-reviewer look, then the ui-designer's call):**
+
+| Where | Line |
+|---|---|
+| Activity line for `end_lesson` | "Ending your lesson…" |
+| A lesson the mentor ended with nothing to record (FR-063, T107) | "Lesson ended, not saved." |
+| A go-deeper lesson's Back, lesson open | "Back to your question. Your lesson stays open." |
+| A go-deeper lesson's Back, lesson closed | "Back to your question" |
+| Divider, passed but not saved | "[short name] · not saved" |
+
+**Two behaviours from T061's fix round** (no MU change): (1) a thread read back after a restart with its
+go-deeper lesson open or starting settles as if the lesson ended (answer folded, Go deeper gone, the divider from
+the saved flags, the hand-back line), and that lesson is cleared from the thread's conversation so Pick up never
+shares it; (2) one conversation has one owner: while a closed go-deeper lesson is still answering, the follow-up
+bar stays paused and Go deeper stays Back to your lesson, so no second process resumes the same conversation.
+(2) also fixes the race the design review's check found: a follow-up sent between the record saving and the turn
+ending.
 
 ## Home (FR-055's amendments)
 

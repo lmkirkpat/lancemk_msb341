@@ -42,7 +42,8 @@ every existing suite unchanged.
 
 1. `node product/evals/anchor/run.mjs`, `node product/evals/null-parenting/run.mjs`,
    `node product/evals/next-mentor/run.mjs`, `node product/evals/ask/run.mjs` on B1, one at a time.
-2. On A only (ship step): situation 16, `node product/evals/ask/run.mjs --runtime a --only 16 --repeat 3`.
+2. On A only (ship step): situation 16 is case 19, `node product/evals/ask/run.mjs --runtime a --only 19 --repeat 3`
+   (*corrected 2026-11-19 (i)*: `--only` takes a case number, not a situation number).
 
 ## Phase 3 (B1)
 
@@ -59,5 +60,8 @@ All six sets, next-mentor and ask, one at a time. SC-008: `cd mentor && node --t
    how it went. The cockpit logs the question, the steps (followed without asking, or not), the layer named
    against a look in AE, and the go-deeper in `discovery/usage-notes/ask-sessions.md`.
 5. After each: `node panel/dev/turns.js --ask` for SC-004 and SC-005.
+5a. *Added 2026-11-19 (i), FR-063:* once in session 1, start a lesson and type "end lesson" before trying
+   anything. The lesson closes, Home's Ask opens, and the next question goes to the thread (`turns.js` shows
+   `thread: "ask"`). Also stop one go-deeper lesson in words: it ends on the hand-back line.
 6. Fit (SC-012): every new ask state at the default dock (about 343 pt), at spec 007 SC-010's heights; then
    `ask-answer`, `ask-steps-open` and `ask-deeper-lesson` at 260 × 480 once, logged (OQ-4).
