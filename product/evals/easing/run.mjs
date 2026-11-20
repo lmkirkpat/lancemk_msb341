@@ -23,7 +23,7 @@ import { fileURLToPath } from "node:url";
 import { parseJudgeReply } from "../lib/judge-reply.mjs"; // lenient judge reply (fences, stray text); unreadable = plumbing
 import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
 import { turnChecks } from "../lib/turn-checks.mjs"; // say_max_sentences (spec 014 T079)
-import { handInProblems, seedHandIn } from "../lib/hand-in.mjs"; // a case's seeded hand-in (spec 014 T079)
+import { sessionProblems, seedSession } from "../lib/hand-in.mjs"; // a case's seeded hand-in (spec 014 T079)
 import { phase3Checks, phase3Problems, PHASE3_KEYS } from "../lib/phase3-checks.mjs"; // turn_tools, record_text_never, say_ends_with (spec 014 T079)
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
@@ -90,7 +90,7 @@ function validate(c) {
   if (c.learner_record && !fs.existsSync(path.join(CASES_DIR, c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
-  problems.push(...handInProblems(c.hand_in));
+  problems.push(...sessionProblems(c));
   for (const r of c.runtimes || []) if (!["b1", "a"].includes(r)) problems.push(`runtimes: "${r}" isn't b1 or a`);
   problems.push(...phase3Problems(c.expect, (c.turns || []).length));
   for (const s of (c.expect || {}).say || []) {
@@ -101,7 +101,7 @@ function validate(c) {
   for (const s of (c.expect || {}).say_max_sentences || []) {
     if (!s.id || !Number.isInteger(s.max) || !Array.isArray(s.turns) || !s.turns.length) problems.push(`say_max_sentences needs an id, turns and a whole max`);
   }
-  const known = [...PHASE3_KEYS, "say", "say_max_sentences", "snapshot_reply", "first_tool", "set_ease_max", "set_ease_min", "set_ease_only_on", "verdict", "tools_called", "last_turn_tools_not_called", "last_turn_tools_called", "record_lesson", "targets_include", "never_said_near"];
+  const known = [...PHASE3_KEYS, "say", "say_max_sentences", "snapshot_reply", "tools_not_called", "first_tool", "set_ease_max", "set_ease_min", "set_ease_only_on", "verdict", "tools_called", "last_turn_tools_not_called", "last_turn_tools_called", "record_lesson", "targets_include", "never_said_near"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   return problems;
 }
@@ -266,6 +266,11 @@ function check(expect, turns) {
     const missing = expect.tools_called.filter((n) => !calls.some((e) => e.name === n));
     add("tools_called", missing.length === 0, missing.length ? `never called ${missing.join(", ")}` : "all called");
   }
+  // Spec 014 T079: over the whole case, as in the other sets.
+  if ("tools_not_called" in expect) {
+    const hit = expect.tools_not_called.filter((n) => calls.some((e) => e.name === n));
+    add("tools_not_called", hit.length === 0, hit.length ? `called ${hit.join(", ")}` : "none called");
+  }
   if ("last_turn_tools_not_called" in expect) {
     const called = expect.last_turn_tools_not_called.filter((n) => tools([turns.at(-1)]).some((e) => e.name === n));
     add("last_turn_tools_not_called", called.length === 0, called.length ? `called ${called.join(", ")}` : "none called");
@@ -371,7 +376,7 @@ async function runCase(c, opts) {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-"));
   const stateFile = path.join(home, "fixture-state.json");
   if (c.learner_record) fs.copyFileSync(path.join(CASES_DIR, c.learner_record), path.join(home, "learner.json"));
-  if (c.hand_in) seedHandIn(home, c.hand_in); // what go_deeper leaves on A (spec 014 T079)
+  if (c.hand_in || c.ask_started) seedSession(home, c); // what go_deeper leaves on A (spec 014 T079)
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
   const mentor = opts.runtime === "a" ? ab.openCase({ repo: REPO, home, env, opts }) : null;
   const runtime = mentor ? null : ensureRuntime(REPO, path.join(home, "runtime"));

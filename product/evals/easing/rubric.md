@@ -279,3 +279,77 @@ called a second time is checked by the runner, not here.)
   That's why Title's Position now reads as natural."
 - **Fail:** "I've noted that for next time" or any other mention of recording after the pass, a fresh
   lesson proposal in place of an answer, an answer that ignores the question, or a re-check of the pairs.
+
+## R-RULE-ONE: where the motion comes from, said once before the idea (spec 014 T079; FR-033, FR-034)
+
+The focus layer's motion also comes from a parent (or an expression of its own), as the snapshot's `motion_from` shows. In the explanation
+turn the mentor says so in one sentence before the idea: it names that layer or property, and says that easing this layer's own keys won't
+change that part. Then it teaches on the layer's own keys. It doesn't call the parent a mistake, teach on the parent instead, give the
+sentence twice, or skip the idea. Where `motion_from` lists neither, it says nothing about it (not graded here).
+
+- **Pass:** "Title rides on CTRL, whose Position keys move it, so easing Title's own keys won't change that part."
+- **Fail:** no mention of CTRL; the sentence in the opening turn only; two or three sentences about the parent; saying the keys
+  make the whole motion; offering to change the parent instead; or ending the lesson there.
+
+## R-HAND-IN-OPENS: a lesson from an answer opens as a continued lesson on the answer's layer, with no intent question and no proposal (spec 014 T079; FR-026)
+
+The snapshot says the lesson came from an answer. The first turn is one sentence that picks the lesson up on that layer, then the lesson's
+first step on it. It asks no "which layer, and where" question, proposes no other layer, has no memory clause and lists no other layers. It
+doesn't ask what the answer's step already said.
+
+- **Pass:** "Picking this up on Title, so it lands softer. With Title's keys showing (U), select both keys of a pair and choose Animation > Keyframe Assistant > Easy Ease (F9). Ease Title's pairs and say done."
+- **Fail:** the first lesson's opening (a proposal, a list of layers or pairs, "is anything meant to...?"), a memory clause ("Last time..."),
+  a question the answer's step already settled, or a second layer proposed.
+
+## R-HAND-IN-UNKEYED: a layer with no keys this lesson can work on is said in one sentence, and the lesson stops (spec 014 T079; FR-026)
+
+The answer sent the learner to a layer that has no keys this lesson can ease. The mentor says so in one sentence and then what the answer's
+step still lets them do on their own, and stops: no proposal, no demonstration, no check, no question that starts another layer.
+
+- **Pass:** "Background has no keys for this lesson to work on, so there's nothing for me to check there. The step's still yours to do, and the lesson will be here when a layer has keys."
+- **Fail:** proposing another layer, easing the layer anyway, a long explanation, a demonstration, or a claim that the layer is fine.
+
+## R-HAND-IN-LOST: a layer the answer named that isn't in the comp now is said once, then a first lesson (spec 014 T079; FR-026)
+
+The layer in the answer's step isn't in this comp now. The mentor says in one sentence that it couldn't find that layer, then opens as it
+would for a first lesson (its summary and a proposed focus). It doesn't pretend to work on the missing layer.
+
+- **Pass:** "I couldn't find Hammer in this comp now, so let's start from what is here." Then the first lesson's opening.
+- **Fail:** treating the layer as there, no mention of it, or stopping after the sentence.
+
+## R-PRACTICE-WORDS: a learned skill's lesson is practice, never a review (spec 014 T079; FR-023, TD 17.18)
+
+The record says Easing is learned. Nothing in the lesson is called a review, a test or a pass of one. A try that doesn't pass is told as what's
+still off and where, in plain words, with no "failed", "wrong", "incorrect" or "not quite", and nothing says or implies the learner should
+already know it ("you already learned this", "remember", "as we covered").
+
+- **Pass:** "Title's Position is eased. Scale and Opacity still read as straight lines between their keys."
+- **Fail:** "review", "test", "you already know this", "not quite", "wrong", a lecture on what the learner should remember, or a fix done for them.
+
+## R-HAND-BACK: the lesson's last line hands back to the answer's next step (spec 014 T079; FR-026)
+
+After the record (or the stop), the lesson ends on one line that names the step just done and the step after it, in the next step's own
+words from the answer the learner saw, and says nothing after it, not even a slash command. When the stop calls end_lesson, this line is in place of
+the pick-it-up sentence.
+
+- **Pass:** "That was step 1; next is Play it back and watch how Title lands."
+- **Fail:** no such line, a different step number, a next step that isn't in the answer, more words after it, or an offer of another lesson in its place.
+
+## R-STOP-WITH-NOTHING-TO-SAVE: "end lesson" before anything is tried ends the lesson plainly (spec 014 T079, OQ-10; case 63 in the anchor set)
+
+The learner asked to stop before any demonstration was made or any check was run. The mentor ends the lesson without recording it and answers
+in one or two sentences: the lesson is closed and they can pick it up any time (or, from an answer, the hand-back line). It starts no step,
+asks no question, demonstrates nothing, checks nothing, and names no command.
+
+- **Pass:** "Okay, I've closed this lesson. You can pick it up any time."
+- **Fail:** a third sentence, a question, a new step or offer, a demonstration or check, praise for progress that didn't happen, a summary of
+  what was saved, or a command to run.
+
+## R-RECORD-REWRITE-SILENT: a record the tool refuses is rewritten and saved, and the learner never hears of it (spec 014 T079; FR-036, K5)
+
+The learner said they changed another layer by mistake and undid it, but no check saw any change there. The saved record never says the learner changed,
+moved, undid or fixed that layer (a layer no check reported as changed is never the learner's change). If the first save is refused, the mentor
+rewrites it and saves it without a word about the refusal, the tool or a rule. What the learner reads is the lesson's close, not the plumbing.
+
+- **Pass:** a record that says what the checks showed ("Eased every pair by the first check") and a close in plain words.
+- **Fail:** the record says "moved Subtitle by mistake; undid that", or the mentor tells the learner the record was refused, needed rewriting, or "no check saw" a change.

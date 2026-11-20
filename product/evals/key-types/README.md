@@ -394,3 +394,20 @@ Same change as offset (see `offset/README.md`). `rubric.md` R-OR1-LESSON now say
 ## Spec 015 T063 re-run (2026-11-16, B1, at `84693de`)
 
 Case 33 `--repeat 3`: **2/3**, $2.90 (`results/2026-11-16-193805.json`). The T063 fix worked for what it targeted: the hint named Blink's Opacity and the keys in all three runs, and `names_blink` passed each time. The one miss (run 2) is a different item: R-HINT-NOT-FIX, the hint spelled out "click the key, choose Animation > Toggle Hold Keyframe" as steps. Minor, real but rare (1 of 3); no change proposed yet.
+
+## Phase 3 cases (spec 014 T079, written 2026-11-19, dry-run only)
+
+8 cases, ids 38 to 45: rule 1 (the sentence from `motion_from`), a lesson opened from an answer, the hand-back line, the stop rules (`end_lesson`, and a stop after a check records), a session that began with a question never offering a review, and K5 (a refused record is rewritten without a word). Each says which requirement it covers in `covers`.
+
+| Case | Runs on | What | Rubric |
+|---|---|---|---|
+| 38-rule-one-a-parent-moves-the-layer | b1,a | Rule 1 | R-RULE-ONE, R-NAMES-REAL |
+| 39-hand-in-opens-on-the-layer | a | From an answer (A) | R-HAND-IN-OPENS, R-ONE-IDEA |
+| 40-hand-back-after-the-pass | a | From an answer (A) | R-HAND-BACK |
+| 41-stop-in-a-go-deeper-lesson-ends-on-the-hand-back-line | a | OQ-10 (A) | R-HAND-BACK, R-STOP-WITH-NOTHING-TO-SAVE |
+| 42-end-lesson-before-anything-is-tried | b1,a | OQ-10 | R-STOP-WITH-NOTHING-TO-SAVE |
+| 43-stop-after-a-check-records-and-never-ends | b1,a | OQ-10 | R-RECORD-HONEST |
+| 44-a-session-that-started-with-a-question-offers-no-review | b1,a | FR-032 | R-NO-REVIEW-AFTER-QUESTION |
+| 45-record-rewrite-is-silent | b1,a | K5 | R-RECORD-REWRITE-SILENT, R-RECORD-HONEST |
+
+New expect keys (shared, `../lib/phase3-checks.mjs`, unit-tested in `lib/test/phase3-checks.test.mjs`): `turn_tools` (in one turn: successful calls and calls that must not happen), `record_text_never` (no saved record_lesson text matches a regex), `record_recovers` (a refused record_lesson is followed by a saved one), `say_ends_with` (the last sentence of a turn matches: the hand-back line), `say_never_when_called` (nothing said about a refusal). New case keys: `hand_in` (the state go_deeper leaves, seeded as in the anchor and null sets; `lib/hand-in.mjs`), `ask_started: true` (an ask began in this session window, so no due review opens the lesson), and `runtimes` (a hand-in case runs on A only, as the ask set's case 19 and next-mentor's hand-over cases do; the seed and the tools behave the same on B1, so dropping `runtimes` would run them there). Not run: dry-run only until T080.

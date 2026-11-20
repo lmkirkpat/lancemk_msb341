@@ -1,0 +1,82 @@
+{
+  "id": "39-hand-back-after-the-pass",
+  "title": "From an answer (A): after the pass and the record, the last line hands back to the answer's next step ('That was step 1; next is ...') and nothing follows it",
+  "covers": [
+    "FR-026",
+    "T074",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "easing.basic",
+    "layer": "Title",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select Title's Position, Scale and Opacity keys and choose Easy Ease (F9), so it lands softer.",
+        "skill": "easing.basic",
+        "layer": "Title"
+      },
+      {
+        "text": "Play it back and watch how Title lands.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "title-done",
+      "say": "I eased all of Title's pairs. Done."
+    }
+  ],
+  "expect": {
+    "verdict": "pass",
+    "tools_called": [
+      "record_lesson"
+    ],
+    "record_lesson": {
+      "skill": "easing.basic",
+      "result": "passed",
+      "demo_used": false
+    },
+    "set_ease_max": 0,
+    "turn_tools": [
+      {
+        "turn": 2,
+        "called": [
+          "diff_since_last",
+          "record_lesson"
+        ]
+      }
+    ],
+    "say_ends_with": [
+      {
+        "id": "hand_back_line",
+        "turn": 2,
+        "pattern": "^That was step 1[;.] next is (?:step 2: )?(?:to )?play it back and watch how Title lands"
+      }
+    ],
+    "say": [
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-BACK"
+  ],
+  "note": "Spec 014 T079. The hand-back text is the next step's own words from the seeded answer (the tool's hand_back); the line may say 'step 2:' or 'to'. 'Nothing after it' is the last sentence of the turn. Easing has no understanding check after the pass, so the record comes in the pass turn."
+}

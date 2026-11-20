@@ -1,0 +1,88 @@
+{
+  "id": "39-hand-in-opens-on-the-layer",
+  "title": "From an answer (A): Blink's Opacity is the focus with no 'is anything meant to snap?' question and no proposal; the opening is a continued lesson in one sentence, then the explanation",
+  "covers": [
+    "FR-026",
+    "FR-033",
+    "K6",
+    "T074",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "keyframes.types",
+    "layer": "Blink",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select Blink's Opacity keys and hold them, so it snaps on and off.",
+        "skill": "keyframes.types",
+        "layer": "Blink"
+      },
+      {
+        "text": "Play it back and watch Blink snap on and off.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    }
+  ],
+  "expect": {
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode_source": "hand_in",
+          "hand_in.layer": "Blink",
+          "hand_in.keyed": true,
+          "hand_in.practice": false
+        }
+      }
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "key_types_check"
+    ],
+    "say": [
+      {
+        "id": "opens_on_blink",
+        "must": "\\bBlink\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_intent_question",
+        "never": "\\bwhich (?:one|layer)\\b|\\bis anything\\b|\\banything (?:here|else)\\b|want to start|let me suggest|where should",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_memory_clause",
+        "never": "\\b(?:last time|yesterday|last week)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-IN-OPENS",
+    "R-ONE-IDEA"
+  ],
+  "note": "Spec 014 T079 (K6). Seeded hand-in (lib/hand-in.mjs). Blink has one keyed property, so the focus is set without a question."
+}

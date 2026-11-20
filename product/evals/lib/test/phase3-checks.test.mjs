@@ -48,3 +48,12 @@ test("phase3Problems names a bad turn, regex and missing tool", () => {
   assert.match(phase3Problems({ record_text_never: [{ id: "a", pattern: "(" }] }, 2)[0], /bad regex/);
   assert.match(phase3Problems({ say_never_when_called: [{ id: "a", turn: 1, pattern: "x" }] }, 2)[0], /needs a tool/);
 });
+
+test("record_recovers: a refused record_lesson is followed by a saved one, or there was no refusal", () => {
+  const rec = (ok) => tool("record_lesson", { summary: "x" }, ok);
+  const want = { record_recovers: true };
+  assert.match(run(want, [{ events: [rec(true)] }])[0].detail, /no refusal/);
+  assert.equal(run(want, [{ events: [rec(false), rec(true)] }])[0].pass, true);
+  assert.equal(run(want, [{ events: [rec(false)] }])[0].pass, false);
+  assert.equal(run(want, [{ events: [rec(true), rec(false)] }])[0].pass, false, "a refusal after the save is not a recovery");
+});

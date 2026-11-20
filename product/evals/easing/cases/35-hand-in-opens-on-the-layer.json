@@ -1,0 +1,84 @@
+{
+  "id": "35-hand-in-opens-on-the-layer",
+  "title": "From an answer (A): Title is the focus with no proposal and no intent question; the opening is a continued lesson in one sentence, then the how-to",
+  "covers": [
+    "FR-026",
+    "FR-033",
+    "K6",
+    "T074",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "easing.basic",
+    "layer": "Title",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select Title's Position, Scale and Opacity keys and choose Easy Ease (F9), so it lands softer.",
+        "skill": "easing.basic",
+        "layer": "Title"
+      },
+      {
+        "text": "Play it back and watch how Title lands.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    }
+  ],
+  "expect": {
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode_source": "hand_in",
+          "hand_in.layer": "Title",
+          "hand_in.keyed": true,
+          "hand_in.practice": false,
+          "focus": [
+            "Title"
+          ]
+        }
+      }
+    ],
+    "set_ease_max": 0,
+    "say": [
+      {
+        "id": "opens_on_title",
+        "must": "\\bTitle\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_proposal_or_intent",
+        "never": "\\bwhich (?:one|layer)\\b|\\bis anything\\b|\\banything (?:here|else)\\b|want to start|let me suggest|where should",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_memory_clause",
+        "never": "\\b(?:last time|yesterday|last week)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-IN-OPENS",
+    "R-ONE-IDEA"
+  ],
+  "note": "Spec 014 T079 (K6). The hand-in is the state go_deeper leaves; the run seeds it (product/evals/lib/hand-in.mjs). A case only: B1 never offers a lesson (FR-017), though the seed and the tool behave the same there."
+}

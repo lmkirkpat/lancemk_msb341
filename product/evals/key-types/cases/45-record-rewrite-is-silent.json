@@ -1,0 +1,69 @@
+{
+  "id": "45-record-rewrite-is-silent",
+  "title": "K5: the learner says they changed another layer by mistake and undid it. No check saw it, so the saved record never pairs a change word with Cut; a refused save is rewritten and saved with no word of it to the learner",
+  "covers": [
+    "FR-036",
+    "K5",
+    "T071",
+    "T079"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-all-held.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap. I'll hold them myself, no demo."
+    },
+    {
+      "project": "blink-all-held.json",
+      "say": "Done. Earlier I changed Cut's Opacity by mistake and undid it, then I held all of Blink's pairs."
+    },
+    {
+      "project": "blink-all-held.json",
+      "say": "Thanks, that's all for today."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "record_lesson": {
+      "skill": "keyframes.types",
+      "result": "passed"
+    },
+    "record_recovers": true,
+    "demo_calls_max": 0,
+    "record_text_never": [
+      {
+        "id": "no_unseen_change_on_cut",
+        "pattern": "Cut[^.|]*\\b(?:moved|undid|undo|changed|reverted|reset|mistake|fixed)\\b|\\b(?:moved|undid|changed|reverted|reset|fixed)\\b[^.|]*Cut"
+      }
+    ],
+    "say_never_when_called": [
+      {
+        "id": "refusal_not_said",
+        "turn": 3,
+        "tool": "record_lesson",
+        "pattern": "unattributed|\\brefus|couldn['’]t (?:save|record)|wouldn['’]t (?:save|record)|didn['’]t (?:save|record)|try(?:ing)? (?:to (?:save|record) )?again|\\brewr[io]te|no check (?:saw|reported)|record(?:ing)? (?:error|failed)"
+      },
+      {
+        "id": "refusal_not_said_last",
+        "turn": 4,
+        "tool": "record_lesson",
+        "pattern": "unattributed|\\brefus|couldn['’]t (?:save|record)|wouldn['’]t (?:save|record)|didn['’]t (?:save|record)|try(?:ing)? (?:to (?:save|record) )?again|\\brewr[io]te|no check (?:saw|reported)|record(?:ing)? (?:error|failed)"
+      }
+    ]
+  },
+  "rubric": [
+    "R-RECORD-REWRITE-SILENT",
+    "R-RECORD-HONEST"
+  ],
+  "note": "Spec 014 T079 (K5). As easing's twin: the case pins the outcome, not that the guard fired. The last turn lets a record that comes after the pass turn still be a record."
+}

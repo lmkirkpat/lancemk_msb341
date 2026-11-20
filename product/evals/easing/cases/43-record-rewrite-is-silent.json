@@ -1,0 +1,49 @@
+{
+  "id": "43-record-rewrite-is-silent",
+  "title": "K5: the learner says they changed another layer by mistake and undid it. No check saw that, so the saved record never pairs a change word with Subtitle; if the first save is refused, the mentor rewrites and saves it without a word to the learner",
+  "covers": [
+    "FR-036",
+    "K5",
+    "T071",
+    "T079"
+  ],
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good."
+    },
+    {
+      "project": "title-done",
+      "say": "Done. Earlier I moved Subtitle's Position by mistake and undid it, then eased all of Title's pairs."
+    }
+  ],
+  "expect": {
+    "record_lesson": {
+      "result": "passed"
+    },
+    "record_recovers": true,
+    "record_text_never": [
+      {
+        "id": "no_unseen_change_on_subtitle",
+        "pattern": "Subtitle[^.|]*\\b(?:moved|undid|undo|changed|reverted|reset|mistake|fixed)\\b|\\b(?:moved|undid|changed|reverted|reset|fixed)\\b[^.|]*Subtitle"
+      }
+    ],
+    "say_never_when_called": [
+      {
+        "id": "refusal_not_said",
+        "turn": 3,
+        "tool": "record_lesson",
+        "pattern": "unattributed|\\brefus|couldn['’]t (?:save|record)|wouldn['’]t (?:save|record)|didn['’]t (?:save|record)|try(?:ing)? (?:to (?:save|record) )?again|\\brewr[io]te|no check (?:saw|reported)|record(?:ing)? (?:error|failed)"
+      }
+    ]
+  },
+  "rubric": [
+    "R-RECORD-REWRITE-SILENT",
+    "R-RECORD-HONEST"
+  ],
+  "note": "Spec 014 T079 (K5, FR-036). The guard refuses a summary or next that pairs a change word with a layer no check attributed (research R9). The mentor may not write it at all, which also passes: the case pins the outcome (nothing unseen in the saved record, a refused save recovered, no word of it to the learner), not that the guard fired. A refused call shows in the transcript as a record_lesson error."
+}

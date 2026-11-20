@@ -1,0 +1,86 @@
+{
+  "id": "48-stop-in-a-go-deeper-lesson-ends-on-the-hand-back-line",
+  "title": "OQ-10 (A): 'end lesson' in a lesson that started from an answer, before anything is tried: end_lesson, no record, and the reply ends on the hand-back line",
+  "covers": [
+    "T106",
+    "FR-026",
+    "OQ-10",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "timing.offset",
+    "layer": "Dot 1",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Offset Dot 1, Dot 2 and Dot 3 so Dot 1 goes first, then Dot 2, then Dot 3, four frames apart.",
+        "skill": "timing.offset",
+        "layer": "Dot 1"
+      },
+      {
+        "text": "Play it back and watch the Dots land one after another.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "end lesson"
+    }
+  ],
+  "expect": {
+    "last_turn_tools_called": [
+      "end_lesson"
+    ],
+    "last_turn_tools_not_called": [
+      "record_lesson",
+      "offset_demo",
+      "offset_check"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "at_most_two",
+        "turns": [
+          2
+        ],
+        "max": 2
+      }
+    ],
+    "say_ends_with": [
+      {
+        "id": "hand_back_line",
+        "turn": 2,
+        "pattern": "^That was step 1[;.] next is (?:step 2: )?(?:to )?play it back and watch the Dots land one after another"
+      }
+    ],
+    "say": [
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-BACK",
+    "R-STOP-WITH-NOTHING-TO-SAVE"
+  ],
+  "note": "Spec 014 T079 (the hand-back line also after end_lesson)."
+}

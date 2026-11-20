@@ -30,7 +30,7 @@ import { fileURLToPath } from "node:url";
 import { parseJudgeReply } from "../lib/judge-reply.mjs"; // lenient judge reply (fences, stray text); unreadable = plumbing
 import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
 import { turnChecks, turnProblems, TURN_KEYS } from "../lib/turn-checks.mjs"; // last_turn_* and say_max_sentences (spec 007)
-import { handInProblems, seedHandIn } from "../lib/hand-in.mjs"; // a case's seeded hand-in (spec 014 T079)
+import { sessionProblems, seedSession } from "../lib/hand-in.mjs"; // a case's seeded hand-in (spec 014 T079)
 import { phase3Checks, phase3Problems, PHASE3_KEYS } from "../lib/phase3-checks.mjs"; // turn_tools, record_text_never, say_ends_with (spec 014 T079)
 import { blankFrame } from "../lib/blank-frame.mjs"; // flat 1920 x 1080 preview frame
 
@@ -178,7 +178,7 @@ function validate(c) {
   if (c.learner_record && !fs.existsSync(recordFile(c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
-  problems.push(...handInProblems(c.hand_in));
+  problems.push(...sessionProblems(c));
   for (const r of c.runtimes || []) if (!["b1", "a"].includes(r)) problems.push(`runtimes: "${r}" isn't b1 or a`);
   const known = [...TURN_KEYS, ...PHASE3_KEYS, "first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
     "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "snapshot_reply", "focus_stable", "focus_named", "first_snapshot_without_options", "snapshot_in_turn_lacks"];
@@ -595,7 +595,7 @@ async function runCase(c, opts) {
   fs.mkdirSync(snaps);
   fs.writeFileSync(path.join(snaps, "frame.png"), blankFrame());
   if (c.learner_record) fs.copyFileSync(recordFile(c.learner_record), path.join(home, "learner.json"));
-  if (c.hand_in) seedHandIn(home, c.hand_in); // what go_deeper leaves on A (spec 014 T079)
+  if (c.hand_in || c.ask_started) seedSession(home, c); // what go_deeper leaves on A (spec 014 T079)
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
   const mentor = opts.runtime === "a" ? ab.openCase({ repo: REPO, home, env, opts }) : null;
   const runtime = mentor ? null : ensureRuntime(REPO, path.join(home, "runtime"));

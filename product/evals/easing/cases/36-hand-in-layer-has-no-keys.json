@@ -1,0 +1,82 @@
+{
+  "id": "36-hand-in-layer-has-no-keys",
+  "title": "From an answer (A), keyed false: the answer's layer (Background) has no keys this lesson can work on. One sentence says so, then what the answer's step still lets them do on their own, and it stops: no demonstration, no proposal",
+  "covers": [
+    "FR-026",
+    "T074",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "easing.basic",
+    "layer": "Background",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select Background's keys and choose Easy Ease (F9).",
+        "skill": "easing.basic",
+        "layer": "Background"
+      },
+      {
+        "text": "Play it back and watch the Background.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/expressions/practice.json",
+      "say": "/ease-mentor"
+    }
+  ],
+  "expect": {
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode_source": "hand_in",
+          "hand_in.keyed": false
+        }
+      }
+    ],
+    "set_ease_max": 0,
+    "tools_not_called": [
+      "diff_since_last",
+      "record_lesson"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "short",
+        "turns": [
+          1
+        ],
+        "max": 3
+      }
+    ],
+    "say": [
+      {
+        "id": "names_the_layer",
+        "must": "\\bBackground\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_intent",
+        "never": "\\bwhich (?:one|layer)\\b|\\bis anything\\b|\\banything (?:here|else)\\b|want to start|let me suggest|where should",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-IN-UNKEYED"
+  ],
+  "note": "Spec 014 T079. Needs a capture with the layer list (the practice capture with read R2 has it); older captures read a layer that has no keys as 'lost'. Background has no keys in it."
+}

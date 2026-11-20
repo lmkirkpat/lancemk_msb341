@@ -1,0 +1,55 @@
+{
+  "id": "41-stop-after-a-check-records-and-never-ends",
+  "title": "OQ-10: a stop after a check that didn't pass records the lesson as partial and never calls end_lesson (something has been checked, so there is something to record)",
+  "covers": [
+    "T106",
+    "OQ-10",
+    "T079"
+  ],
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good."
+    },
+    {
+      "project": "partial",
+      "say": "done"
+    },
+    {
+      "project": "partial",
+      "say": "Let's stop here for today, I'll finish later."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "diff_since_last",
+      "record_lesson"
+    ],
+    "tools_not_called": [
+      "end_lesson"
+    ],
+    "record_lesson": {
+      "skill": "easing.basic",
+      "result": "partial"
+    },
+    "turn_tools": [
+      {
+        "turn": 4,
+        "called": [
+          "record_lesson"
+        ],
+        "not_called": [
+          "end_lesson"
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-RECORD-HONEST"
+  ],
+  "note": "Spec 014 T079 (OQ-10: 'a stop after a check (records)'). The same flow as case 16, which pins the result; this one pins the tool: record_lesson, never end_lesson. Runs on B1 and A."
+}

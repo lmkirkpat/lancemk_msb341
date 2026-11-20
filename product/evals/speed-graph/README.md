@@ -424,3 +424,19 @@ B1 baseline compared: `2026-11-11-232337.json`, 36/37 (97%); gap 0 points.
 ## Spec 015 T063 re-run (2026-11-16, B1, at `84693de`)
 
 Case 16 `--repeat 3`: **2/3**, $3.31 (`results/2026-11-16-194004.json`). The record summary was honest in all three (what happened at the check, no verdict on the lesson). The miss (run 1) is R-RECORD-HONEST on the `attempted` field: it said the learner "Shaped Title Position 1.5-3 s and 3-4.37 s", and the check's `seen_shaped` listed only the demo pair and Scale. Runs 2 and 3 wrote the same claim ("Shaping ...") and passed, so this is judge strictness on a borderline field, not the summary rule T063 changed. Not fixed; a record-wording line for `attempted` would be the smallest change if the builder wants one.
+
+## Phase 3 cases (spec 014 T079, written 2026-11-19, dry-run only)
+
+7 cases, ids 38 to 44: rule 1 (the sentence from `motion_from`), a lesson opened from an answer, the hand-back line, the stop rules (`end_lesson`, and a stop after a check records), a session that began with a question never offering a review, and K5 (a refused record is rewritten without a word). Each says which requirement it covers in `covers`.
+
+| Case | Runs on | What | Rubric |
+|---|---|---|---|
+| 38-rule-one-a-parent-moves-the-layer | b1,a | Rule 1 | R-RULE-ONE, R-NAMES-REAL |
+| 39-hand-in-opens-on-the-layer | a | From an answer (A) | R-HAND-IN-OPENS, R-ONE-IDEA |
+| 40-hand-back-after-a-stop-that-records | a | From an answer (A) | R-HAND-BACK, R-RECORD-HONEST |
+| 41-stop-in-a-go-deeper-lesson-ends-on-the-hand-back-line | a | OQ-10 (A) | R-HAND-BACK, R-STOP-WITH-NOTHING-TO-SAVE |
+| 42-end-lesson-before-anything-is-tried | b1,a | OQ-10 | R-STOP-WITH-NOTHING-TO-SAVE |
+| 43-a-session-that-started-with-a-question-offers-no-review | b1,a | FR-032 | R-NO-REVIEW-AFTER-QUESTION |
+| 44-record-rewrite-is-silent | b1,a | K5 | R-RECORD-REWRITE-SILENT, R-RECORD-HONEST |
+
+New expect keys (shared, `../lib/phase3-checks.mjs`, unit-tested in `lib/test/phase3-checks.test.mjs`): `turn_tools` (in one turn: successful calls and calls that must not happen), `record_text_never` (no saved record_lesson text matches a regex), `record_recovers` (a refused record_lesson is followed by a saved one), `say_ends_with` (the last sentence of a turn matches: the hand-back line), `say_never_when_called` (nothing said about a refusal). New case keys: `hand_in` (the state go_deeper leaves, seeded as in the anchor and null sets; `lib/hand-in.mjs`), `ask_started: true` (an ask began in this session window, so no due review opens the lesson), and `runtimes` (a hand-in case runs on A only, as the ask set's case 19 and next-mentor's hand-over cases do; the seed and the tools behave the same on B1, so dropping `runtimes` would run them there). Not run: dry-run only until T080.

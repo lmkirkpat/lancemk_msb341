@@ -10,12 +10,13 @@
 //                      (K5: a layer no check attributed isn't named with a change word)
 //   say_ends_with      [{ id, turn, pattern, cs? }]: the last sentence the mentor says in that turn matches the regex
 //                      (the hand-back line is the last line, nothing after it)
+//   record_recovers    true: when a record_lesson call was refused (RECORD_UNATTRIBUTED), a later one was saved
 //   say_never_when_called  [{ id, turn, tool, pattern }]: when that turn has a call to `tool`, no words of that turn
 //                      match the regex (nothing said about a refusal the learner never sees)
 //
 // Events are the runners': { kind: "say", text } and { kind: "tool", name, ok, input }, names without the prefix.
 
-export const PHASE3_KEYS = ["turn_tools", "record_text_never", "say_ends_with", "say_never_when_called"];
+export const PHASE3_KEYS = ["turn_tools", "record_text_never", "say_ends_with", "say_never_when_called", "record_recovers"];
 
 const toolsOf = (turn) => (turn ? turn.events : []).filter((e) => e.kind === "tool");
 const saysOf = (turn) => (turn ? turn.events : []).filter((e) => e.kind === "say").map((e) => e.text);
@@ -50,6 +51,12 @@ export function phase3Checks(expect, turns, mentorTools) {
     const re = rx(w);
     const hit = recs.map((e) => [e.input?.summary, e.input?.attempted, e.input?.next].filter(Boolean).join(" | ")).map((t) => t.match(re)).find(Boolean);
     add(`record_text_never:${w.id}`, !hit, hit ? `a saved record says "${hit[0]}"` : recs.length ? "clean" : "clean (nothing was recorded)");
+  }
+  if (expect.record_recovers) {
+    const recs = turns.flatMap(toolsOf).filter((e) => e.name === "record_lesson");
+    const firstBad = recs.findIndex((e) => !e.ok);
+    const saved = firstBad < 0 || recs.slice(firstBad + 1).some((e) => e.ok);
+    add("record_recovers", saved, firstBad < 0 ? `no refusal (${recs.length} record call(s))` : saved ? "a refused record was rewritten and saved" : "a refused record was never saved");
   }
   for (const w of expect.say_ends_with || []) {
     const last = lastSentence(saysOf(turns[w.turn - 1]));

@@ -1,0 +1,54 @@
+{
+  "id": "44-a-session-that-started-with-a-question-offers-no-review",
+  "title": "FR-032: a review is due, but the learner asked a question about their comp earlier in this session. The snapshot opens a lesson, and nothing offers or mentions a review",
+  "covers": [
+    "FR-032",
+    "R6",
+    "T072",
+    "T074",
+    "T079"
+  ],
+  "ask_started": true,
+  "learner_record": "mentor/test/fixtures/key-types/records/learned-blink.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "key_types_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "no_review_offer",
+        "never": "\\breview\\b|\\brefresher\\b|\\bquiz\\b|\\bdue\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_what_snaps",
+        "must": "snap",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NO-REVIEW-AFTER-QUESTION"
+  ],
+  "note": "Spec 014 T079 (FR-032, T072). learned-blink.json has Key types learned with its review date long past, so without the ask the snapshot would open a review (case 14). The run seeds an ask started now in session.json (`ask_started`); the real ask writes it when an answer is given."
+}
