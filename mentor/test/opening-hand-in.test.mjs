@@ -125,3 +125,32 @@ test("with no hand-in, opening() writes nothing to session.json", () => {
   open();
   assert.equal(fs.existsSync(SESSION), false);
 });
+
+// ---- Spec 014 T072 (FR-032, research R6, rule 5): no due review opens a session started with a question.
+
+const ask = (at) => session.saveAnswer({ comp_id: COMP_ID, project: SNAP.project, comp: SNAP.comp.name, kind: "answer", steps: [], offered_skills: [], goal: "g" }, { now: at });
+
+test("T072: an ask in this session window: the due review isn't the opening; a lesson, and no review offer remembered", () => {
+  ask(NOW.getTime() - HOUR);
+  const r = open();
+  assert.equal(r.mode, "lesson");
+  assert.equal(r.mode_source, "default");
+  assert.equal(session.reviewOffers().length, 0);
+});
+
+test("T072: a describe or how-to counts as an ask too (any answer started the session)", () => {
+  session.saveAnswer({ comp_id: null, project: null, comp: null, kind: "howto", steps: [], offered_skills: [], goal: null }, { now: NOW.getTime() - HOUR });
+  assert.equal(open().mode_source, "default");
+});
+
+test("T072: an ask before the window doesn't hold the review back", () => {
+  ask(NOW.getTime() - 4 * HOUR);
+  assert.equal(open().mode_source, "review_due");
+});
+
+test("T072: the learner can still ask for the review, and a hand-in still comes first", () => {
+  ask(NOW.getTime() - HOUR);
+  assert.equal(open({ mode: "review" }).mode, "review");
+  handIn();
+  assert.equal(open().mode_source, "hand_in");
+});
