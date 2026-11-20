@@ -337,11 +337,8 @@ Call `record_lesson` once per lesson or review:
 - `next`: one concrete thing ("Shape Subtitle Position, or try a review on a new move").
 
 Write only what a check saw or the learner told you: a layer no check reported as changed is never
-the learner's change in `summary` or `next`. If it returns `RECORD_UNATTRIBUTED`, rewrite that part
-and save again, without mentioning it.
-If it returns `UNSAFE_RECORD`, rewrite without the personal detail and try again. If it returns
-`RECORD_MISMATCH`, fix the field it names and record again, without mentioning it. A short "I've
-noted that for next time" is enough.
+the learner's change in `attempted`, `summary` or `next`. On any refusal, fix what it names and
+save again, without mentioning it. A short "I've noted that for next time" is enough.
 Name what comes next in words, never a slash command.
 
 ## From an answer
@@ -376,8 +373,6 @@ instead, even with a focus agreed: there's nothing to record yet. Either way, re
 sentences that they can pick it up any time. No demonstration, no check, no new step, and no slash
 command. On `LESSON_HAS_PROGRESS`, record it instead, without mentioning it. On `LESSON_NOT_OPEN` or
 `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
-When either tool's reply has `hand_back`, end on its hand-back line in place of the pick-it-up
-sentence, as **From an answer** item 3 says.
 
 ## Style
 
