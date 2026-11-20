@@ -64,8 +64,9 @@ test("give_answer is registered from its own file, with TOOLS only: no skill ID 
   assert.equal(askModule.SKILLS, undefined);
   assert.equal(askModule.FINDERS, undefined);
   assert.ok(!SKILLS.some((s) => s.startsWith("ask")));
-  // Phase 2 (R13): pivot and null take a hand-in; the other four wait for phase 3.
-  assert.deepEqual(Object.keys(FINDERS).filter((id) => FINDERS[id].hand_in === true).sort(), ["parenting.null", "transform.anchor"]);
+  // Phase 3 (R13): all six take a hand-in, each with its skill folder.
+  assert.deepEqual(Object.keys(FINDERS).filter((id) => FINDERS[id].hand_in === true).sort(), ["easing.basic", "easing.speed_graph", "keyframes.types", "parenting.null", "timing.offset", "transform.anchor"]);
+  for (const id of Object.keys(FINDERS)) if (FINDERS[id].hand_in) assert.match(FINDERS[id].skill_command, /^[a-z-]+-mentor$/);
 });
 
 test(`reply shape on B1 (${LIVE ? "live" : "derived"} Comp 1): the accepted fields plus comp, runtime and tags; no offer`, async () => {
@@ -114,21 +115,30 @@ test("the session's ask block holds the checked offer and the goal, even on B1",
   assert.ok(entry, "linked to the record's asked entry");
 });
 
-test("on A, an offer needs a lesson that takes a hand-in: Set the pivot does (phase 2), Speed graph doesn't yet; no offer is fine", async () => {
+test("on A, an offer needs a lesson that takes a hand-in: all six do from phase 3; one without the flag is refused; no offer is fine", async () => {
   process.env.AE_MENTOR_RUNTIME = "a";
   const r = await call(td16());
   assert.equal(r.runtime, "a");
   assert.deepEqual(r.offered_skills, ["transform.anchor"]);
   fs.rmSync(SESSION);
   use(PRACTICE);
-  await refuses({
+  const speed = {
     kind: "answer",
     explanation: "In Mentor Practice, Title moves on its own Position keys.",
     steps: [{ text: "Select Title's last two Position keys and open the speed graph.", skill: "Speed graph", layer: "Title" }],
     offered_skills: ["easing.speed_graph"],
     closing_offer: "Try it, or want to go deeper with *Speed graph*?",
-  }, "OFFER_NOT_READY");
+    goal: "a softer landing",
+  };
+  FINDERS["easing.speed_graph"].hand_in = false;
+  try {
+    await refuses(speed, "OFFER_NOT_READY");
+  } finally {
+    FINDERS["easing.speed_graph"].hand_in = true;
+  }
   assert.equal(fs.existsSync(SESSION), false, "a refusal saves nothing");
+  assert.deepEqual((await call(speed)).offered_skills, ["easing.speed_graph"], "phase 3: Speed graph takes a hand-in");
+  fs.rmSync(SESSION);
   use(COMP1);
   const none = await call({ ...td16(), offered_skills: [], closing_offer: "Try them?" });
   assert.deepEqual(none.offered_skills, []);

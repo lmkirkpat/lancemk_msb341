@@ -81,7 +81,8 @@ test("lapsed after the session window", () => {
 
 test("a skill whose finder doesn't take a hand-in never takes one, even its own", () => {
   handIn({ skill: "keyframes.types" });
-  const r = opening({ skill: "keyframes.types", snapshot: SNAP, finder: FINDERS["keyframes.types"], now: NOW });
+  // Phase 3: all six take one, so a finder without the flag stands in.
+  const r = opening({ skill: "keyframes.types", snapshot: SNAP, finder: { ...FINDERS["keyframes.types"], hand_in: false }, now: NOW });
   assert.notEqual(r.mode_source, "hand_in");
   assert.equal(session.peekHandIn().used, false);
 });

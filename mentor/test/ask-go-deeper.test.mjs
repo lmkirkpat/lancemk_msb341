@@ -133,9 +133,16 @@ test("NOT_OFFERED: a skill the answer didn't offer, a step's tag that wasn't off
 });
 
 test("OFFER_NOT_READY: an offer saved for a lesson that can't take a hand-in (saved on B1, say) is refused on A", async () => {
-  session.saveAnswer({ comp_id: 1, project: "p", comp: "Comp 1", kind: "howto", steps: [], offered_skills: ["easing.speed_graph"], goal: null });
-  await refuses({ skill: "easing.speed_graph" }, "OFFER_NOT_READY");
-  assert.equal(onDisk().hand_in, undefined);
+  // Phase 3: all six take one (R13), so the guard is shown with one finder's flag turned off.
+  const { FINDERS } = await import("../tools/index.mjs");
+  FINDERS["easing.speed_graph"].hand_in = false;
+  try {
+    session.saveAnswer({ comp_id: 1, project: "p", comp: "Comp 1", kind: "howto", steps: [], offered_skills: ["easing.speed_graph"], goal: null });
+    await refuses({ skill: "easing.speed_graph" }, "OFFER_NOT_READY");
+    assert.equal(onDisk().hand_in, undefined);
+  } finally {
+    FINDERS["easing.speed_graph"].hand_in = true;
+  }
 });
 
 test("a how-to's yes hands in no layer and no step (PQ-4)", async () => {
