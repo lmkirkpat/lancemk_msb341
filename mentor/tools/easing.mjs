@@ -7,6 +7,7 @@ import { diff } from "../lib/diff.mjs";
 import { demoLayer } from "../lib/demo-layer.mjs";
 import { isKeptLinear } from "../lib/marks.mjs";
 import * as session from "../lib/session.mjs";
+import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { json } from "../lib/reply.mjs";
 
@@ -65,7 +66,7 @@ async function diffSinceLast() {
   const lesson = session.currentLesson();
   const current = await takeSnapshot();
   const result = diff(lesson.baseline, current, lesson);
-  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone });
+  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
   return json(result);
 }
 

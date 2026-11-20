@@ -9,6 +9,7 @@ import { parseHost } from "../lib/host.mjs";
 import { demoLayer } from "../lib/demo-layer.mjs";
 import { analyze, check, describePairs, finder, grade } from "../lib/key-types.mjs";
 import * as session from "../lib/session.mjs";
+import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { json } from "../lib/reply.mjs";
@@ -113,7 +114,7 @@ async function keyTypesCheck({ should_move = [], constant_speed = null } = {}) {
   let result = check(lesson.baseline, current, lesson, { should_move, constant_speed });
   if (!result.comp_matches) return json({ ...result, constant_speed: null });
 
-  session.markChecked(result.passed, { demoUndone: result.demo_undone });
+  session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
   const cs = result.constant_speed;
   if (cs) cs.marked = false;
   if (cs && cs.verdict === "linear") {
@@ -124,7 +125,7 @@ async function keyTypesCheck({ should_move = [], constant_speed = null } = {}) {
       if (e.code !== "NOT_KEPT_LINEAR") throw e;
       // Research R6: reported as not linear, and nothing is stored.
       result = grade({ ...result, constant_speed: { ...cs, verdict: "not_linear", marked: false } }, { mode });
-      session.markChecked(result.passed, { demoUndone: result.demo_undone });
+      session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
     }
   }
   return json(result);

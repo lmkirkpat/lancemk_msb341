@@ -16,6 +16,7 @@ import { layerNow } from "../lib/renumber.mjs";
 import { motionFrom } from "../lib/motion-sources.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
+import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
@@ -218,7 +219,7 @@ async function anchorCheck() {
   const lesson = ownLesson();
   const current = await io.takeSnapshot({ sample_times: checkSampleTimes(lesson.baseline, lesson) });
   const result = check(lesson.baseline, current, lesson);
-  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone });
+  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
   return json(result);
 }
 

@@ -311,8 +311,21 @@ export function recordDemo(targetId) {
 }
 
 // demoUndone: the check saw the demo pair needing ease again. From then on it's the learner's pair.
-export function markChecked(passed, { demoUndone = false } = {}) {
+// attributed (spec 014 K5, research R9): the changes this check reported, [{ layer, property }], added
+// to the lesson's `attributed` list with the time, for record_lesson's guard. A lesson without any
+// keeps no list, so its session data is as before.
+export function markChecked(passed, { demoUndone = false, attributed = [] } = {}) {
   return updateCurrent((lesson) => {
+    if (Array.isArray(attributed) && attributed.length) {
+      const at = new Date().toISOString();
+      const list = Array.isArray(lesson.attributed) ? lesson.attributed : [];
+      for (const a of attributed) {
+        if (!a || typeof a.layer !== "string") continue;
+        const property = typeof a.property === "string" ? a.property : null;
+        if (!list.some((x) => x.layer === a.layer && x.property === property)) list.push({ layer: a.layer, property, at });
+      }
+      lesson.attributed = list;
+    }
     lesson.status = "checked";
     lesson.checked = true; // stays true after a later demo, unlike status
     // A saved pass stays a pass: a later check answers a question, it doesn't reopen the lesson.
