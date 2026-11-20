@@ -51,7 +51,9 @@ export function checkGoalText(goal, snapshot) {
   if (!g) return null;
   if (isUnsafe(g)) throw new MentorError("UNSAFE_RECORD");
   if (g.length > GOAL_MAX) throw new MentorError("GOAL_NOT_GENERAL");
-  if (effectNames(snapshot).some((n) => holdsWhole(g, n))) throw new MentorError("GOAL_NOT_GENERAL");
+  const effect = effectNames(snapshot).find((n) => holdsWhole(g, n));
+  // T081 review: name the word, so the retry isn't blind.
+  if (effect) throw new MentorError("GOAL_NOT_GENERAL", `The goal holds ${effect}, an effect's name from the comp. Say what the motion should do in general words instead, without it.`);
   return g;
 }
 

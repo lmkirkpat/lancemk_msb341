@@ -144,7 +144,7 @@ test("FR-044: personal details never reach an entry", () => {
 test("the goal check (FR-040): general terms, 120 characters at most, no effect name from the read", () => {
   const snap = { layer_info: [{ name: "Black Solid 1", effects: [{ name: "CC Light Sweep", match_name: "CC Light Sweep" }] }] };
   assert.equal(asked.checkGoalText("  a light  sweep that follows the logo ", snap), "a light sweep that follows the logo");
-  assert.throws(() => asked.checkGoalText("make the CC Light Sweep follow", snap), (x) => x.code === "GOAL_NOT_GENERAL");
+  assert.throws(() => asked.checkGoalText("make the CC Light Sweep follow", snap), (x) => x.code === "GOAL_NOT_GENERAL" && x.message.includes("CC Light Sweep"));
   assert.throws(() => asked.checkGoalText("make the cc light sweep follow", snap), (x) => x.code === "GOAL_NOT_GENERAL");
   assert.throws(() => asked.checkGoalText("x".repeat(121), snap), (x) => x.code === "GOAL_NOT_GENERAL");
   assert.equal(asked.checkGoalText("x".repeat(120), snap).length, 120);
