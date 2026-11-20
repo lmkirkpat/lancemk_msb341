@@ -11,7 +11,7 @@
 // a comp switched between the mentor's read and its answer (COMP_NOT_NAMED).
 
 import { MentorError, registerErrors } from "../errors.mjs";
-import { checkAnswer, KINDS, NOT_TAUGHT, NULL_SKILL, nullWithChildren, READ_KINDS, skillIdOf } from "../lib/ask-answer.mjs";
+import { checkAnswer, hasCode, KINDS, NOT_TAUGHT, NULL_SKILL, nullWithChildren, READ_KINDS, skillIdOf } from "../lib/ask-answer.mjs";
 import { layerInfo } from "../lib/layer-info.mjs";
 import { checkGoalText, checkSaidText, markWentDeeper, recordAsked, setSaid } from "../lib/asked-record.mjs";
 import { peekRecord } from "../lib/learner-store.mjs";
@@ -195,6 +195,10 @@ export async function noteSaid(input = {}) {
   const ask = latestAnswer();
   if (!ask || ask.kind !== "answer") throw new MentorError("NO_ANSWER");
   const said = checkSaidText(args.said); // SAID_NOT_GENERAL, UNSAFE_RECORD: checked even with no entry to keep it on
+  // FR-045: no expression or error text in the record (give_answer's plain-words test). note_said has
+  // no read of its own, so the 24-character copy test isn't run; the code pattern catches the rest.
+  const { skills } = await skillModules();
+  if (hasCode(said, [...skills, NOT_TAUGHT])) throw new MentorError("NOT_PLAIN_WORDS");
   const entry = ask.entry_date ? setSaid(ask.entry_date, said) : null;
   return textReply({ saved: !!entry });
 }
