@@ -11,7 +11,7 @@ import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { json } from "../lib/reply.mjs";
 import { peekRecord } from "../lib/learner-store.mjs";
-import { carriedFocus, handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
+import { carriedFocus, handInSlice, noKeysReply, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
 import { layerInfo } from "../lib/layer-info.mjs";
 
 export const SKILLS = ["easing.basic"];
@@ -63,6 +63,7 @@ async function snapshotProject({ focus_layers } = {}) {
     const record = peekRecord();
     const learner = { status: record && record.skills && record.skills[SKILL] ? record.skills[SKILL].status : "not_started" };
     extra = { mode_source: taken.lost ? "hand_in_lost" : "hand_in", hand_in: handInSlice(taken.h, learner, keyed === undefined ? {} : { keyed }) };
+    if (keyed === false) return json(noKeysReply(snapshot, extra));
   }
   if (!taken && !(focus_layers && focus_layers.length)) {
     const carried = carriedFocus(session, SKILL, snapshot);

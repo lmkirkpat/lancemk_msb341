@@ -105,3 +105,10 @@ export function carriedFocus(session, skill, snapshot, mode = "lesson") {
   const f = lesson.hand_in && lesson.hand_in.focus_layers;
   return Array.isArray(f) && f.length ? [...f] : null;
 }
+
+// T081 review: a hand-in whose layer has no keys this skill reads opens no lesson (nothing would be
+// left open for a record or an end). The reply says so with the slice (keyed false) and nothing else
+// the lesson would use.
+export const noKeysReply = (snapshot, fields) => ({
+  lesson: null, project: snapshot.project, comp: { name: snapshot.comp.name }, ...fields,
+});

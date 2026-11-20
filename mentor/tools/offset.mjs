@@ -14,7 +14,7 @@ import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
-import { carriedFocus, handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor, otherLayersNamed } from "../lib/hand-in-lesson.mjs";
+import { carriedFocus, handInSlice, noKeysReply, keyedLayer, layerNames, lessonHandIn, motionFromFor, otherLayersNamed } from "../lib/hand-in-lesson.mjs";
 
 export const SKILLS = [SKILL];
 
@@ -49,6 +49,9 @@ async function offsetSnapshot({ mode: asked, focus_layers, skill_options } = {})
   // K6: a hand-in opens a new lesson on its layer and any other layer its step names (the group).
   const taken = open.mode_source === "hand_in" && open.hand_in && open.hand_in.layer ? open.hand_in : null;
   const keyed = taken ? keyedLayer(snapshot, taken.layer) : undefined;
+  if (taken && keyed === false) {
+    return json(noKeysReply(snapshot, { mode: "lesson", mode_source: open.mode_source, learner: open.learner, hand_in: handInSlice(taken, open.learner, { keyed }) }));
+  }
   const named = focus_layers && focus_layers.length;
   if (taken && keyed && !named) focus_layers = [taken.layer, ...otherLayersNamed(snapshot, taken)];
   else if (!taken && !named) focus_layers = carriedFocus(session, SKILL, snapshot, mode) || focus_layers;

@@ -104,13 +104,15 @@ for (const [skill, c] of Object.entries(CASES)) {
   });
 }
 
-test("a layer with no keys: keyed false, no focus from it, and no error (K4 should keep this from happening)", async () => {
+test("a layer with no keys: keyed false, no lesson started (nothing left open), and no error (K4 should keep this from happening)", async () => {
   use(PRACTICE2);
   for (const skill of ["keyframes.types", "timing.offset"]) {
     handIn(skill, { layer: "Hatch Rig" });
     const r = await call(CASES[skill].tool);
     assert.equal(r.mode_source, "hand_in");
     assert.equal(r.hand_in.keyed, false);
+    assert.equal(r.lesson, null, skill);
+    await assert.rejects(() => tool("end_lesson")({}), (e) => e.code === "LESSON_NOT_OPEN", `${skill}: no lesson left open`);
   }
   use(PRACTICE);
   for (const skill of ["easing.basic", "easing.speed_graph"]) {
@@ -119,6 +121,8 @@ test("a layer with no keys: keyed false, no focus from it, and no error (K4 shou
     handIn(skill, { layer: unkeyed });
     const r = await call(CASES[skill].tool);
     assert.equal(r.hand_in.keyed, false, skill);
+    assert.equal(r.lesson, null, skill);
+    await assert.rejects(() => tool("end_lesson")({}), (e) => e.code === "LESSON_NOT_OPEN", `${skill}: no lesson left open`);
   }
 });
 
