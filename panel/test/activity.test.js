@@ -63,6 +63,24 @@ test("ask-mentor's tools have their lines: describe_layers is MU's \"Reading the
   for (const t of ["describe_layers", "preview_frame", "give_answer"]) assert.doesNotMatch(STATUS[t], /_|snapshot|ae-mentor/, t);
 });
 
+// Spec 014 phase 3: note_said (turn 4) has its own plain line, and in the ask thread it never swaps
+// the timed reading line, like every ask tool.
+test("note_said's line is plain and says only what it does", async () => {
+  assert.equal(STATUS.note_said, "Noting how the steps went…");
+  assert.notEqual(statusFor("note_said"), "Working…");
+  assert.doesNotMatch(STATUS.note_said, /_|said|record|saved|ae-mentor/i, "no tool or field names, no claim it saved their words");
+  const { ready } = require("./app-harness.js");
+  const { renderApp } = require("../lib/screens.js");
+  const { COPY } = require("../lib/copy.js");
+  const h = await ready({ runtime: "a", setTimeout: () => 0 });
+  h.app.setDraft("Why does it swing?");
+  h.app.act("ask_home");
+  h.adapter().emit("tool_call", { name: "note_said" });
+  const status = renderApp(h.app.model()).lesson.status.replace(/&#39;/g, "'");
+  assert.equal(status.includes(COPY.ask.reading), true, "the thread keeps its own line");
+  assert.equal(status.includes(STATUS.note_said), false);
+});
+
 test("the ask thread's status comes from its own timer, never the tool: one line, then Still reading at 6 s", async () => {
   const { ready } = require("./app-harness.js");
   const { renderApp } = require("../lib/screens.js");

@@ -199,26 +199,30 @@ test("the message breakpoint goes on a copy; the history is never changed", () =
 // Spec 014: ask-mentor runs on A (T037). Its allowed-tools filter gives it exactly the three ask tools,
 // and no lesson skill is ever offered the ask tools. ask-mentor's SKILL.md comes with 014-mentor.
 // Spec 014 phase 2 (T051): go_deeper, and Skill for the hand-over to the lesson on A.
-const ASK_TOOLS = ["describe_layers", "give_answer", "go_deeper", "preview_frame"];
+// Spec 014 phase 3: note_said (turn 4), once the tree's server has it (014-p3-mentor). Keyed on the
+// server, not the SKILL.md, so a phase 3 server with a SKILL.md that leaves it out fails here.
+const ASK_TOOLS_P2 = ["describe_layers", "give_answer", "go_deeper", "preview_frame"];
+const askTools = () => (server.tools.some((t) => t.name === "note_said") ? [...ASK_TOOLS_P2, "note_said"].sort() : ASK_TOOLS_P2);
 const HAS_ASK = fs.existsSync(path.join(SKILLS, "ask-mentor", "SKILL.md"));
 
-test("ask-mentor offers exactly describe_layers, preview_frame, give_answer and go_deeper, plus Skill for Go deeper's hand-over", { skip: HAS_ASK ? false : "ask-mentor's SKILL.md isn't in this tree yet (014-mentor)" }, () => {
+test("ask-mentor offers exactly describe_layers, preview_frame, give_answer, go_deeper and (phase 3) note_said, plus Skill for Go deeper's hand-over", { skip: HAS_ASK ? false : "ask-mentor's SKILL.md isn't in this tree yet (014-mentor)" }, () => {
+  const ASK_TOOLS = askTools();
   assert.deepEqual(readSkill(SKILLS, "ask-mentor").allowedTools.slice().sort(), ["Skill", ...ASK_TOOLS]);
   for (const patch of [undefined, HAIKU]) {
     const p = lesson("ask-mentor", patch);
-    assert.deepEqual([...p.allowed].filter((t) => t !== "Skill").sort(), ASK_TOOLS, "every one runs: the server has all four");
+    assert.deepEqual([...p.allowed].filter((t) => t !== "Skill").sort(), ASK_TOOLS, "every one runs: the server has them all");
     assert.deepEqual(offered(p).sort(), ["Skill", ...ASK_TOOLS]);
     assert.deepEqual(p.tools.find((t) => t.name === "Skill"), { name: "Skill", description: skillTool.description, input_schema: skillTool.input_schema }, "the hand-over tool, as next-mentor's");
   }
 });
 
-test("no other mentor skill is offered give_answer or describe_layers", () => {
+test("no other mentor skill is offered give_answer, describe_layers or note_said", () => {
   const names = listSkills(SKILLS).filter((n) => n !== "ask-mentor");
   assert.ok(names.length >= 7);
   for (const patch of [undefined, HAIKU]) {
     for (const name of names) {
       const p = lesson(name, patch);
-      for (const t of ["give_answer", "describe_layers"]) {
+      for (const t of ["give_answer", "describe_layers", "note_said"]) {
         assert.ok(!p.allowed.has(t), `${name}: ${t}`);
         assert.ok(!offered(p).includes(t), `${name}: ${t} offered`);
       }
