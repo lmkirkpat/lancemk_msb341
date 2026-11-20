@@ -41,6 +41,10 @@
     {
       "project": "blink-all-held.json",
       "say": "I held all of Blink's pairs myself. Done."
+    },
+    {
+      "project": "blink-all-held.json",
+      "say": "Nothing here needs to run at constant speed."
     }
   ],
   "expect": {
@@ -60,7 +64,7 @@
     "say_ends_with": [
       {
         "id": "hand_back_line",
-        "turn": 2,
+        "turn": 3,
         "pattern": "^That was step 1[;.] next is (?:step 2: )?(?:to )?play it back and watch Blink snap on and off"
       }
     ],
@@ -69,7 +73,7 @@
         "id": "no_command",
         "never": "/[a-z-]+-mentor",
         "turns": [
-          2
+          3
         ]
       }
     ]
@@ -77,5 +81,5 @@
   "rubric": [
     "R-HAND-BACK"
   ],
-  "note": "Spec 014 T079. If the skill waits for the learner's reply before it records (it may ask what runs at constant speed first), the line is not in turn 2 and this fails: that would be a prompt gap to read, not noise."
+  "note": "Spec 014 T079. The skill asks its constant-speed question in the pass turn and records after the learner's answer (step 8, step 10), so the record and the hand-back line come in turn 3: turn 2 says the pass, turn 3 answers the question and ends on the line. The learner's turn 3 answer says none applies, so the lesson goes on to the record."
 }
