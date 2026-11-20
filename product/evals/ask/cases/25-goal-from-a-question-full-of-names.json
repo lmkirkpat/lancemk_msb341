@@ -1,0 +1,47 @@
+{
+  "id": "25-goal-from-a-question-full-of-names",
+  "title": "Situation 17, harder: a question that names the layers and the effect. The accepted answer's goal is still in general motion words, with none of those names in it (the tool may refuse once with GOAL_NOT_GENERAL and the mentor tries again)",
+  "covers": [
+    "TD 17.17",
+    "FR-040",
+    "T078"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the sweep that Sweep Control drives on Black Solid 1 with CC Light Sweep go slower."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ]
+      }
+    ],
+    "asked_entry": {
+      "count": 1,
+      "goal": {
+        "from_turn": 1,
+        "max_chars": 120,
+        "no_run_of": 5,
+        "never_names": [
+          "Shake Control",
+          "Sweep Control",
+          "CC Light Sweep",
+          "Light Sweep",
+          "Black Solid 1",
+          "Black Solid"
+        ]
+      }
+    }
+  },
+  "rubric": [
+    "R-ONE-IDEA"
+  ],
+  "note": "Spec 014 T078. Pins the new refusal GOAL_NOT_GENERAL from the record side: whatever the mentor tried first, the saved goal has no layer or effect name. A refused first try is visible in the run's refusals line (by code); retries cost a little and are allowed."
+}

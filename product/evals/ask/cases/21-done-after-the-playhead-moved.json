@@ -1,0 +1,92 @@
+{
+  "id": "21-done-after-the-playhead-moved",
+  "title": "Situation 2: after an answer the learner says they did the steps and are done, and the playhead has moved since the last read. The mentor reads the same layers again at the earlier read's time, writes no new answer, and never says \"you moved\" or \"you changed\" or advises Undo for a difference the learner didn't make",
+  "covers": [
+    "TD 17.2",
+    "FR-029",
+    "TD 10.1 rule 3",
+    "T078"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1-playhead-moved.json",
+      "say": "I did steps 1 to 3. Done.",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ]
+      }
+    ],
+    "no_answer_turns": [
+      2
+    ],
+    "turn_first_tool": [
+      {
+        "turn": 2,
+        "tool": "describe_layers"
+      }
+    ],
+    "reread": [
+      {
+        "turn": 2,
+        "of": 1,
+        "at_time": true,
+        "layers": true
+      }
+    ],
+    "turn_tools": [
+      {
+        "turn": 2,
+        "not_called": [
+          "give_answer",
+          "note_said",
+          "go_deeper",
+          "Skill"
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "never_you_moved",
+        "never": "(?<!\\b(?:if|whether|unless) )\\byou(?:['’]ve| have)? (?:moved|changed|dragged|adjusted|panned|edited|reset|nudged)\\b",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      },
+      {
+        "id": "no_verdict",
+        "never": "\\b(?:pass(?:ed)?|fail(?:ed|s)?|well done|nailed it|nice work|great job|good job|you did it|you got it|that worked|correct(?:ly)?|incorrect|mistake)\\b",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      }
+    ],
+    "prose_max_sentences": [
+      {
+        "id": "short_read",
+        "turns": [
+          2
+        ],
+        "max": 5
+      }
+    ]
+  },
+  "rubric": [
+    "R-TRY-READ"
+  ],
+  "note": "Spec 014 T078 (situation 2). Turn 2's fixture is Comp 1 with only the comp's time changed (1.2 s, before the first hit), so the check is on the call, not the values: the fixture reader ignores the requested time, so the case pins that the call asks for the time of turn 1's read (3.403 s) and covers the layers step 3 was on. The learner says what was done (steps 1 to 3) so the line can't be read as an answer to the closing offer; a pivot is never read, so nothing in the read can show step 3. 'you moved' skips a conditional ('if you moved') and a negation ('you haven't moved') by its shape."
+}

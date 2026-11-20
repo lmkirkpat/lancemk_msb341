@@ -1,0 +1,66 @@
+{
+  "id": "27-a-question-and-a-did-are-not-how-it-went",
+  "title": "A question about a step, then \"I did step 3\" (what was done, not how it went). The mentor never calls note_said for either, and the asked entry has nothing said",
+  "covers": [
+    "FR-038",
+    "TD 11",
+    "T076",
+    "T078"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "Why is the rock riding on a null?",
+      "followup": true
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "I did step 3.",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ]
+      }
+    ],
+    "no_answer_turns": [
+      2,
+      3
+    ],
+    "turn_tools": [
+      {
+        "turn": 2,
+        "not_called": [
+          "note_said",
+          "give_answer"
+        ]
+      },
+      {
+        "turn": 3,
+        "not_called": [
+          "note_said",
+          "give_answer"
+        ]
+      }
+    ],
+    "asked_entry": {
+      "count": 1,
+      "said": false
+    }
+  },
+  "rubric": [
+    "R-NOTE-QUIET"
+  ],
+  "note": "Spec 014 T078 (negative twin of 26). 'Not for questions' and a said-only-when-they-said-it entry: turn 2 is a question, turn 3 only says what was done (the read can describe it, TD 6 turn 4), neither says how it went."
+}

@@ -9,6 +9,7 @@
 // without the MCP prefix.
 
 import { countSentences } from "../lib/turn-checks.mjs";
+import { phase3Checks } from "../lib/phase3-checks.mjs";
 
 export const ANSWER_TOOL = "give_answer";
 export const KEYFRAME_SKILLS = ["easing.basic", "keyframes.types", "easing.speed_graph", "timing.offset"];
@@ -40,7 +41,7 @@ export function answerCalls(turn) {
 
 // Refusals are plain messages with a code (research R3). A known code wins; else the first ALL_CAPS word
 // with an underscore; else UNKNOWN.
-export const REFUSAL_CODES = ["TOO_MANY_STEPS", "BAD_STEP_SKILL", "BAD_OFFER", "BAD_CLOSING", "COMP_NOT_NAMED", "STEPS_IN_EXPLANATION", "KEYFRAME_SKILL_ON_KEYLESS", "ROUTE_TO_PIVOT", "OFFER_NOT_READY", "NOT_ACTIONABLE", "ANSWER_SHAPE", "KIND_MISMATCH", "STEP_NEEDS_LAYER", "COMP_IS_OPEN", "NOT_PLAIN_WORDS", "NO_ACTIVE_COMP", "AE_UNREACHABLE", "AE_BUSY"];
+export const REFUSAL_CODES = ["TOO_MANY_STEPS", "BAD_STEP_SKILL", "BAD_OFFER", "BAD_CLOSING", "COMP_NOT_NAMED", "STEPS_IN_EXPLANATION", "KEYFRAME_SKILL_ON_KEYLESS", "ROUTE_TO_PIVOT", "OFFER_NOT_READY", "NOT_ACTIONABLE", "ANSWER_SHAPE", "KIND_MISMATCH", "STEP_NEEDS_LAYER", "COMP_IS_OPEN", "NOT_PLAIN_WORDS", "NO_ACTIVE_COMP", "GOAL_NOT_GENERAL", "SAID_NOT_GENERAL", "NO_ANSWER", "AE_UNREACHABLE", "AE_BUSY"];
 export function refusalCode(text) {
   const t = String(text || "");
   const known = REFUSAL_CODES.find((c) => t.includes(c));
@@ -300,6 +301,70 @@ export function askChecks(expect, ctx) {
     }
   }
 
+  // Phase 3 (spec 014 T078). A turn after an answer reads again (turn 4, TD § 6): the same layers, at the time of the last
+  // read, and it is never a new answer. [{ turn, of, at_time?, layers? }]: in `turn`, a describe_layers call succeeded;
+  // `at_time` true: one of them passed the time the earlier turn's last read returned (the playhead may have moved since);
+  // `layers` true: every layer the earlier answer's steps were on is covered by one (named, by index, or the whole comp).
+  for (const w of expect.reread || []) {
+    const reads = (n) => tools(turns[n - 1] || { events: [] }).filter((e) => e.name === "describe_layers" && e.ok);
+    const now = reads(w.turn);
+    const wrong = [];
+    if (!now.length) wrong.push(`no describe_layers read in turn ${w.turn}`);
+    if (now.length && w.at_time) {
+      const prev = parse(reads(w.of).at(-1)?.result)?.comp?.time;
+      const hit = Number.isFinite(prev) && now.some((e) => Number.isFinite(e.input?.at_time) && Math.abs(e.input.at_time - prev) < 0.005);
+      if (!hit) wrong.push(`no read at the earlier read's time (${prev} s); at_time was ${now.map((e) => JSON.stringify(e.input?.at_time ?? null)).join(", ")}`);
+    }
+    if (now.length && w.layers) {
+      const idx = (ctx.fixtures[w.turn - 1] || {}).indexes || {};
+      const need = [...new Set(stepsOf(answered[w.of - 1]?.a).map((s) => s?.layer).filter(Boolean))];
+      const covers = (e, name) => !(e.input?.layers || []).length || e.input.layers.some((l) => String(l).toLowerCase() === name.toLowerCase() || l === idx[name]);
+      const missing = need.filter((n) => !now.some((e) => covers(e, n)));
+      if (missing.length) wrong.push(`the read left out ${missing.join(", ")}`);
+    }
+    add(`reread@${w.turn}`, wrong.length === 0, wrong.length ? wrong.join("; ") : "read again");
+  }
+
+  // The asked entry the answer wrote (FR-038 to FR-041, FR-061; data-model § 3): the learner record's `asked` list at the end.
+  // { count?, said? (true: set; false: absent), said_never?, skills_include?, after_learning?, went_deeper?: null,
+  //   goal?: { from_turn?, max_chars?, no_run_of? (words), never_names?: [names], must? } }
+  if (expect.asked_entry) {
+    const w = expect.asked_entry;
+    const list = (ctx.record?.end?.asked) || [];
+    const e = list.at(-1);
+    const wrong = [];
+    if ("count" in w && list.length !== w.count) wrong.push(`${list.length} asked entries (wanted ${w.count})`);
+    if (e) {
+      if (w.said === false && e.said !== undefined) wrong.push(`said was set: "${e.said}"`);
+      if (w.said === true && !e.said) wrong.push("said wasn't set");
+      if (w.said_never && e.said && new RegExp(w.said_never, "i").test(e.said)) wrong.push(`said "${e.said}" matches /${w.said_never}/`);
+      for (const s of w.skills_include || []) if (!(e.skills || []).includes(s)) wrong.push(`skills lacks ${s}`);
+      if (w.after_learning && JSON.stringify([...(e.after_learning || [])].sort()) !== JSON.stringify([...w.after_learning].sort())) wrong.push(`after_learning was ${JSON.stringify(e.after_learning)}`);
+      if (w.went_deeper === null && e.went_deeper !== null) wrong.push(`went_deeper was ${JSON.stringify(e.went_deeper)}`);
+      for (const k of ["verdict", "summary", "question"]) if (k in e) wrong.push(`the entry has a ${k}`);
+    } else if (w.count !== 0) wrong.push("no asked entry was written");
+    add("asked_entry", wrong.length === 0, wrong.length ? wrong.join("; ") : e ? `one entry on ${(e.layers || []).join(", ") || "no layers"}` : "none, as wanted");
+    if (w.goal && e) {
+      const g = String(e.goal ?? "");
+      const bad = [];
+      if (!g) bad.push("no goal");
+      if (w.goal.max_chars && g.length > w.goal.max_chars) bad.push(`${g.length} characters`);
+      if (w.goal.must && !new RegExp(w.goal.must, "i").test(g)) bad.push(`never matched /${w.goal.must}/`);
+      for (const n of w.goal.never_names || []) if (new RegExp(`(?<![\\p{L}\\p{N}])${n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\p{L}\\p{N}])`, "iu").test(g)) bad.push(`names ${n}`);
+      if (w.goal.no_run_of) {
+        const words = (s) => String(s).toLowerCase().match(/[\p{L}\p{N}']+/gu) || [];
+        const q = words(String(ctx.c?.turns?.[(w.goal.from_turn || 1) - 1]?.say || "").replace(/^\/ask-mentor /, "")).join(" ");
+        const gw = words(g);
+        for (let i = 0; i + w.goal.no_run_of <= gw.length; i++) {
+          const run = gw.slice(i, i + w.goal.no_run_of).join(" ");
+          if ((" " + q + " ").includes(" " + run + " ")) { bad.push(`copies "${run}" from the question`); break; }
+        }
+      }
+      add("asked_goal", bad.length === 0, bad.length ? `goal "${g.slice(0, 80)}": ${bad.join("; ")}` : `goal "${g.slice(0, 80)}"`);
+    }
+  }
+  out.push(...phase3Checks(expect, turns, { includes: () => true }));
+
   // A yes hands over (phase 2, FR-025, FR-026): [{ turn, skill (the command_skill, e.g. "anchor-mentor"), go_deeper: { skill, ... },
   // snapshot (the lesson's snapshot tool), mode_source }]. In that turn go_deeper succeeded, then Skill named the lesson,
   // then the lesson's snapshot tool replied with this mode_source, in that order.
@@ -411,5 +476,5 @@ export function fixtureFacts(snap) {
   }
   for (const l of snap?.layers || []) if (!has.has(l.index)) problems.push(`keyed layer ${l.index} has no layer_info`);
   for (const e of snap?.expressions || []) if (!has.has(e.layer)) problems.push(`an expression is on layer ${e.layer}, not in the comp`);
-  return { comp: snap?.comp?.name, layers: info.map((l) => l.name), sweeps: (snap?.expression_sweeps || []).length > 0, problems };
+  return { comp: snap?.comp?.name, layers: info.map((l) => l.name), indexes: Object.fromEntries(info.map((l) => [l.name, l.index])), sweeps: (snap?.expression_sweeps || []).length > 0, problems };
 }

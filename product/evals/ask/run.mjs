@@ -34,6 +34,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { parseJudgeReply } from "../lib/judge-reply.mjs";
 import * as ab from "../lib/ab.mjs";
+import { phase3Problems, PHASE3_KEYS } from "../lib/phase3-checks.mjs";
 import { askChecks, answerOf, answerCalls, answerCallCount, refusalsOf, renderAnswer, fixtureFacts } from "./checks.mjs";
 
 const { ensureRuntime } = createRequire(import.meta.url)("../../../panel/lib/runtime.js");
@@ -109,7 +110,7 @@ const runsOn = (c, runtime) => (c.runtimes || ["b1", "a"]).includes(runtime);
 const readJson = (p) => JSON.parse(fs.readFileSync(repoFile(p), "utf8"));
 const factsOf = (c) => c.turns.map((t) => (t.project === "unreachable" || !fs.existsSync(repoFile(t.project)) ? {} : fixtureFacts(readJson(t.project))));
 
-const EXPECT_KEYS = ["answers", "no_answer_turns", "turn_first_tool", "tools_called", "tools_not_called", "text", "prose_max_sentences", "handover"];
+const EXPECT_KEYS = ["answers", "no_answer_turns", "turn_first_tool", "tools_called", "tools_not_called", "text", "prose_max_sentences", "handover", "reread", "asked_entry", ...PHASE3_KEYS];
 const ANSWER_KEYS = ["turn", "kind", "steps", "no_keyframe_skills", "step_skills_include", "step_skills_forbid", "offered_equals", "step_on_layer", "skill_step_on_layer", "max_sentences", "step_order", "step_text_order"];
 
 const e0 = (c) => c.expect || {};
@@ -148,6 +149,9 @@ function validate(c) {
     if (!a.kind) problems.push(`answers@${a.turn}: no kind`);
   }
   for (const t of e.no_answer_turns || []) inRange(t, "no_answer_turns");
+  problems.push(...phase3Problems(e, n));
+  for (const w of e.reread || []) { inRange(w.turn, "reread"); inRange(w.of, "reread of"); if (!(w.of < w.turn)) problems.push(`reread: turn ${w.turn} must come after turn ${w.of}`); }
+  if (e.asked_entry && e.asked_entry.goal && e.asked_entry.goal.from_turn) inRange(e.asked_entry.goal.from_turn, "asked_entry.goal.from_turn");
   for (const w of e.turn_first_tool || []) inRange(w.turn, "turn_first_tool");
   for (const s of e.text || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`text check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);

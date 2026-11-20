@@ -1,0 +1,94 @@
+{
+  "id": "23-just-the-steps-no-more-offers",
+  "title": "Situation 8: after an answer the learner says \"just the steps\". The mentor stops offering a lesson: no offer in that reply or in the reply to a follow-up question that comes next, and no hand-over",
+  "covers": [
+    "TD 17.8",
+    "FR-030",
+    "TD 5.4",
+    "T078"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Make Title land softer."
+    },
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "Just the steps, thanks.",
+      "followup": true
+    },
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "Which keys do I select for step 1?",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ]
+      }
+    ],
+    "no_answer_turns": [
+      2,
+      3
+    ],
+    "turn_tools": [
+      {
+        "turn": 2,
+        "not_called": [
+          "give_answer",
+          "go_deeper",
+          "Skill"
+        ]
+      },
+      {
+        "turn": 3,
+        "not_called": [
+          "give_answer",
+          "go_deeper",
+          "Skill"
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "no_offer_after",
+        "never": "go deeper|\\bwant (?:to|me)\\b|would you like|walk (?:you )?through|show you|\\blesson\\b|\\bpractice\\b|happy to",
+        "turns": [
+          2,
+          3
+        ],
+        "in": "prose"
+      },
+      {
+        "id": "no_question_after",
+        "never": "\\?",
+        "turns": [
+          2,
+          3
+        ],
+        "in": "prose"
+      }
+    ],
+    "prose_max_sentences": [
+      {
+        "id": "short_replies",
+        "turns": [
+          2,
+          3
+        ],
+        "max": 6
+      }
+    ]
+  },
+  "rubric": [
+    "R-NO-PUSH"
+  ],
+  "note": "Spec 014 T078 (situation 8). Turn 3 is a question about step 1's mechanics, so it is a follow-up and not a new question (which would let an offer come back, FR-030). On B1 the closing offer is wording only; the checks read the replies after it, not the buttons. 'practice' is in the offer words because the skill offers a learned skill as practice."
+}

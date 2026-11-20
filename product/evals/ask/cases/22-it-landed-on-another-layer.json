@@ -1,0 +1,107 @@
+{
+  "id": "22-it-landed-on-another-layer",
+  "title": "Situation 19: after an answer on Title, the learner eased Bar's End keys instead and says Title still lands hard. The mentor reads again, says where the change shows (Bar) and that Title's keys read as before, as a hint, with no pass or fail words and no new steps",
+  "covers": [
+    "TD 17.19",
+    "FR-029",
+    "T078"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Make Title land softer."
+    },
+    {
+      "project": "product/evals/ask/fixtures/practice-bar-eased.json",
+      "say": "I eased the End keys on Bar and played it back. Title still lands hard.",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ],
+        "step_on_layer": "Title"
+      }
+    ],
+    "no_answer_turns": [
+      2
+    ],
+    "turn_first_tool": [
+      {
+        "turn": 2,
+        "tool": "describe_layers"
+      }
+    ],
+    "reread": [
+      {
+        "turn": 2,
+        "of": 1,
+        "layers": true
+      }
+    ],
+    "turn_tools": [
+      {
+        "turn": 2,
+        "not_called": [
+          "give_answer",
+          "go_deeper",
+          "Skill"
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "names_where_it_landed",
+        "must": "\\bBar\\b",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      },
+      {
+        "id": "names_the_step_layer",
+        "must": "\\bTitle\\b",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      },
+      {
+        "id": "no_verdict",
+        "never": "\\b(?:pass(?:ed)?|fail(?:ed|s)?|well done|nailed it|nice work|great job|good job|you did it|you got it|that worked|correct(?:ly)?|incorrect|mistake)\\b|\\bwrong\\b",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      },
+      {
+        "id": "no_new_list",
+        "never": "(?:^|\\n)\\s*\\d+[.)]\\s",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      }
+    ],
+    "prose_max_sentences": [
+      {
+        "id": "short_read",
+        "turns": [
+          2
+        ],
+        "max": 5
+      }
+    ]
+  },
+  "rubric": [
+    "R-TRY-READ",
+    "R-WHERE-LANDED"
+  ],
+  "note": "Spec 014 T078 (situation 19). Turn 2's fixture is Mentor Practice with Bar's End keys eased (a mechanical change in fixtures/build.mjs); describe_layers shows Bar's End as eased, and Title's keys as linear, as in turn 1. The learner says what they did, so 'you eased Bar' is allowed; the hint is where it landed."
+}

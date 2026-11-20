@@ -1,0 +1,59 @@
+{
+  "id": "29-a-new-question-in-the-follow-up-bar-gets-an-answer",
+  "title": "A new question typed after an answer (another layer, another goal). It gets give_answer, a fresh read and steps on the new layer, and doesn't recite the first answer",
+  "covers": [
+    "FR-031",
+    "TD 6 turn 7",
+    "T078"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Make Title land softer."
+    },
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "Now how do I make Subtitle fade in slower?",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ],
+        "step_on_layer": "Title"
+      },
+      {
+        "turn": 2,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ],
+        "step_on_layer": "Subtitle"
+      }
+    ],
+    "asked_entry": {
+      "count": 2
+    },
+    "text": [
+      {
+        "id": "does_not_recite",
+        "never": "\\bTitle\\b",
+        "turns": [
+          2
+        ],
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-NEW-QUESTION"
+  ],
+  "note": "Spec 014 T078 (FR-031). The second turn is plain text, as the panel sends the follow-up bar; the tool's kind decides it is a new question. 'Title' is banned from the second answer: Subtitle is not parented to it (its parent is CTRL), so the name could only come from reciting. Two answers with steps write two asked entries (FR-038)."
+}

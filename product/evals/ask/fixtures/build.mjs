@@ -120,6 +120,25 @@ export function fixtures() {
     delete panned.synthetic;
     out["comp1-shake-pivot-panned.json"] = panned;
   }
+  // 8. Case 21 (spec 014 T078, situation 2): Comp 1 as read again after the playhead moved (before the first hit). Only the comp's
+  //    time changes: the read that follows is asked for the earlier read's time, and nothing the learner said they made shows.
+  {
+    const s = clone(comp1());
+    s.comp.time = 1.2;
+    out["comp1-playhead-moved.json"] = s;
+  }
+  // 9. Case 22 (situation 19): Mentor Practice after the learner eased Bar's End keys, not Title's: the change landed on another layer.
+  {
+    const s = clone(load("practice.json"));
+    const prop = s.layers.find((l) => l.name === "Bar").properties.find((p) => p.display_name === "End");
+    for (const k of prop.keys) {
+      k.in_type = "bezier";
+      k.out_type = "bezier";
+      k.in_ease = [{ speed: 0, influence: 33.33 }];
+      k.out_ease = [{ speed: 0, influence: 33.33 }];
+    }
+    out["practice-bar-eased.json"] = s;
+  }
   return out;
 }
 

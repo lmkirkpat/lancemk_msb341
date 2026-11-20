@@ -11,7 +11,7 @@ Written 2026-11-16. It has run on B1: the T037 baseline at `91fd9c7` (2026-11-18
 
 ## Cases
 
-20 cases. All but 19 run on B1 and A; the A-only expectations in the others are individual checks. Case 19 is `runtimes: ["a"]` (go_deeper refuses on B1, FR-017).
+29 cases. All but 19 run on B1 and A; the A-only expectations in the others are individual checks. Case 19 is `runtimes: ["a"]` (go_deeper refuses on B1, FR-017).
 
 | Case | TD § 17 situation, or row | What it covers | Fixture |
 |---|---|---|---|
@@ -36,9 +36,21 @@ Written 2026-11-16. It has run on B1: the T037 baseline at `91fd9c7` (2026-11-18
 | 19-go-deeper-hands-over-and-back | 16 (A only) | A yes to going deeper on the pivot step: `go_deeper`, the hand-over, the lesson opens on Shake Control with no intent question or proposal, and after the pass the last line hands back to the answer's next step | `comp1.json`, `comp1-shake-pivot-panned.json` |
 | 20-asked-again-about-a-learned-skill | 18 | Set the pivot is learned: the same question gets a full answer, the pivot offered as practice on A, never a review or a line that makes the learner feel forgetful (H-5) | `comp1.json` + `records/pivot-learned.json` |
 
-Not in this set (they need later phases): situations 2, 3, 8, 16, 17, 18 and 19 of § 17 (turn 4's fresh read,
-the padded PNG, "just the steps", the hand-in, the record entry, a learned skill as practice, a change on the
-wrong layer). Case numbers 01 to 17 are the cockpit's; the next case takes 19. Case 18's wrapper is written out in full in the case file, from the contract; when the panel adds the wrapper's first line to `REQUESTS`, its sync test should pin case 18's first line to it.
+Phase 3 (T078, 2026-11-19), cases 21 to 29, all on B1 and A. They are dry-run only until T080:
+
+| Case | TD § 17 situation, or row | What it covers | Fixture |
+|---|---|---|---|
+| 21-done-after-the-playhead-moved | 2 | After an answer, "I did steps 1 to 3. Done." with the playhead moved: no `give_answer`, a read at turn 1's read time on the step layers, never "you moved/changed", no verdict, no Undo | `comp1.json`, `comp1-playhead-moved.json` |
+| 22-it-landed-on-another-layer | 19 | The learner eased Bar's End keys, not Title's: the read says where it landed (Bar), that Title reads as before, no pass or fail words, no new list | `practice.json`, `practice-bar-eased.json` |
+| 23-just-the-steps-no-more-offers | 8 | "Just the steps", then a question about step 1: neither reply offers a lesson (no offer words, no question mark), no hand-over | `practice.json` |
+| 24-the-asked-entry-holds-a-general-goal | 17 | One asked entry: a goal of at most 120 characters with no run of 5 words from the question and no layer or effect name, nothing said, no skill state changed | `comp1.json` |
+| 25-goal-from-a-question-full-of-names | 17 | A question that names two layers and an effect: the saved goal has none of them (`GOAL_NOT_GENERAL` may cost a retry) | `comp1.json` |
+| 26-the-learner-says-it-worked | FR-038 | "The shake works now": `note_said` called, the entry's `said` set in general words, no announcement | `comp1.json` |
+| 27-a-question-and-a-did-are-not-how-it-went | FR-038 | A question, then "I did step 3": no `note_said`, nothing said on the entry | `comp1.json` |
+| 28-asked-about-after-learning-is-marked-and-never-said | 18 (record half) | Set the pivot learned: `after_learning` holds it, no skill state changes, no word of the mark or FR-041's banned phrases | `comp1.json` + `records/pivot-learned.json` |
+| 29-a-new-question-in-the-follow-up-bar-gets-an-answer | FR-031 | Another goal on another layer, plain text: a fresh `give_answer` on Subtitle, two entries, no recital of the first answer | `practice.json` |
+
+Not in this set (later phases or elsewhere): situations 3 (the padded PNG, anchor case 61) and 16 (case 19). The next case takes 30. Case 18's wrapper is written out in full in the case file, from the contract; when the panel adds the wrapper's first line to `REQUESTS`, its sync test should pin case 18's first line to it.
 
 ## What a turn looks like
 
@@ -92,6 +104,9 @@ On each answer a case expects (`expect.answers`):
   `step_order` with `needs_sweeps` counts only when the fixture carries expression sweeps (see Fixtures). The Comp 1 fixtures do, so case 01's is active; a fixture without sweeps is reported inactive in the dry run.
 - `handover`: `[{ turn, skill (the hand-over's command skill), snapshot (the lesson's snapshot tool), mode_source, go_deeper: { skill, step? } }]`: in that (yes) turn `go_deeper` was accepted with these inputs, `Skill` named the lesson, then the snapshot tool replied with this `mode_source`, in that order.
 - `no_answer_turns`: turns that must not call `give_answer` (a follow-up is prose).
+- `reread`: `[{ turn, of, at_time?, layers? }]` (T078): in `turn` a `describe_layers` call succeeded; `at_time`: one passed the time turn `of`'s last read returned (the fixture reader ignores the requested time, so this pins the call, not the values); `layers`: every layer turn `of`'s steps were on is covered (named, by index, or the whole comp).
+- `asked_entry`: `{ count?, said? (true set, false absent), said_never?, skills_include?, after_learning?, went_deeper?: null, goal?: { from_turn?, max_chars?, no_run_of? (words), never_names?, must? } }` over the learner record's `asked` list at the end of the case (data-model § 3). Reports `asked_entry` and, with `goal`, `asked_goal`; an entry holding a `verdict`, `summary` or `question` fails.
+- `turn_tools`, `record_text_never`, `say_ends_with`, `say_never_when_called`: shared with the lesson sets (`../lib/phase3-checks.mjs`).
 - `turn_first_tool`: `[{ turn, tool }]`.
 - `tools_called`, `tools_not_called`: over the whole case.
 - `text`: `[{ id, must | never (a regex, case-insensitive; `cs: true` for case-sensitive), turns?, in?: "all" | "explanation" | "steps" | "offer" | "prose", runtimes? }]`.
