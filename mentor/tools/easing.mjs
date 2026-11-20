@@ -65,7 +65,7 @@ async function snapshotProject({ focus_layers } = {}) {
     extra = { mode_source: taken.lost ? "hand_in_lost" : "hand_in", hand_in: handInSlice(taken.h, learner, keyed === undefined ? {} : { keyed }) };
   }
   if (!taken && !(focus_layers && focus_layers.length)) {
-    const carried = carriedFocus(session, SKILL, snapshot.comp.id);
+    const carried = carriedFocus(session, SKILL, snapshot);
     if (carried) opts.focus_layers = carried;
   }
   const { lesson, analysis, session: s } = session.start(snapshot, opts);

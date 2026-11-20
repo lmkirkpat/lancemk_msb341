@@ -51,7 +51,7 @@ async function offsetSnapshot({ mode: asked, focus_layers, skill_options } = {})
   const keyed = taken ? keyedLayer(snapshot, taken.layer) : undefined;
   const named = focus_layers && focus_layers.length;
   if (taken && keyed && !named) focus_layers = [taken.layer, ...otherLayersNamed(snapshot, taken)];
-  else if (!taken && !named) focus_layers = carriedFocus(session, SKILL, snapshot.comp.id) || focus_layers;
+  else if (!taken && !named) focus_layers = carriedFocus(session, SKILL, snapshot, mode) || focus_layers;
   const opts = { skill: SKILL, analyze, mode };
   if (focus_layers) opts.focus_layers = focus_layers;
   if (skill_options !== undefined) opts.skill_options = skill_options;

@@ -109,7 +109,7 @@ async function speedGraphSnapshot({ focus_layers, mode: asked, skill_options } =
     analyze: (snap, o) => analyze(snap, { ...o, skill_options: withEased(o.skill_options), mode }),
     focus_layers: focus_layers && focus_layers.length ? focus_layers
       : taken ? (keyed ? [taken.layer] : focus_layers)
-        : carriedFocus(session, SKILL, snapshot.comp.id) || focus_layers,
+        : carriedFocus(session, SKILL, snapshot, mode) || focus_layers,
     mode,
   };
   if (skill_options !== undefined) opts.skill_options = cleanOptions(skill_options);

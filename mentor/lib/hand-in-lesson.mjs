@@ -90,15 +90,18 @@ export function layerNames(...lists) {
 
 // The focus layers a hand-in lesson opened with, for a later call on the same lesson that names none
 // (speed graph's second opening call, a snapshot after a demo), so the focus never falls back to the
-// whole comp. Null when the current lesson isn't this skill's on this comp, is passed, or has none.
-export function carriedFocus(session, skill, compId) {
+// whole comp. Only when session.start would continue that lesson: the same test it uses (openMode:
+// the current lesson, this skill and comp, not passed, not stale, in the call's mode). A stale or new
+// lesson gets none (T081 review), and start() then keeps no hand-in on it either, so no hand-back.
+export function carriedFocus(session, skill, snapshot, mode = "lesson") {
+  if (session.openMode(skill, snapshot.comp.id, snapshot) !== mode) return null;
   let lesson;
   try {
     lesson = session.currentLesson();
   } catch {
     return null;
   }
-  if (!lesson || lesson.skill !== skill || lesson.comp_id !== compId || lesson.passed) return null;
+  if (!lesson || lesson.skill !== skill || lesson.comp_id !== snapshot.comp.id || lesson.passed) return null;
   const f = lesson.hand_in && lesson.hand_in.focus_layers;
   return Array.isArray(f) && f.length ? [...f] : null;
 }
