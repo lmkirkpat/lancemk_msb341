@@ -304,3 +304,33 @@ test("T066: read_learner_record leaves asked entries out (FR-041, FR-043); a rec
   assert.equal("asked" in r, false);
   assert.ok(Array.isArray(r.lessons));
 });
+
+// ---- T081 (the builder's decision): turn 4 repeated as a card is refused FOLLOW_UP_NOT_ANSWER.
+
+test("T081: the same answer again (same comp, step layers and texts) is refused as a follow-up; nothing more is saved", async () => {
+  await call(td16());
+  const before = fs.readFileSync(LEARNER, "utf8");
+  await refuses({ ...td16(), explanation: "In Comp 1, nothing changed since my last read.", goal: "a shake that turns from the hit" }, "FOLLOW_UP_NOT_ANSWER");
+  assert.equal(fs.readFileSync(LEARNER, "utf8"), before, "no second asked entry");
+  // A real new question: another step, or the same steps on another comp, is an answer.
+  const other = td16();
+  other.steps = other.steps.slice(2);
+  assert.equal((await call(other)).kind, "answer");
+});
+
+test("T081: a describe or howto repeats only with the same explanation too; another describe on the same comp is fine", async () => {
+  const d = { kind: "describe", explanation: "In Comp 1, Sweep Control is a null.", steps: [], offered_skills: [], closing_offer: "Want to know what moves it?" };
+  await call(d);
+  await refuses(d, "FOLLOW_UP_NOT_ANSWER");
+  assert.equal((await call({ ...d, explanation: "In Comp 1, Shake Control is a null moved by expressions." })).kind, "describe");
+});
+
+test("T081: an earlier answer outside the session window doesn't count; the message names no field", async () => {
+  const session = await import("../lib/session.mjs");
+  const r = await call(td16());
+  const saved = JSON.parse(fs.readFileSync(SESSION, "utf8")).ask;
+  session.saveAnswer({ ...saved }, { now: Date.now() - 4 * 3600 * 1000 });
+  assert.equal((await call(td16())).kind, r.kind);
+  const { MESSAGES } = await import("../errors.mjs");
+  assert.doesNotMatch(MESSAGES.FOLLOW_UP_NOT_ANSWER, /_|give_answer/);
+});

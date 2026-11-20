@@ -64,7 +64,9 @@ test("after an answer: said lands on that answer's entry, as given, and nothing 
 
 test("only the latest answer's entry: a second answer takes the next said", async () => {
   await call("give_answer", answer());
-  await call("give_answer", { ...answer(), goal: "a softer landing" });
+  const second = answer();
+  second.steps[1] = { text: "Play it back and watch the hits.", skill: null, layer: null };
+  await call("give_answer", { ...second, goal: "a softer landing" });
   await call("note_said", { said: "said step 1 didn't help" });
   const [a, b] = JSON.parse(fs.readFileSync(LEARNER, "utf8")).asked;
   assert.equal(a.said, undefined);

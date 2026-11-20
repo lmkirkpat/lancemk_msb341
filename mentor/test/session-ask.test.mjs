@@ -33,7 +33,7 @@ test("saveAnswer writes data-model § 2's shape, and latestAnswer reads it back"
   const want = {
     at: "2026-11-16T15:00:00.000Z", comp_id: 1, project: "Comp 1.aep", comp: "Comp 1", kind: "answer",
     steps: STEPS, offered_skills: ["transform.anchor"], goal: "shake turns from the hit point",
-    entry_date: null, started_at: "2026-11-16T15:00:00.000Z",
+    explanation: null, entry_date: null, started_at: "2026-11-16T15:00:00.000Z",
   };
   assert.deepEqual(saved, want);
   assert.deepEqual(onDisk().ask, want);
@@ -45,7 +45,7 @@ test("a howto with no comp saves nulls, never undefined, and a missing goal is n
   assert.equal(saved.comp, null);
   assert.equal(saved.goal, null);
   assert.deepEqual(saved.steps, []);
-  assert.deepEqual(Object.keys(onDisk().ask).sort(), ["at", "comp", "comp_id", "entry_date", "goal", "kind", "offered_skills", "project", "started_at", "steps"]);
+  assert.deepEqual(Object.keys(onDisk().ask).sort(), ["at", "comp", "comp_id", "entry_date", "explanation", "goal", "kind", "offered_skills", "project", "started_at", "steps"]);
 });
 
 test("additive: an existing lesson, current and review_offers are untouched", () => {
