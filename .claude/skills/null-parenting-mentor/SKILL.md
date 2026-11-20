@@ -149,8 +149,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
      - `focus_set` false with `refused`: say why that layer can't be in the group, as above, and ask
        for another. One exception: a layer that follows a null (its `parent`, with `parent_is_null`
        true) already moves as one with what that null carries. Say so in one sentence, and that
-       moving where they turn is *Set the pivot* on that null, named in words; never a second null
-       on top of it, since an existing control null is always the pivot lesson's. In a lesson from
+       moving where they turn is *Set the pivot* on that null, named in words; teach no null on top
+       of it, since an existing control null is always the pivot lesson's. In a lesson from
        an answer, stop there; otherwise ask whether they want a different group. In a lesson from
        an answer whose step named a refused null itself (reason `null`), it's a control null
        already: say in one sentence that it already carries those layers, so moving where it turns
@@ -413,7 +413,7 @@ demonstration, hints not fixes, the checks, the record), with these changes:
 2. **Trace first:** when the layers already follow a parent that moves them (their `motion_from`
    lists it, or `left_out` or `refused` gives it as their `parent`), that parent already moves them
    as one. Say so in one sentence, and that moving where it turns is *Set the pivot* on that parent, named in
-   words; never teach a second null on top of it (step 1's exception).
+   words; teach no null on top of it (step 1's exception).
 3. **Already learned** (`practice` true in `hand_in`): it's practice. Never say "review", "test" or
    "passed the review", and a check that doesn't pass says what's still off and where, never
    "failed", "wrong" or "not quite".

@@ -27,7 +27,7 @@
     "say": [
       {
         "id": "plain_refusal",
-        "must": "more keys|too many keys|too many|in one go|can['\u2019]t check",
+        "must": "more keys|more keyframes?|too many keys|too many|in one go|at once|can['\u2019]t check",
         "turns": [
           1
         ]
