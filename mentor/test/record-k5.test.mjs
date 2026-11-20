@@ -38,7 +38,8 @@ beforeEach(() => {
 });
 
 test("the message is data-model § 8's, with no field names", () => {
-  assert.equal(MESSAGES.RECORD_UNATTRIBUTED, "The record says the learner changed something no check saw them change. Say only what a check saw or they said.");
+  assert.equal(MESSAGES.RECORD_UNATTRIBUTED, "The record says the learner changed a layer no check saw them change. Rewrite that sentence so it says only what a check saw or they said, keep everything else, and save again.");
+  assert.doesNotMatch(MESSAGES.RECORD_UNATTRIBUTED, /_/);
 });
 
 test("AB 6's summary is refused when no check attributed the parent; nothing is written", async () => {
@@ -46,6 +47,7 @@ test("AB 6's summary is refused when no check attributed the parent; nothing is 
   session.markChecked(false);
   await assert.rejects(() => record(entry({ summary: AB6 })), (e) => e.code === "RECORD_UNATTRIBUTED");
   await assert.rejects(() => record(entry({ next: "Undo the change on Shake Control first." })), (e) => e.code === "RECORD_UNATTRIBUTED", "next is guarded too");
+  await assert.rejects(() => record(entry({ attempted: "Set rock.png's pivot; changed Shake Control by mistake" })), (e) => e.code === "RECORD_UNATTRIBUTED", "attempted is guarded too");
   assert.equal(fs.existsSync(LEARNER), false);
 });
 
@@ -76,6 +78,7 @@ test("unattributed(): a sentence needs both a change word and an unattributed la
   assert.deepEqual(unattributed("Shake Control moved by mistake.", ctx), ["Shake Control"]);
   assert.deepEqual(unattributed("Shake Control carries the rock. The pivot moved.", ctx), [], "different sentences");
   assert.deepEqual(unattributed("Reset the pivot on the parent.", ctx), ["Shake Control"], "'parent' stands for the lesson's layers' parents");
+  assert.deepEqual(unattributed("shake control moved by mistake.", ctx), [], "names are case-sensitive");
   assert.deepEqual(unattributed("Changed logo.png and rock.png.", ctx), ["logo.png"]);
   assert.deepEqual(unattributed("Changed logo.png.", { ...ctx, attributed: [{ layer: "logo.png", property: null }] }), []);
   assert.deepEqual(unattributed("", ctx), []);
@@ -108,4 +111,25 @@ test("markChecked keeps the list across checks, without duplicates; a lesson wit
   session.markChecked(false, { attributed: [{ layer: "logo.png", property: "Scale" }] });
   session.markChecked(false, { attributed: [{ layer: "logo.png", property: "Scale" }, { layer: "outline.png" }] });
   assert.deepEqual(session.currentLesson().attributed.map((a) => [a.layer, a.property]), [["logo.png", "Scale"], ["outline.png", null]]);
+});
+
+// ---- T081 fix round: true summaries the first build refused.
+
+test("T081: true sentences about motion, and plain nouns that share a layer's name, save", async () => {
+  rockLesson();
+  session.markChecked(false);
+  for (const summary of [
+    "Set the pivot on rock.png; it's still moved by its parent's expression.",
+    "Set the pivot on rock.png; the parent keeps moving it.",
+  ]) {
+    fs.rmSync(LEARNER, { force: true });
+    assert.equal(JSON.parse((await record(entry({ summary }))).content[0].text).saved, true, summary);
+  }
+  // Mentor Practice, own layer Title: "the background" is a noun, not the layer Background.
+  const practice = JSON.parse(fs.readFileSync(path.join(FIXTURES, "expressions", "practice.json"), "utf8"));
+  const ctx = { snapshot: practice, attributed: [], own: ["Title"] };
+  assert.ok(practice.layer_info.some((l) => l.name === "Background"), "the fixture has a layer named Background");
+  assert.deepEqual(unattributed("next, ease the background so it stops moving linearly", ctx), []);
+  assert.deepEqual(unattributed("Changed the title's timing.", ctx), []);
+  assert.deepEqual(unattributed("Moved Background by mistake.", ctx), ["Background"], "the layer's own name still counts");
 });
