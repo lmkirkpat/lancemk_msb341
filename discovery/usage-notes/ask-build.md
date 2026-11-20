@@ -212,3 +212,30 @@ both are checked at the ship step's six-set A run.
 **What it changes:** prompt words are read as wording the model may say: a label ("A review that's due") or a
 prohibition ("never a second null") comes back in the reply. Name rules without the forbidden words, and keep
 labels neutral. Re-run the cases that share an edited step, not only the ones that failed.
+
+## Ship step (2026-11-19)
+
+### T088 to T091: free checks, A runs, panel on A
+
+**T088** at `051ebc2`: all eight skills ready for A; dry runs valid (ask 20 of 20 on A, anchor 68, null 58,
+next-mentor 10 of 14).
+
+**T089 and T090** at `051ebc2` (A, about $9.15 credit; the judge on subscription):
+- Anchor 65/68 (B1 63/68) and null 53/58 (B1 52/58): both meet FR-033. Every hard check passed.
+- Ask 15/20 (B1 19/19). 8 of 16 refusals were `OFFER_NOT_READY` for easing, key types and speed graph, which
+  `main` rightly refuses until phase 3's hand-ins (T073); that explains 05 and 17. `BAD_CLOSING` 7 of 37, every
+  one fixed on the retry (B1 shows the same). 12 noise (2/3), 13 a fixture slip (`practice.json`'s 140° next to
+  `time * 30`; 3/3 on repeat). SC-006's A half is re-run on phase 3's merge commit.
+- **Case 19 (situation 16, the whole go-deeper on A):** `handover@N` could never pass on A. The helper reports a
+  hand-over as `skill_loaded`, not a `Skill` call, and no runner mapped it (`cbae7b9`). Phase 2's B1 cases
+  never hit that path. The lesson keeps its understanding question, so the case got a fifth turn. Then 3/3.
+  **One real gap:** in 1 of 9 runs the mentor invited a try after the understanding check and stopped, with no
+  record and no hand-back. The prompt fix goes on the phase 3 branch (anchor "From an answer" item 6).
+- Triage: anchor 07's learner line was ambiguous ("I set it" read as the playhead); anchor 60's and ask 19's
+  hand-back regexes were too strict. Repeats about $4.6 credit. Merged `014-a-triage`.
+
+**T091:** `bash panel/install.sh --runtime a` done; AE lock free; learner record is the builder's own.
+Restart AE before session 1.
+
+**What it changes:** the paid runtime's own paths (here the hand-over event) are first tested at the ship
+step, because B1 can't take them. Write an A-only adapter test when a feature adds an event B1 never emits.

@@ -419,8 +419,12 @@ must land before session 3 (T094).
   dry runs valid (ask 20 of 20 on A, 26 turns; anchor 68; null 58; next-mentor 10 of 14 on A, 15 turns).
 - [ ] T089 (eval-engineer, **paid**) One full A run of the ask set, situation 16 at `--repeat 3`; spec 013
   FR-033 against T037's (or T059's) B1 baseline (SC-006's A half; SC-013's eval half). Log cost.
-- [ ] T090 (eval-engineer, **paid**, recommended) Anchor and null-parenting on A, since every go-deeper in the
-  sessions runs them on A.
+  **Partial 2026-11-19 at `051ebc2`:** 15/20 (75%), $1.07 credit. Situation 16 (case 19) 3/3 on A after the
+  `skill_loaded` mapping (`cbae7b9`) and a fifth turn. Ask 05 and 17 are offers `main` refuses until phase 3
+  (T073), so SC-006's A half is re-run on phase 3's merge commit (with T099). Logged in `ask-build.md`.
+- [x] T090 (eval-engineer, **paid**, recommended) Anchor and null-parenting on A, since every go-deeper in the
+  sessions runs them on A. **Done 2026-11-19 at `051ebc2`:** anchor 65/68 (B1 63/68), null 53/58 (B1 52/58), both
+  meet FR-033; $8.08 credit. Triage merged (`014-a-triage`).
 - [ ] T091 (cockpit) `bash panel/install.sh --runtime a`; restart AE; check the panel reads runtime A, the AE lock
   is free, and the learner record is the builder's real one (spec › Assumptions).
 - [ ] T092 (cockpit logs, AE, **builder's hands**) Session 1 on one of the builder's own comps not set up for
