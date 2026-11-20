@@ -198,7 +198,9 @@ test("T053: read back, a return keeps its divider and line; a lesson still open 
 
 // ---------- spec 014 T070 (FR-043, TD § 6 turn 4 and § 7.4): turn 4 is a read, not a check ----------
 // After the learner says how a try went ("it didn't work", "done"), the mentor reads the same layers
-// again (describe_layers), may note what they said (note_said) and answers with give_answer. Ask mode
+// again (describe_layers), may note what they said (note_said) and answers in prose: turn 4 is a
+// follow-up, never a give_answer (contracts/panel-ask.md › Context after a lesson, clarified (f);
+// ask-mentor SKILL.md; the mentor refuses a repeated answer card with FOLLOW_UP_NOT_ANSWER). Ask mode
 // has no check: none of it ticks or crosses anything anywhere in the panel, reloads the record or
 // changes a lesson's result. Results shaped by contracts/ask-tools.md (the mentor half is built on
 // another branch, so these are fixtures).
@@ -213,7 +215,9 @@ const ASKED_WORDS = /asked again|asked about|after learning|you already learned|
 const RES = (name, json) => ({ name, ok: true, text: JSON.stringify(json), images: [], json });
 const READ = RES("describe_layers", { comp: { name: "Comp 1" }, layers: [{ name: "Shake Control" }, { name: "rock.png" }] });
 const SAID = RES("note_said", { saved: true });
-// Turn 4's answer: the next step again, on the layer it belongs to. The last two fields are ones a
+// Not turn 4's shape: a give_answer in the follow-up bar is a send the mentor took as a new question
+// (amendment (d)), so the panel folds the earlier answer and treats this one as new. The tests below
+// pin that, so a give_answer here is never read as "folds nothing". The last two fields are ones a
 // phase 3 reply might carry (the asked entry it linked); the panel must draw neither.
 const TURN4 = (kind) => RES("give_answer", Object.assign(
   kind === "describe"
@@ -277,6 +281,23 @@ for (const runtime of ["a", "b1"]) {
       const line = h.turns[h.turns.length - 1];
       assert.equal(line.thread, "ask");
       assert.equal(line.lesson_passed, false);
+      const th = m.thread;
+      const s = t.split(th);
+      if (shape === "prose") return; // turn 4 as the contract has it: a follow-up under the same answer
+      // A give_answer here is a new question (amendment (d)): the original answer folds into Earlier
+      // questions (1), and Your steps holds the new step, or goes away for a describe.
+      assert.equal(t.latest(th).kind, "question", "the send became a question");
+      assert.equal(s.earlier_count, 1);
+      assert.deepEqual(s.earlier.map((q) => q.text), ["How can I make the rock shake from the hammer hit?"]);
+      assert.ok(plainText(html).includes(COPY_ASK.earlier(1)), "Earlier questions (1) on screen");
+      if (shape === "answer") {
+        assert.deepEqual(th.latest_steps.map((x) => x.text), ["Select Shake Control and Pan Behind its pivot to where the hammer hits."]);
+        assert.ok(plainText(html).includes(COPY_ASK.your_steps(1)), "Your steps holds the new step");
+        assert.equal(plainText(html).includes(COPY_ASK.your_steps(4)), false, "not the first answer's four");
+      } else {
+        assert.equal(th.latest_steps, null, "a describe has no steps: Your steps goes away");
+        assert.doesNotMatch(plainText(html), /Your steps/);
+      }
     });
   }
 }
@@ -294,8 +315,9 @@ test("T070: the ask tools are never checks, snapshots or demos, and a lesson's v
 });
 
 // A go-deeper lesson with its check list on screen, then the learner says how it went inside the
-// lesson (FR-046's ask box) and the mentor answers with the ask tools: the list, the stage and the
-// result stay as the check left them.
+// lesson (FR-046's ask box) and ask tool results arrive in that turn (a stray give_answer included,
+// which the contract never sends there): the list, the stage and the result stay as the check left
+// them.
 const PASSED_CHECK = RES("anchor_check", { comp_matches: true, passed: true, layers: [{ layer: "Shake Control", item1: { passed: true, wanted: "your_call", place_now: "middle-left" }, item2: { passed: true }, item3: { set_away_from_rest: false }, item4: null, item5: { passed: true, moved_layers: [] }, cant_check: [], credit: "learner" }], other_changes: [] });
 const OFF_CHECK = RES("anchor_check", { comp_matches: true, passed: false, layers: [{ layer: "Shake Control", item1: { passed: true, wanted: "your_call", place_now: "middle-left" }, item2: { passed: true }, item3: { set_away_from_rest: false }, item4: null, item5: { passed: false, moved_layers: ["rock.png"] }, cant_check: [], credit: "learner" }], other_changes: [] });
 
