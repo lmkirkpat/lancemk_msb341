@@ -89,7 +89,7 @@ export function helperEnv(base = process.env) {
 // One turn's helper events → { events, ok, error, cost_usd, end }.
 // `text` → say; `tool_call` + its `tool_result` → one tool event, in the order of the calls. A
 // result with no call before it (the helper sends none for a call it won't run, but still answers)
-// becomes a tool event of its own. The hand-over tool has neither (R9).
+// becomes a tool event of its own. The hand-over tool has neither (R9); the helper's `skill_loaded` event stands in for it as a `Skill` tool event.
 export function mapTurn(helperEvents) {
   const events = [];
   const byId = new Map();
@@ -111,6 +111,11 @@ export function mapTurn(helperEvents) {
       }
       ev.ok = !!e.ok;
       ev.result = typeof e.text === "string" ? e.text : "";
+    } else if (e.type === "skill_loaded") {
+      // A hand-over (helper-protocol: by the hand-over tool or a message starting with another skill's
+      // command). B1 shows it as a `Skill` tool call, and the checks look for that, so it becomes one,
+      // at its place in the order. The hand-over has no tool_call or tool_result of its own (R9).
+      if (typeof e.skill === "string" && e.skill) events.push({ kind: "tool", name: "Skill", input: { skill: e.skill }, ok: true, result: "" });
     } else if (e.type === "error") {
       if (!error) error = e.kind || "error";
     } else if (e.type === "turn_end") {

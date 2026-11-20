@@ -367,3 +367,19 @@ test("timing-report: counts, re-sends, maxima and the slowest five", () => {
   assert.match(format("f", s), /01\/run 1\/turn 2: 9000 ms/);
   assert.match(format("f", summarize({ cases: [] })), /no timing/);
 });
+
+test("a skill_loaded event maps to a Skill tool event at its place in the order (the hand-over, case ask 19)", () => {
+  const r = mapTurn([
+    { type: "turn_start" },
+    { type: "tool_call", id: "a", name: "go_deeper", input: { skill: "anchor-mentor" } },
+    { type: "tool_result", id: "a", name: "go_deeper", ok: true, text: "{}" },
+    { type: "skill_loaded", skill: "anchor-mentor" },
+    { type: "tool_call", id: "b", name: "anchor_snapshot", input: {} },
+    { type: "tool_result", id: "b", name: "anchor_snapshot", ok: true, text: "{}" },
+    { type: "turn_end", ok: true, cost_usd: 0.01 },
+  ]);
+  assert.deepEqual(r.events.map((e) => (e.kind === "tool" ? e.name : e.kind)), ["go_deeper", "Skill", "anchor_snapshot"]);
+  assert.deepEqual(r.events[1], { kind: "tool", name: "Skill", input: { skill: "anchor-mentor" }, ok: true, result: "" });
+  // A skill_loaded with no name adds nothing.
+  assert.equal(mapTurn([{ type: "skill_loaded" }, { type: "turn_end", ok: true, cost_usd: 0 }]).events.length, 0);
+});

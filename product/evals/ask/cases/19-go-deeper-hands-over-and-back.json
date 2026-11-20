@@ -1,6 +1,6 @@
 {
   "id": "19-go-deeper-hands-over-and-back",
-  "title": "A only, situation 16: the learner says yes to going deeper on the pivot step. The mentor hands over (go_deeper, then the hand-over, nothing said), the pivot lesson opens on Shake Control with no intent question and no proposal, and after the pass its last line hands back to the answer's next step",
+  "title": "A only, situation 16: the learner says yes to going deeper on the pivot step. The mentor hands over (go_deeper, then the hand-over, nothing said), the pivot lesson opens on Shake Control with no intent question and no proposal, and after the pass and the understanding check its last line hands back to the answer's next step",
   "covers": [
     "TD 17.16",
     "FR-022",
@@ -32,6 +32,11 @@
     {
       "project": "product/evals/ask/fixtures/comp1-shake-pivot-panned.json",
       "say": "I used Pan Behind on it. Done.",
+      "followup": true
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1-shake-pivot-panned.json",
+      "say": "The spot by the hammer stays still.",
       "followup": true
     }
   ],
@@ -70,7 +75,8 @@
     "no_answer_turns": [
       2,
       3,
-      4
+      4,
+      5
     ],
     "tools_called": [
       "anchor_check",
@@ -106,7 +112,7 @@
         "must": "That was step \\d+; next is \\S|That was the last step",
         "in": "prose",
         "turns": [
-          4
+          5
         ]
       }
     ]
@@ -115,5 +121,5 @@
     "R-HAND-OVER-OPENS",
     "R-HAND-BACK"
   ],
-  "note": "Spec 014 T058, situation 16, A only (go_deeper refuses on B1, FR-017; the lesson sets' cases 60 to 62 and 56 to 57 cover the lesson side on B1 with a seeded hand-in). Turn 2 is the panel's own Go deeper request, with no /ask-mentor prefix. Turn 1 pins what the hand-over needs: a step tagged Set the pivot on Shake Control; if the answer puts it elsewhere the case fails there, and the later turns say why they didn't run as intended. Turn 4's fixture has Pan Behind planted on Shake Control with nothing else moved, so the check passes. Run with --repeat 3 at ship step T089/T090."
+  "note": "Spec 014 T058, situation 16, A only (go_deeper refuses on B1, FR-017; the lesson sets' cases 60 to 62 and 56 to 57 cover the lesson side on B1 with a seeded hand-in). Turn 2 is the panel's own Go deeper request, with no /ask-mentor prefix. Turn 1 pins what the hand-over needs: a step tagged Set the pivot on Shake Control; if the answer puts it elsewhere the case fails there, and the later turns say why they didn't run as intended. Turn 4's fixture has Pan Behind planted on Shake Control with nothing else moved, so the check passes. Turn 5 answers the pivot lesson's understanding question (anchor SKILL.md step 8, which a hand-in lesson keeps: 'Everything in the lesson above still holds'); only then does the lesson record and end on the hand-back line (first A run 2026-11-19: the case ended at turn 4, on the question, so record_lesson and the hand-back line were never due). Run with --repeat 3 at ship step T089/T090."
 }
