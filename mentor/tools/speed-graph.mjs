@@ -13,7 +13,7 @@ import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
-import { handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
+import { carriedFocus, handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
 import { DEMO_IN, DEMO_OUT, analyze, check, finder, pairsFor } from "../lib/speed-graph.mjs";
 
 const SKILL = "easing.speed_graph";
@@ -107,11 +107,13 @@ async function speedGraphSnapshot({ focus_layers, mode: asked, skill_options } =
     skill: SKILL,
     // The session doesn't pass the mode to the analyzer; a review picks one or two pairs (FR-021).
     analyze: (snap, o) => analyze(snap, { ...o, skill_options: withEased(o.skill_options), mode }),
-    focus_layers: taken && keyed && !(focus_layers && focus_layers.length) ? [taken.layer] : focus_layers,
+    focus_layers: focus_layers && focus_layers.length ? focus_layers
+      : taken ? (keyed ? [taken.layer] : focus_layers)
+        : carriedFocus(session, SKILL, snapshot.comp.id) || focus_layers,
     mode,
   };
   if (skill_options !== undefined) opts.skill_options = cleanOptions(skill_options);
-  if (taken) opts.hand_in = lessonHandIn(taken);
+  if (taken) opts.hand_in = keyed ? { ...lessonHandIn(taken), focus_layers: [taken.layer] } : lessonHandIn(taken);
   const { lesson, session: l, analysis, stored_choices } = session.start(snapshot, opts);
   const handInFields = l.hand_in ? { hand_in: handInSlice(l.hand_in, open.learner, taken ? { keyed } : {}) }
     : open.hand_in ? { hand_in: handInSlice(open.hand_in, open.learner) } : {};

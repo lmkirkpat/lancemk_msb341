@@ -87,3 +87,18 @@ export function layerNames(...lists) {
   }
   return out;
 }
+
+// The focus layers a hand-in lesson opened with, for a later call on the same lesson that names none
+// (speed graph's second opening call, a snapshot after a demo), so the focus never falls back to the
+// whole comp. Null when the current lesson isn't this skill's on this comp, is passed, or has none.
+export function carriedFocus(session, skill, compId) {
+  let lesson;
+  try {
+    lesson = session.currentLesson();
+  } catch {
+    return null;
+  }
+  if (!lesson || lesson.skill !== skill || lesson.comp_id !== compId || lesson.passed) return null;
+  const f = lesson.hand_in && lesson.hand_in.focus_layers;
+  return Array.isArray(f) && f.length ? [...f] : null;
+}

@@ -154,3 +154,24 @@ test("easing end to end on A: give_answer, go_deeper, the snapshot, then record_
   assert.deepEqual(saved.hand_back, { step_number: 1, next_step: LAST });
   assert.equal(JSON.parse(fs.readFileSync(LEARNER, "utf8")).asked[0].went_deeper, "easing.basic");
 });
+
+test("a later call with no focus keeps the hand-in's focus (speed graph's second opening call, a snapshot after a demo)", async () => {
+  for (const skill of ["easing.basic", "easing.speed_graph", "timing.offset"]) {
+    const c = CASES[skill];
+    use(c.file);
+    handIn(skill);
+    const first = await call(c.tool);
+    const args = skill === "easing.speed_graph" ? { skill_options: { eased_layers: [], land_hard: [] } } : {};
+    const again = await call(c.tool, args);
+    assert.deepEqual(again.focus, first.focus, skill);
+    assert.deepEqual(again.targets, first.targets, skill);
+  }
+});
+
+test("a lesson not from a hand-in keeps its old focus behaviour (no carried focus)", async () => {
+  use(PRACTICE);
+  const a = await call("snapshot_project", { focus_layers: ["Title"] });
+  const b = await call("snapshot_project");
+  assert.deepEqual(a.focus, ["Title"]);
+  assert.notDeepEqual(b.focus, ["Title"], "a call with no focus covers the comp, as before");
+});

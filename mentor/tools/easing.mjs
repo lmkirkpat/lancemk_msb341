@@ -11,7 +11,7 @@ import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { json } from "../lib/reply.mjs";
 import { peekRecord } from "../lib/learner-store.mjs";
-import { handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
+import { carriedFocus, handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
 import { layerInfo } from "../lib/layer-info.mjs";
 
 export const SKILLS = ["easing.basic"];
@@ -59,10 +59,14 @@ async function snapshotProject({ focus_layers } = {}) {
     const kept = lessonHandIn(taken.h);
     const keyed = !taken.lost && kept.layer ? keyedLayer(snapshot, kept.layer) : undefined;
     if (keyed && !(focus_layers && focus_layers.length)) opts.focus_layers = [kept.layer];
-    opts.hand_in = kept;
+    opts.hand_in = keyed ? { ...kept, focus_layers: [kept.layer] } : kept;
     const record = peekRecord();
     const learner = { status: record && record.skills && record.skills[SKILL] ? record.skills[SKILL].status : "not_started" };
     extra = { mode_source: taken.lost ? "hand_in_lost" : "hand_in", hand_in: handInSlice(taken.h, learner, keyed === undefined ? {} : { keyed }) };
+  }
+  if (!taken && !(focus_layers && focus_layers.length)) {
+    const carried = carriedFocus(session, SKILL, snapshot.comp.id);
+    if (carried) opts.focus_layers = carried;
   }
   const { lesson, analysis, session: s } = session.start(snapshot, opts);
   // A continued lesson opened from a hand-in still carries its slice (for the hand-back line).

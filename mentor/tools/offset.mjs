@@ -14,7 +14,7 @@ import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
-import { handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor, otherLayersNamed } from "../lib/hand-in-lesson.mjs";
+import { carriedFocus, handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor, otherLayersNamed } from "../lib/hand-in-lesson.mjs";
 
 export const SKILLS = [SKILL];
 
@@ -49,11 +49,13 @@ async function offsetSnapshot({ mode: asked, focus_layers, skill_options } = {})
   // K6: a hand-in opens a new lesson on its layer and any other layer its step names (the group).
   const taken = open.mode_source === "hand_in" && open.hand_in && open.hand_in.layer ? open.hand_in : null;
   const keyed = taken ? keyedLayer(snapshot, taken.layer) : undefined;
-  if (taken && keyed && !(focus_layers && focus_layers.length)) focus_layers = [taken.layer, ...otherLayersNamed(snapshot, taken)];
+  const named = focus_layers && focus_layers.length;
+  if (taken && keyed && !named) focus_layers = [taken.layer, ...otherLayersNamed(snapshot, taken)];
+  else if (!taken && !named) focus_layers = carriedFocus(session, SKILL, snapshot.comp.id) || focus_layers;
   const opts = { skill: SKILL, analyze, mode };
   if (focus_layers) opts.focus_layers = focus_layers;
   if (skill_options !== undefined) opts.skill_options = skill_options;
-  if (taken) opts.hand_in = lessonHandIn(taken);
+  if (taken) opts.hand_in = taken && keyed ? { ...lessonHandIn(taken), focus_layers: [...focus_layers] } : lessonHandIn(taken);
   const { lesson, session: s, analysis, stored_choices } = session.start(snapshot, opts);
   const handInFields = s.hand_in ? { hand_in: handInSlice(s.hand_in, open.learner, taken ? { keyed } : {}) }
     : open.hand_in ? { hand_in: handInSlice(open.hand_in, open.learner) } : {};
