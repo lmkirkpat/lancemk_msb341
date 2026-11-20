@@ -20,7 +20,7 @@
     },
     {
       "project": "pop-shrunk.json",
-      "say": "I set it. Done."
+      "say": "I set the pivot. Done."
     }
   ],
   "expect": {

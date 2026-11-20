@@ -134,7 +134,7 @@
       },
       {
         "id": "hand_back_line",
-        "must": "That was step 3[;.] [Nn]ext is (?:step 4: )?(?:to )?[Pp]lay it back and watch the turn",
+        "must": "That was step 3[;.] [Nn]ext is (?:step 4: )?(?:to )?[\"“]?[Pp]lay it back and watch the turn",
         "turns": [
           5
         ]
