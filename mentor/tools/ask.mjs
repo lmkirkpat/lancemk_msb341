@@ -1,8 +1,9 @@
-// Spec 014's ask tools (contracts/ask-tools.md). Phase 1: give_answer; phase 2: go_deeper. TOOLS only:
-// no SKILLS and no FINDERS, which index.mjs allows (as spec 015's comp-reads.mjs does). Read-only for
-// After Effects (FR-002): their one read is a snapshot, and they never run a snippet that changes the
-// project, the selection, the playhead or the active comp. They write only session.json's ask and
-// hand_in blocks, and nothing to the learner record in these phases (T013, T043).
+// Spec 014's ask tools (contracts/ask-tools.md). Phase 1: give_answer; phase 2: go_deeper; phase 3:
+// note_said and the asked entries. TOOLS only: no SKILLS and no FINDERS, which index.mjs allows (as
+// spec 015's comp-reads.mjs does). Read-only for After Effects (FR-002): their one read is a snapshot,
+// and they never run a snippet that changes the project, the selection, the playhead or the active
+// comp. They write session.json's ask and hand_in blocks, and, from phase 3, the learner record's
+// asked list only (lib/asked-record.mjs): never a skill's state or a lesson (FR-039).
 //
 // The comp an answer is about comes from give_answer's own read of the active comp, taken when the
 // call is checked, never from the input. describe_layers (spec 015) keeps session.json untouched
@@ -12,7 +13,8 @@
 import { MentorError, registerErrors } from "../errors.mjs";
 import { checkAnswer, KINDS, NOT_TAUGHT, NULL_SKILL, nullWithChildren, READ_KINDS, skillIdOf } from "../lib/ask-answer.mjs";
 import { layerInfo } from "../lib/layer-info.mjs";
-import { peekRecord, unsafeFields } from "../lib/learner-store.mjs";
+import { checkGoalText, checkSaidText, markWentDeeper, recordAsked, setSaid } from "../lib/asked-record.mjs";
+import { peekRecord } from "../lib/learner-store.mjs";
 import { motionSources } from "../lib/motion-sources.mjs";
 import { readPath, shortName, skillName } from "../lib/path.mjs";
 import { runtime } from "../lib/runtime-flag.mjs";
@@ -46,13 +48,15 @@ async function skillModules() {
   };
 }
 
-// Data-model § 2: `goal` is general motion terms, checked like a record field.
-function checkGoal(goal, snapshot) {
-  if (goal === undefined || goal === null) return null;
-  if (typeof goal !== "string") throw new MentorError("ANSWER_SHAPE");
-  const g = goal.trim();
-  if (!g) return null;
-  if (unsafeFields({ goal: g }).length) throw new MentorError("UNSAFE_RECORD");
+// Data-model § 2 and § 3: `goal` is general motion terms, checked like a record field (FR-040,
+// FR-044). Phase 3: an answer with steps needs one, since its asked entry keeps it.
+function checkGoal(goal, snapshot, kind) {
+  if (goal !== undefined && goal !== null && typeof goal !== "string") throw new MentorError("ANSWER_SHAPE");
+  const g = checkGoalText(goal, snapshot);
+  if (!g) {
+    if (kind === "answer") throw new MentorError("GOAL_NOT_GENERAL");
+    return null;
+  }
   if (copiesExpression(g, snapshot)) throw new MentorError("RECORD_HAS_EXPRESSION");
   return g;
 }
@@ -83,7 +87,15 @@ export async function giveAnswer(input = {}) {
   }
   const { skills, handInReady } = await skillModules();
   const { reply, offered } = checkAnswer(input, { runtime: runtime(), skills, handInReady, snapshot, noComp });
-  const goal = checkGoal(input.goal, snapshot);
+  const goal = checkGoal(input.goal, snapshot, reply.kind);
+  // FR-038: one asked entry per answer with steps, linked from the session's ask (entry_date).
+  const entry = reply.kind === "answer" ? recordAsked({
+    project: snapshot ? snapshot.project ?? null : null,
+    comp: reply.comp,
+    layers: reply.steps.map((s) => s.layer),
+    goal,
+    skills: reply.steps.map((s) => s.skill).filter((id) => skills.includes(id)),
+  }) : null;
   if (SAVED_KINDS.has(reply.kind)) {
     save({
       comp_id: snapshot && snapshot.comp ? snapshot.comp.id : null,
@@ -93,6 +105,7 @@ export async function giveAnswer(input = {}) {
       steps: reply.steps,
       offered_skills: offered,
       goal,
+      entry_date: entry ? entry.date : null,
     });
   }
   return textReply({ ...reply, done: DONE });
@@ -158,6 +171,7 @@ export async function goDeeper(input = {}) {
     goal: ask.goal ?? null,
     place_named: args.place_named === true,
   });
+  markWentDeeper(ask.entry_date, skill); // phase 3: on the answer's asked entry, when it has one
   const record = peekRecord();
   const learned = !!(record && record.skills && record.skills[skill] && record.skills[skill].status === "learned");
   return textReply({
@@ -167,6 +181,19 @@ export async function goDeeper(input = {}) {
     practice: learned,
     missing_prerequisite: missingPrerequisite(skill, record),
   });
+}
+
+// ---- note_said (phase 3; contracts/ask-tools.md): the learner said how the steps went. Kept on the
+// latest answer's asked entry, as theirs, in general terms (FR-038). NO_ANSWER without an answer with
+// steps in this session; `saved: false`, quietly, when the record couldn't take it (unreadable, or
+// the entry isn't there any more), so the conversation carries on either way.
+export async function noteSaid(input = {}) {
+  const args = input && typeof input === "object" ? input : {};
+  const ask = latestAnswer();
+  if (!ask || ask.kind !== "answer") throw new MentorError("NO_ANSWER");
+  const said = checkSaidText(args.said); // SAID_NOT_GENERAL, UNSAFE_RECORD: checked even with no entry to keep it on
+  const entry = ask.entry_date ? setSaid(ask.entry_date, said) : null;
+  return textReply({ saved: !!entry });
 }
 
 // Eval run 2026-11-16: every accepted answer was followed by prose (a copy, or "the answer is in the
@@ -228,5 +255,22 @@ export const TOOLS = [
     },
     annotations: { readOnlyHint: false, destructiveHint: false },
     handler: goDeeper,
+  },
+  {
+    name: "note_said",
+    title: "Note what the learner said",
+    description:
+      "The learner said how the last answer's steps went (\"that worked\", \"the steps didn't help\"). Keeps it with that " +
+      "answer, marked as theirs, in a few general words. Not for questions. Changes nothing in After Effects.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        said: { type: "string", maxLength: 120, description: "What they said back, in a few general words (\"said the steps worked\"), never their sentence or a name." },
+      },
+      required: ["said"],
+      additionalProperties: false,
+    },
+    annotations: { readOnlyHint: false, destructiveHint: false },
+    handler: noteSaid,
   },
 ];

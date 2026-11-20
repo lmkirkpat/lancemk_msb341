@@ -135,6 +135,7 @@ test("the ask's answer and hand-in stay; a lesson from an answer hands back to t
     ],
     offered_skills: ["transform.anchor"],
     closing_offer: "Try them, or want to go deeper on step 1 with *Set the pivot*?",
+    goal: "a shake that turns from where it's hit",
   });
   await call("go_deeper", { skill: "transform.anchor", step: 1 });
   await call("anchor_snapshot");

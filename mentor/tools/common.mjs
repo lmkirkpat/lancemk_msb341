@@ -147,7 +147,9 @@ async function previewFrame({ time, layer } = {}) {
 // skill comes back with its review fields worked out (spec 004 FR-023: older records have none) and
 // whether a review is due today, so the mentor never does date arithmetic. Reading never writes.
 async function readLearnerRecord() {
-  const record = learner.readRecord();
+  // Spec 014 FR-041, FR-043: asked entries are for scheduling and recommend_next only, never something
+  // the mentor reads back to the learner, so this reply leaves them out (a record without any is as before).
+  const { asked: _asked, ...record } = learner.readRecord();
   const now = new Date();
   const skills = {};
   for (const [id, s] of Object.entries(record.skills)) skills[id] = { ...reviews.withReviewFields(s), review_is_due: reviews.isDue(s, now) };

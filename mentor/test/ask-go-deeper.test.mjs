@@ -181,11 +181,15 @@ test("practice: true when the record has the skill learned (FR-023); an unreadab
   assert.equal(r.missing_prerequisite, null);
 });
 
-test("read-only: no fixture edit, and no learner record write", async () => {
+test("read-only: no fixture edit; the record gains only the answer's asked entry, marked went deeper (phase 3)", async () => {
   await callGive(td16());
   await call({ skill: "transform.anchor" });
   assert.equal(fs.existsSync(EDITS), false);
-  assert.equal(fs.existsSync(LEARNER), false);
+  const rec = JSON.parse(fs.readFileSync(LEARNER, "utf8"));
+  assert.deepEqual(rec.skills, {});
+  assert.deepEqual(rec.lessons, []);
+  assert.equal(rec.asked.length, 1);
+  assert.equal(rec.asked[0].went_deeper, "transform.anchor");
 });
 
 test("the refusal messages are data-model § 8's, with no field names", () => {
