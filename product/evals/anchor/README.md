@@ -733,4 +733,6 @@ A case may carry a `hand_in`: the run writes `session.json` with the hand-in `go
 
 ## Phase 3 cases (spec 014 T079, written 2026-11-19, dry-run only)
 
-1 case, id 64: K5, a refused record is rewritten and saved, and the learner hears nothing of it (`R-RECORD-REWRITE-SILENT`). It uses the shared keys `record_text_never`, `record_recovers` and `say_never_when_called` (`../lib/phase3-checks.mjs`). Dry-run only until T080.
+2 cases, ids 64 and 65: K5, a refused record is rewritten and saved, and the learner hears nothing of it (`R-RECORD-REWRITE-SILENT`). It uses the shared keys `record_text_never`, `record_recovers` and `say_never_when_called` (`../lib/phase3-checks.mjs`). Dry-run only until T080.
+
+Case 65 (T081 follow-up): a true sentence about a parent ("rock.png is still moved by its parent's expression") is never refused: `record_no_refusal`, with the seeded hand-in on Shake Control from case 60. The guard no longer reads "moved by" or "moving" as a change and matches layer names case-sensitively.

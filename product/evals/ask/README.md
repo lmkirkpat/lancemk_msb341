@@ -50,7 +50,14 @@ Phase 3 (T078, 2026-11-19), cases 21 to 29, all on B1 and A. They are dry-run on
 | 28-asked-about-after-learning-is-marked-and-never-said | 18 (record half) | Set the pivot learned: `after_learning` holds it, no skill state changes, no word of the mark or FR-041's banned phrases | `comp1.json` + `records/pivot-learned.json` |
 | 29-a-new-question-in-the-follow-up-bar-gets-an-answer | FR-031 | Another goal on another layer, plain text: a fresh `give_answer` on Subtitle, two entries, no recital of the first answer | `practice.json` |
 
-Not in this set (later phases or elsewhere): situations 3 (the padded PNG, anchor case 61) and 16 (case 19). The next case takes 30. Case 18's wrapper is written out in full in the case file, from the contract; when the panel adds the wrapper's first line to `REQUESTS`, its sync test should pin case 18's first line to it.
+T081 follow-up (2026-11-19), cases 30 and 31:
+
+| Case | Situation | What it covers | Runs on |
+|---|---|---|---|
+| 30-a-repeat-answer-card-on-turn-4-is-refused | TD 6 turn 4, FR-029 | After "done" the mentor replies in prose; a repeat card is refused (`FOLLOW_UP_NOT_ANSWER`, allowed) and no card is accepted (`follow_up_not_answer`) | B1,A |
+| 31-go-deeper-on-a-tagged-step-from-turn-4 | TD 6 turn 4, FR-020 | A yes after "it didn't work" starts the pivot lesson; no `go_deeper` is refused (`go_deeper_never_refused`) | A |
+
+Cases 21 and 22 still fail on any `give_answer` call in turn 2, refused or not (a card attempt is still the wrong move); case 30 is the one that tolerates a refused repeat. Not in this set (later phases or elsewhere): situations 3 (the padded PNG, anchor case 61) and 16 (case 19). The next case takes 32. Case 18's wrapper is written out in full in the case file, from the contract; when the panel adds the wrapper's first line to `REQUESTS`, its sync test should pin case 18's first line to it.
 
 ## What a turn looks like
 
@@ -106,6 +113,7 @@ On each answer a case expects (`expect.answers`):
 - `no_answer_turns`: turns that must not call `give_answer` (a follow-up is prose).
 - `reread`: `[{ turn, of, at_time?, layers? }]` (T078): in `turn` a `describe_layers` call succeeded; `at_time`: one passed the time turn `of`'s last read returned (the fixture reader ignores the requested time, so this pins the call, not the values); `layers`: every layer turn `of`'s steps were on is covered (named, by index, or the whole comp).
 - `asked_entry`: `{ count?, said? (true set, false absent), said_never?, skills_include?, after_learning?, went_deeper?: null, goal?: { from_turn?, max_chars?, no_run_of? (words), never_names?, must? } }` over the learner record's `asked` list at the end of the case (data-model § 3). Reports `asked_entry` and, with `goal`, `asked_goal`; an entry holding a `verdict`, `summary` or `question` fails.
+- `follow_up_not_answer`: `[{ turn, allowed_refusals? }]`: no accepted `give_answer` in the turn, any refused one carries an allowed code (default `FOLLOW_UP_NOT_ANSWER`), and there is prose. `go_deeper_never_refused`: true: at least one `go_deeper` call and none refused.
 - `turn_tools`, `record_text_never`, `say_ends_with`, `say_never_when_called`: shared with the lesson sets (`../lib/phase3-checks.mjs`).
 - `turn_first_tool`: `[{ turn, tool }]`.
 - `tools_called`, `tools_not_called`: over the whole case.

@@ -233,10 +233,10 @@ test("fixtureFacts reports a dangling reference", () => {
   assert.equal(f.problems.length, 2);
 });
 
-test("case files: each is valid JSON with the keys the runner needs, and the numbers run 01 to 29", () => {
+test("case files: each is valid JSON with the keys the runner needs, and the numbers run 01 to 31", () => {
   const dir = path.join(HERE, "..", "cases");
   const files = fs.readdirSync(dir).filter((f) => /^\d\d-.*\.json$/.test(f)).sort();
-  assert.deepEqual(files.map((f) => f.slice(0, 2)), Array.from({ length: 29 }, (_, i) => String(i + 1).padStart(2, "0")));
+  assert.deepEqual(files.map((f) => f.slice(0, 2)), Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, "0")));
   for (const f of files) {
     const c = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
     assert.equal(c.id, f.replace(/\.json$/, ""));
@@ -451,4 +451,25 @@ test("the fixtures for cases 21 and 22 differ from their sources only where the 
   assert.equal(bar(f["practice-bar-eased.json"], "End"), "bezier,bezier");
   assert.equal(bar(f["practice-bar-eased.json"], "X Position"), bar(f["practice.json"], "X Position"));
   assert.equal(JSON.stringify(f["practice-bar-eased.json"].layers.find((l) => l.name === "Title")), JSON.stringify(f["practice.json"].layers.find((l) => l.name === "Title")));
+});
+
+test("follow_up_not_answer: prose only, or a refused repeat card then prose, passes; an accepted card or another refusal fails", () => {
+  const ex = { follow_up_not_answer: [{ turn: 2 }] };
+  const say = { kind: "say", text: "Shake Control looks the same in what I read." };
+  const repeat = call("That's the same answer as last time (FOLLOW_UP_NOT_ANSWER), so this is a follow-up.", false);
+  assert.equal(byName(run([answerTurn(), turn(read, say)], ex), "follow_up_not_answer@2").pass, true);
+  const c = byName(run([answerTurn(), turn(read, repeat, say)], ex), "follow_up_not_answer@2");
+  assert.equal(c.pass, true);
+  assert.match(c.detail, /refused 1x, then prose/);
+  assert.match(byName(run([answerTurn(), turn(read, call(good()), say)], ex), "follow_up_not_answer@2").detail, /accepted give_answer/);
+  assert.match(byName(run([answerTurn(), turn(read, call("refused: BAD_OFFER", false), say)], ex), "follow_up_not_answer@2").detail, /BAD_OFFER/);
+  assert.match(byName(run([answerTurn(), turn(read, repeat)], ex), "follow_up_not_answer@2").detail, /no prose/);
+});
+
+test("go_deeper_never_refused: an accepted call passes; a NOT_OFFERED refusal or no call fails", () => {
+  const gd = (ok) => ({ kind: "tool", name: "go_deeper", input: {}, ok, result: ok ? "{}" : "NOT_OFFERED" });
+  const ex = { go_deeper_never_refused: true };
+  assert.equal(byName(run([turn(gd(true))], ex), "go_deeper_never_refused").pass, true);
+  assert.equal(byName(run([turn(gd(false), gd(true))], ex), "go_deeper_never_refused").pass, false);
+  assert.match(byName(run([turn()], ex), "go_deeper_never_refused").detail, /never called/);
 });

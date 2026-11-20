@@ -1,0 +1,85 @@
+{
+  "id": "65-a-true-sentence-about-a-parent-saves-first-time",
+  "title": "K5, T081: a lesson on Shake Control (a null that an expression moves, carrying rock.png). The learner says rock.png is still moved by its parent's expression. That's true and nobody changed it, so a record that says it saves first time: record_lesson is never refused",
+  "covers": [
+    "FR-036",
+    "K5",
+    "T071",
+    "T081",
+    "T079"
+  ],
+  "hand_in": {
+    "skill": "transform.anchor",
+    "layer": "Shake Control",
+    "step_number": 3,
+    "steps": [
+      {
+        "text": "Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet.",
+        "skill": "not_taught",
+        "layer": "Shake Control"
+      },
+      {
+        "text": "Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet.",
+        "skill": "not_taught",
+        "layer": "Shake Control"
+      },
+      {
+        "text": "Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits.",
+        "skill": "transform.anchor",
+        "layer": "Shake Control"
+      },
+      {
+        "text": "Play it back and watch the turn.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "comp1.json": "live",
+    "synthetic/comp1-shake-pivot-panned.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "comp1.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "comp1.json",
+      "say": "OK, both are showing."
+    },
+    {
+      "project": "synthetic/comp1-shake-pivot-panned.json",
+      "say": "I used Pan Behind on it. Done."
+    },
+    {
+      "project": "synthetic/comp1-shake-pivot-panned.json",
+      "say": "The hammer end stays still. The shake still comes from the parent's expression moving rock.png, not from the pivot. That's all for now."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "tools_called": [
+      "record_lesson"
+    ],
+    "record_no_refusal": true,
+    "say_never_when_called": [
+      {
+        "id": "refusal_not_said_4",
+        "turn": 4,
+        "tool": "record_lesson",
+        "pattern": "unattributed|\\brefus|couldn['’]t (?:save|record)|wouldn['’]t (?:save|record)|didn['’]t (?:save|record)|try(?:ing)? (?:to (?:save|record) )?again|\\brewr[io]te|no check (?:saw|reported)|record(?:ing)? (?:error|failed)"
+      }
+    ]
+  },
+  "rubric": [
+    "R-RECORD-REWRITE-SILENT",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 014 T081 (the must-fix: R9's guard refused a true passive sentence about an unchanged layer, e.g. 'rock.png is still moved by its parent's expression'; 'moved by' is now read as what moves a layer, 'moving' is no longer a change word, and layer names match case-sensitively). Case 64 pins that a refused record is rewritten silently; this one pins that a true sentence isn't refused at all (record_no_refusal). The learner's last line gives the mentor that sentence to record, but whether it writes it isn't forced, so a record without it also passes; the tool-level cases are mentor/test/record-k5.test.mjs. The flow is case 60's first clean pass (the seeded hand-in, Pan Behind on Shake Control, rock.png unmoved) with an understanding-check answer that ends the lesson."
+}

@@ -41,7 +41,7 @@ export function answerCalls(turn) {
 
 // Refusals are plain messages with a code (research R3). A known code wins; else the first ALL_CAPS word
 // with an underscore; else UNKNOWN.
-export const REFUSAL_CODES = ["TOO_MANY_STEPS", "BAD_STEP_SKILL", "BAD_OFFER", "BAD_CLOSING", "COMP_NOT_NAMED", "STEPS_IN_EXPLANATION", "KEYFRAME_SKILL_ON_KEYLESS", "ROUTE_TO_PIVOT", "OFFER_NOT_READY", "NOT_ACTIONABLE", "ANSWER_SHAPE", "KIND_MISMATCH", "STEP_NEEDS_LAYER", "COMP_IS_OPEN", "NOT_PLAIN_WORDS", "NO_ACTIVE_COMP", "GOAL_NOT_GENERAL", "SAID_NOT_GENERAL", "NO_ANSWER", "AE_UNREACHABLE", "AE_BUSY"];
+export const REFUSAL_CODES = ["TOO_MANY_STEPS", "BAD_STEP_SKILL", "BAD_OFFER", "BAD_CLOSING", "COMP_NOT_NAMED", "STEPS_IN_EXPLANATION", "KEYFRAME_SKILL_ON_KEYLESS", "ROUTE_TO_PIVOT", "OFFER_NOT_READY", "NOT_ACTIONABLE", "ANSWER_SHAPE", "KIND_MISMATCH", "STEP_NEEDS_LAYER", "COMP_IS_OPEN", "NOT_PLAIN_WORDS", "NO_ACTIVE_COMP", "GOAL_NOT_GENERAL", "SAID_NOT_GENERAL", "NO_ANSWER", "FOLLOW_UP_NOT_ANSWER", "NOT_OFFERED", "OFFER_NOT_READY", "AE_UNREACHABLE", "AE_BUSY"];
 export function refusalCode(text) {
   const t = String(text || "");
   const known = REFUSAL_CODES.find((c) => t.includes(c));
@@ -362,6 +362,25 @@ export function askChecks(expect, ctx) {
       }
       add("asked_goal", bad.length === 0, bad.length ? `goal "${g.slice(0, 80)}": ${bad.join("; ")}` : `goal "${g.slice(0, 80)}"`);
     }
+  }
+  // T081 (the builder's decision): turn 4 is a follow-up, never an answer card. [{ turn, allowed_refusals? }]: no accepted give_answer
+  // in that turn, any refused one carries only an allowed code (FOLLOW_UP_NOT_ANSWER: the same card sent again), and the mentor
+  // replied in prose.
+  for (const w of expect.follow_up_not_answer || []) {
+    const x = answered[w.turn - 1];
+    const allowed = new Set(w.allowed_refusals || ["FOLLOW_UP_NOT_ANSWER"]);
+    const wrong = [];
+    if (x && x.accepted.length) wrong.push(`${x.accepted.length} accepted give_answer call(s)`);
+    for (const r of x ? x.refused : []) if (!allowed.has(r.code)) wrong.push(`a refusal with ${r.code}`);
+    if (!saysOf(turns[w.turn - 1]).join("").trim()) wrong.push("no prose reply");
+    const refusedRepeat = x ? x.refused.filter((r) => r.code === "FOLLOW_UP_NOT_ANSWER").length : 0;
+    add(`follow_up_not_answer@${w.turn}`, wrong.length === 0, wrong.length ? wrong.join("; ") : refusedRepeat ? `the repeat card was refused ${refusedRepeat}x, then prose` : "prose only");
+  }
+  // A go_deeper call that was refused (NOT_OFFERED for a skill a step was tagged with, T081) fails this.
+  if (expect.go_deeper_never_refused) {
+    const gd = turns.flatMap(tools).filter((e) => e.name === "go_deeper");
+    const bad = gd.filter((e) => !e.ok);
+    add("go_deeper_never_refused", gd.length > 0 && bad.length === 0, !gd.length ? "go_deeper was never called" : bad.length ? `refused: ${String(bad[0].result).slice(0, 100)}` : `${gd.length} accepted`);
   }
   out.push(...phase3Checks(expect, turns, { includes: () => true }));
 

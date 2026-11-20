@@ -57,3 +57,11 @@ test("record_recovers: a refused record_lesson is followed by a saved one, or th
   assert.equal(run(want, [{ events: [rec(false)] }])[0].pass, false);
   assert.equal(run(want, [{ events: [rec(true), rec(false)] }])[0].pass, false, "a refusal after the save is not a recovery");
 });
+
+test("record_no_refusal: every record_lesson call saved, and there was at least one", () => {
+  const rec = (ok) => tool("record_lesson", { summary: "x" }, ok);
+  const want = { record_no_refusal: true };
+  assert.equal(run(want, [{ events: [rec(true)] }])[0].pass, true);
+  assert.equal(run(want, [{ events: [rec(false), rec(true)] }])[0].pass, false, "a refusal then a rewrite is still a refusal");
+  assert.match(run(want, [{ events: [] }])[0].detail, /never called/);
+});
