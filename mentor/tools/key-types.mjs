@@ -14,7 +14,7 @@ import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { json } from "../lib/reply.mjs";
 import { opening } from "../lib/opening.mjs";
-import { handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor, namesWhole, stepText } from "../lib/hand-in-lesson.mjs";
+import { handInSlice, keyedLayer, noKeysReply, layerNames, lessonHandIn, motionFromFor, namesWhole, stepText } from "../lib/hand-in-lesson.mjs";
 
 const SKILL = "keyframes.types";
 export const SKILLS = [SKILL];
@@ -73,6 +73,9 @@ async function keyTypesSnapshot({ mode: asked, fresh = false, skill_options } = 
   // K6: a hand-in opens a new lesson on its layer (contracts/hand-in.md › Per skill).
   const taken = open.mode_source === "hand_in" && open.hand_in && open.hand_in.layer ? open.hand_in : null;
   const keyed = taken ? keyedLayer(snapshot, taken.layer) : undefined;
+  if (taken && keyed === false) {
+    return json(noKeysReply(snapshot, { mode: "lesson", mode_source: open.mode_source, learner: open.learner, hand_in: handInSlice(taken, open.learner, { keyed }) }));
+  }
   let options = skill_options;
   if (taken && keyed && options === undefined) {
     const f = handInFocus(snapshot, taken);

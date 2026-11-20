@@ -44,14 +44,18 @@ export function attributedFrom(result) {
   });
 }
 
-// R9's change words. "by mistake" counts as one.
-const CHANGE_WORD = /\b(undo|undid|undone|undoing|moved|moving|changed|reverted|revert|reset|fixed|by mistake)\b/i;
+// R9's change words. "by mistake" counts as one. Not "moving" or "undoing", which describe motion or
+// advice more often than a change (T081 review: "the parent keeps moving it" is true and the
+// learner's doing nothing). A passive "moved by …" says what moves a layer, not who changed it, so
+// it's taken out before the test.
+const CHANGE_WORD = /\b(undo|undid|undone|moved|changed|reverted|revert|reset|fixed|by mistake)\b/i;
+const PASSIVE = /\bmoved by\b(?!\s+mistake)/gi; // "moved by mistake" is a change, not a passive
 const isWordChar = (c) => c !== undefined && /[\p{L}\p{N}_]/u.test(c);
+// Case-sensitive, so a plain noun ("the background", "the title") isn't read as a layer named
+// Background or Title (T081 review).
 function names(text, name) {
-  const t = text.toLowerCase();
-  const n = name.toLowerCase();
-  for (let i = t.indexOf(n); i >= 0; i = t.indexOf(n, i + 1)) {
-    if (!isWordChar(t[i - 1]) && !isWordChar(t[i + n.length])) return true;
+  for (let i = text.indexOf(name); i >= 0; i = text.indexOf(name, i + 1)) {
+    if (!isWordChar(text[i - 1]) && !isWordChar(text[i + name.length])) return true;
   }
   return false;
 }
@@ -89,8 +93,7 @@ export function unattributed(text, { snapshot, attributed = [], own = [] }) {
   const longestFirst = (list) => [...list].sort((a, b) => b.length - a.length);
   const blank = (sentence, n) => {
     let out = sentence;
-    const lower = () => out.toLowerCase();
-    for (let i = lower().indexOf(n.toLowerCase()); i >= 0; i = lower().indexOf(n.toLowerCase(), i + 1)) {
+    for (let i = out.indexOf(n); i >= 0; i = out.indexOf(n, i + 1)) {
       if (!isWordChar(out[i - 1]) && !isWordChar(out[i + n.length])) out = out.slice(0, i) + " ".repeat(n.length) + out.slice(i + n.length);
     }
     return out;
@@ -98,7 +101,7 @@ export function unattributed(text, { snapshot, attributed = [], own = [] }) {
   const off = new Set();
   // A stop inside a name (logo.png) isn't a sentence end.
   for (const raw of text.split(/[.;!?](?=\s|$)|\n/)) {
-    if (!CHANGE_WORD.test(raw)) continue;
+    if (!CHANGE_WORD.test(raw.replace(PASSIVE, " "))) continue;
     let sentence = raw;
     for (const n of longestFirst(allowed)) sentence = blank(sentence, n);
     for (const n of longestFirst(all)) {

@@ -395,11 +395,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
       what they should have done or how to do it.
 
     Write only what a check saw or the learner told you: a layer no check reported as changed is
-    never the learner's change in `summary` or `next`. If it returns `RECORD_UNATTRIBUTED`, rewrite
-    that part and save again, without mentioning it.
-    If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
-    `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short "I've
-    noted that for next time" is enough.
+    never the learner's change in `attempted`, `summary` or `next`. On any refusal, fix what it
+    names and save again, without mentioning it. A short "I've noted that for next time" is enough.
     Name what comes next in words, never a slash command.
 
 ## From an answer

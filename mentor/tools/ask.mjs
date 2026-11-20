@@ -11,7 +11,7 @@
 // a comp switched between the mentor's read and its answer (COMP_NOT_NAMED).
 
 import { MentorError, registerErrors } from "../errors.mjs";
-import { checkAnswer, KINDS, NOT_TAUGHT, NULL_SKILL, nullWithChildren, READ_KINDS, skillIdOf } from "../lib/ask-answer.mjs";
+import { checkAnswer, hasCode, KINDS, NOT_TAUGHT, NULL_SKILL, nullWithChildren, READ_KINDS, skillIdOf } from "../lib/ask-answer.mjs";
 import { layerInfo } from "../lib/layer-info.mjs";
 import { checkGoalText, checkSaidText, markWentDeeper, recordAsked, setSaid } from "../lib/asked-record.mjs";
 import { peekRecord } from "../lib/learner-store.mjs";
@@ -24,11 +24,36 @@ import { copiesExpression } from "./common.mjs";
 
 // Data-model § 8's messages for go_deeper, word for word, plus WRONG_STEP, which this build adds.
 registerErrors({
-  NOT_OFFERED: "Only a skill the last answer offered can start from it.",
+  NOT_OFFERED: "Only a skill the last answer offered, or one its steps are tagged with, can start from it.",
   NOT_ON_THIS_RUNTIME: "The lesson can't start from here. Say so in one sentence and name where to start it.",
   NO_ANSWER: "There's no answer in this session yet.",
   WRONG_STEP: "Name the step that skill goes deeper on, by its number in the answer.",
+  // T081 (the builder's decision): turn 4 is a follow-up, never a new answer.
+  FOLLOW_UP_NOT_ANSWER:
+    "That's the same answer as last time, so this is a follow-up: read the same layers again and reply in a few sentences of your own, with no answer card.",
 });
+
+// T081 (the builder's decision; contracts/panel-ask.md: only a new question gets give_answer): an answer,
+// describe or howto that repeats the session's last answer is a follow-up given as a card, which the
+// panel would treat as a new question and fold the real one away. Same comp, same step layers and
+// texts (as normalized); for a kind with no steps, the same explanation too, so a second question
+// about the same comp isn't caught.
+const norm = (t) => (typeof t === "string" ? t.replace(/\s+/g, " ").trim() : t);
+function repeatsLast(reply, compId) {
+  let last;
+  try {
+    last = latestAnswer();
+  } catch (e) {
+    if (e instanceof MentorError && e.code === "SESSION_UNREADABLE") return false; // set aside; the save starts fresh
+    throw e;
+  }
+  if (!last || !SAVED_KINDS.has(reply.kind) || last.comp !== reply.comp || (last.comp_id ?? null) !== (compId ?? null)) return false;
+  const a = Array.isArray(last.steps) ? last.steps : [];
+  const b = reply.steps;
+  if (a.length !== b.length || !a.every((s, i) => s && norm(s.text) === norm(b[i].text) && (s.layer ?? null) === (b[i].layer ?? null))) return false;
+  if (b.length) return true;
+  return typeof last.explanation === "string" && norm(last.explanation) === norm(reply.explanation);
+}
 
 // The read, through one object so tests can watch it and stand in for After Effects.
 export const io = { takeSnapshot };
@@ -88,6 +113,7 @@ export async function giveAnswer(input = {}) {
   const { skills, handInReady } = await skillModules();
   const { reply, offered } = checkAnswer(input, { runtime: runtime(), skills, handInReady, snapshot, noComp });
   const goal = checkGoal(input.goal, snapshot, reply.kind);
+  if (repeatsLast(reply, snapshot && snapshot.comp ? snapshot.comp.id : null)) throw new MentorError("FOLLOW_UP_NOT_ANSWER");
   // FR-038: one asked entry per answer with steps, linked from the session's ask (entry_date).
   const entry = reply.kind === "answer" ? recordAsked({
     project: snapshot ? snapshot.project ?? null : null,
@@ -105,6 +131,7 @@ export async function giveAnswer(input = {}) {
       steps: reply.steps,
       offered_skills: offered,
       goal,
+      explanation: reply.explanation,
       entry_date: entry ? entry.date : null,
     });
   }
@@ -156,7 +183,10 @@ export async function goDeeper(input = {}) {
   if (!ask) throw new MentorError("NO_ANSWER");
   const { skills, handInReady, commandOf } = await skillModules();
   const skill = skillIdOf(args.skill, skills);
-  if (!skill || skill === NOT_TAUGHT || !(ask.offered_skills || []).includes(skill)) throw new MentorError("NOT_OFFERED");
+  // T081 review: turn 4 may offer to go deeper on the step that didn't land, which the answer may not
+  // have offered, so any skill a step of the latest answer is tagged with counts too.
+  const tagged = (Array.isArray(ask.steps) ? ask.steps : []).some((s) => s && s.skill === skill);
+  if (!skill || skill === NOT_TAUGHT || !((ask.offered_skills || []).includes(skill) || tagged)) throw new MentorError("NOT_OFFERED");
   if (!handInReady(skill) || !commandOf(skill)) throw new MentorError("OFFER_NOT_READY");
   const hit = stepFor(ask, skill, args.step);
   const layer = hit && typeof hit.s.layer === "string" ? hit.s.layer : null;
@@ -192,6 +222,10 @@ export async function noteSaid(input = {}) {
   const ask = latestAnswer();
   if (!ask || ask.kind !== "answer") throw new MentorError("NO_ANSWER");
   const said = checkSaidText(args.said); // SAID_NOT_GENERAL, UNSAFE_RECORD: checked even with no entry to keep it on
+  // FR-045: no expression or error text in the record (give_answer's plain-words test). note_said has
+  // no read of its own, so the 24-character copy test isn't run; the code pattern catches the rest.
+  const { skills } = await skillModules();
+  if (hasCode(said, [...skills, NOT_TAUGHT])) throw new MentorError("NOT_PLAIN_WORDS");
   const entry = ask.entry_date ? setSaid(ask.entry_date, said) : null;
   return textReply({ saved: !!entry });
 }

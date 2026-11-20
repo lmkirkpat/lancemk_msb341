@@ -417,7 +417,8 @@ export function reviewOffers() {
 // stays until the window lapses (FR-032's test, phase 3). `entry_date` links the asked entry in the
 // record (phase 3); null until then. An unreadable file behaves as for every other reader here:
 // it's set aside and SESSION_UNREADABLE is thrown, and the next call starts fresh.
-const ASK_FIELDS = ["comp_id", "project", "comp", "kind", "steps", "offered_skills", "goal"];
+// `explanation` (T081): kept only so give_answer can tell a repeated no-step answer from a new one.
+const ASK_FIELDS = ["comp_id", "project", "comp", "kind", "steps", "offered_skills", "goal", "explanation"];
 const inWindow = (iso, now) => typeof iso === "string" && Date.parse(iso) >= windowStart(now);
 
 export function saveAnswer(answer, { now = Date.now() } = {}) {

@@ -204,3 +204,9 @@ test("T076: note_said for how the steps went, a new question gets give_answer, j
 test("T076: an answer gives its goal, in general motion words", () => {
   assert.match(squash(SKILL), /\*\*`goal`:\*\* needed for an `answer`: what they want the motion to do, in a few general motion words, never their words copied, a name, or an effect's name\./);
 });
+
+test("T081 review: the two rules the T076 trim cut are back, and a note that isn't saved goes unsaid", () => {
+  assert.match(squash(SKILL), /no list of what's fine, no findings about the comp they didn't ask about\./);
+  assert.match(squash(SKILL), /Two sources of about the same size are both named with their sizes\./);
+  assert.match(squash(SKILL), /If it isn't saved, say nothing about it\./);
+});

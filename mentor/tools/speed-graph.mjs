@@ -13,7 +13,7 @@ import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
-import { carriedFocus, handInSlice, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
+import { carriedFocus, handInSlice, noKeysReply, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
 import { DEMO_IN, DEMO_OUT, analyze, check, finder, pairsFor } from "../lib/speed-graph.mjs";
 
 const SKILL = "easing.speed_graph";
@@ -103,13 +103,16 @@ async function speedGraphSnapshot({ focus_layers, mode: asked, skill_options } =
   // K6: a hand-in opens a new lesson on its layer (contracts/hand-in.md › Per skill).
   const taken = open.mode_source === "hand_in" && open.hand_in && open.hand_in.layer ? open.hand_in : null;
   const keyed = taken ? keyedLayer(snapshot, taken.layer) : undefined;
+  if (taken && keyed === false) {
+    return json(noKeysReply(snapshot, { mode: "lesson", mode_source: open.mode_source, learner: { ...open.learner, eased_layers: eased }, hand_in: handInSlice(taken, open.learner, { keyed }) }));
+  }
   const opts = {
     skill: SKILL,
     // The session doesn't pass the mode to the analyzer; a review picks one or two pairs (FR-021).
     analyze: (snap, o) => analyze(snap, { ...o, skill_options: withEased(o.skill_options), mode }),
     focus_layers: focus_layers && focus_layers.length ? focus_layers
       : taken ? (keyed ? [taken.layer] : focus_layers)
-        : carriedFocus(session, SKILL, snapshot.comp.id) || focus_layers,
+        : carriedFocus(session, SKILL, snapshot, mode) || focus_layers,
     mode,
   };
   if (skill_options !== undefined) opts.skill_options = cleanOptions(skill_options);

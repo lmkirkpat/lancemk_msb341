@@ -104,13 +104,15 @@ for (const [skill, c] of Object.entries(CASES)) {
   });
 }
 
-test("a layer with no keys: keyed false, no focus from it, and no error (K4 should keep this from happening)", async () => {
+test("a layer with no keys: keyed false, no lesson started (nothing left open), and no error (K4 should keep this from happening)", async () => {
   use(PRACTICE2);
   for (const skill of ["keyframes.types", "timing.offset"]) {
     handIn(skill, { layer: "Hatch Rig" });
     const r = await call(CASES[skill].tool);
     assert.equal(r.mode_source, "hand_in");
     assert.equal(r.hand_in.keyed, false);
+    assert.equal(r.lesson, null, skill);
+    await assert.rejects(() => tool("end_lesson")({}), (e) => e.code === "LESSON_NOT_OPEN", `${skill}: no lesson left open`);
   }
   use(PRACTICE);
   for (const skill of ["easing.basic", "easing.speed_graph"]) {
@@ -119,6 +121,8 @@ test("a layer with no keys: keyed false, no focus from it, and no error (K4 shou
     handIn(skill, { layer: unkeyed });
     const r = await call(CASES[skill].tool);
     assert.equal(r.hand_in.keyed, false, skill);
+    assert.equal(r.lesson, null, skill);
+    await assert.rejects(() => tool("end_lesson")({}), (e) => e.code === "LESSON_NOT_OPEN", `${skill}: no lesson left open`);
   }
 });
 
@@ -174,4 +178,28 @@ test("a lesson not from a hand-in keeps its old focus behaviour (no carried focu
   const b = await call("snapshot_project");
   assert.deepEqual(a.focus, ["Title"]);
   assert.notDeepEqual(b.focus, ["Title"], "a call with no focus covers the comp, as before");
+});
+
+test("T081 review: a stale hand-in lesson (begun an earlier day, nothing done) carries no focus and no hand-back on the next call", async () => {
+  for (const skill of ["easing.basic", "easing.speed_graph", "timing.offset"]) {
+    for (const f of fs.readdirSync(home)) if (f.startsWith("session.json")) fs.rmSync(path.join(home, f));
+    const c = CASES[skill];
+    use(c.file);
+    handIn(skill);
+    const first = await call(c.tool);
+    assert.equal(first.hand_in.layer, c.layer);
+    // Make it yesterday's: session.start then starts a new lesson, as for any stale one.
+    const file = path.join(home, "session.json");
+    const state = JSON.parse(fs.readFileSync(file, "utf8"));
+    const key = String(state.current);
+    state.lessons[key].lesson_id = new Date(Date.now() - 2 * 86400000).toISOString();
+    fs.writeFileSync(file, JSON.stringify(state));
+    const again = await call(c.tool);
+    assert.equal(again.lesson, "new", skill);
+    assert.equal("hand_in" in again, false, `${skill}: no slice, so no "That was step n"`);
+    // Speed graph's own default proposal is Subtitle on this comp too, so only the other two show it.
+    if (skill !== "easing.speed_graph") assert.notDeepEqual(again.targets, first.targets, `${skill}: the focus isn't carried`);
+    const ended = await call("end_lesson");
+    assert.equal("hand_back" in ended, false, skill);
+  }
 });

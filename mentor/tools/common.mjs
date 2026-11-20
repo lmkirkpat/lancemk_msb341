@@ -24,7 +24,7 @@ import { MentorError, registerErrors } from "../errors.mjs";
 // Spec 015 FR-020 (OQ-7): the record never holds text copied from the learner's expressions.
 registerErrors({
   // Spec 014 K5 (data-model § 8): not for the learner; the mentor rewrites and saves again.
-  RECORD_UNATTRIBUTED: "The record says the learner changed something no check saw them change. Say only what a check saw or they said.",
+  RECORD_UNATTRIBUTED: "The record says the learner changed a layer no check saw them change. Rewrite that sentence so it says only what a check saw or they said, keep everything else, and save again.",
   RECORD_HAS_EXPRESSION: "The learner record can't hold text copied from the project's expressions. Say what happened in your own words, then save again.",
 });
 
@@ -281,7 +281,7 @@ export function commonTools(options) {
       const own = [...(Array.isArray(lesson.target_refs) ? lesson.target_refs.map((r) => r && r.layer) : []), ...(Array.isArray(lesson.focus) ? lesson.focus : [])]
         .filter((n) => typeof n === "string");
       const ctx = { snapshot: lesson.baseline, attributed: Array.isArray(lesson.attributed) ? lesson.attributed : [], own };
-      if (["summary", "next"].some((f) => unattributed(entry[f], ctx).length)) throw new MentorError("RECORD_UNATTRIBUTED");
+      if (["attempted", "summary", "next"].some((f) => unattributed(entry[f], ctx).length)) throw new MentorError("RECORD_UNATTRIBUTED");
     }
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     if (lesson && entry.result === "passed") session.markPassSaved();

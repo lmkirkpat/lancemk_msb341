@@ -80,8 +80,23 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
     .sort((a, b) => String(skills[b.id].last_practiced || "").localeCompare(String(skills[a.id].last_practiced || "")));
   if (practicing.length) recommendation = result(practicing[0], "continue", "in_progress", focusOf(practicing[0].id));
 
-  // 1a. Spec 014 FR-042 (TD § 11): an unlearned skill the learner's steps used in an earlier answer,
-  //     when its finder finds something on this comp. Below a lesson in progress; once per entry
+  // 2. A due review, only with the comp in view (it needs a new target), at most one per session,
+  //    and none on a skill practiced in this session (FR-020). Once a review has been offered in
+  //    this window, only that one can come back: a repeat call offers it again while it still
+  //    qualifies, and never another.
+  if (!recommendation && snapshot) {
+    for (const s of ordered) {
+      const focus = reviewFor({ skill: s.id, record, built, finders, snapshot, now, offers });
+      if (focus) {
+        recommendation = result(s, "review", "review_due", focus);
+        break;
+      }
+    }
+  }
+
+  // 2a. Spec 014 FR-042 (TD § 11): an unlearned skill the learner's steps used in an earlier answer,
+  //     when its finder finds something on this comp. Below a lesson in progress and a due review
+  //     (the builder's decision, T081); once per entry
   //     (`raised`), counted as for review offers: an entry raised in this session window may come back
   //     on a repeat call, never after. Newest entry first; its skills in path order. The reply carries
   //     the entry's goal (general terms already, FR-040) and how many days ago it was asked.
@@ -97,20 +112,6 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
       recommendation = { ...result(s, "lesson", "asked_before", focusOf(s.id)), asked: { goal: typeof e.goal === "string" ? e.goal : null, days_ago: daysAgo(e.date, now) } };
       raisedEntry = e.date;
       break;
-    }
-  }
-
-  // 2. A due review, only with the comp in view (it needs a new target), at most one per session,
-  //    and none on a skill practiced in this session (FR-020). Once a review has been offered in
-  //    this window, only that one can come back: a repeat call offers it again while it still
-  //    qualifies, and never another.
-  if (!recommendation && snapshot) {
-    for (const s of ordered) {
-      const focus = reviewFor({ skill: s.id, record, built, finders, snapshot, now, offers });
-      if (focus) {
-        recommendation = result(s, "review", "review_due", focus);
-        break;
-      }
     }
   }
 

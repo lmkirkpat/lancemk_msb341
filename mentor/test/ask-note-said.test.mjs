@@ -64,7 +64,9 @@ test("after an answer: said lands on that answer's entry, as given, and nothing 
 
 test("only the latest answer's entry: a second answer takes the next said", async () => {
   await call("give_answer", answer());
-  await call("give_answer", { ...answer(), goal: "a softer landing" });
+  const second = answer();
+  second.steps[1] = { text: "Play it back and watch the hits.", skill: null, layer: null };
+  await call("give_answer", { ...second, goal: "a softer landing" });
   await call("note_said", { said: "said step 1 didn't help" });
   const [a, b] = JSON.parse(fs.readFileSync(LEARNER, "utf8")).asked;
   assert.equal(a.said, undefined);
@@ -86,6 +88,10 @@ test("the text is checked: general terms, 120 characters at most, no personal de
   await refuses({ said: "z".repeat(121) }, "SAID_NOT_GENERAL");
   await refuses({ said: 4 }, "SAID_NOT_GENERAL");
   await refuses({ said: "said to email jo@example.com" }, "UNSAFE_RECORD");
+  // T081 review (FR-045): no expression or error text, no backticks, no IDs.
+  await refuses({ said: "said wiggle(2,30) still errors" }, "NOT_PLAIN_WORDS");
+  await refuses({ said: "said `value` was off" }, "NOT_PLAIN_WORDS");
+  await refuses({ said: "said transform.anchor helped" }, "NOT_PLAIN_WORDS");
   assert.equal(JSON.parse(fs.readFileSync(LEARNER, "utf8")).asked[0].said, undefined);
   for (const code of ["SAID_NOT_GENERAL"]) assert.doesNotMatch(MESSAGES[code], /_|said:|`/, "no field names in the message");
 });

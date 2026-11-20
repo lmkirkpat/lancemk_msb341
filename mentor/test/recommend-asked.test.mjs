@@ -54,6 +54,18 @@ test("below a lesson in progress", () => {
   assert.equal(r.recommendation.reason, "in_progress");
 });
 
+test("below a due review (the builder's decision, T081): lesson in progress, then due review, then the asked skill", () => {
+  const due = { status: "learned", last_practiced: "2026-11-01T10:00:00.000Z", times_passed: 1, next: "n", review_due: "2026-11-10", reviews_passed_in_row: 1 };
+  const r = run(rec([entry()], { "easing.basic": learned, "parenting.null": due, "transform.anchor": { ...learned, status: "practicing" } }));
+  assert.equal(r.recommendation.reason, "in_progress", "a lesson in progress first");
+  const r2 = run(rec([entry({ skills: ["parenting.null"] })], { "easing.basic": learned, "transform.anchor": due }));
+  assert.equal(r2.recommendation.kind, "review", "a due review comes before the asked skill");
+  assert.equal(r2.recommendation.skill, "transform.anchor");
+  assert.equal(r2.raised_entry, undefined, "the entry isn't marked when it wasn't raised");
+  const r3 = run(rec([entry({ skills: ["parenting.null"] })], { "easing.basic": learned, "transform.anchor": learned }));
+  assert.equal(r3.recommendation.reason, "asked_before", "with no review due, the asked skill");
+});
+
 test("not when its finder finds nothing here (K4: a keyframe skill on keyless motion finds no pairs), not learned, not unbuilt, not missing a hard prerequisite", () => {
   assert.notEqual(run(rec([entry({ skills: ["easing.speed_graph"] })])).recommendation.reason, "asked_before", "finder count 0");
   assert.notEqual(run(rec([entry()], { "easing.basic": learned, "transform.anchor": learned })).recommendation.reason, "asked_before", "learned: never as a candidate");
