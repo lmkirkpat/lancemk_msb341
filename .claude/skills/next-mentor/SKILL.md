@@ -45,16 +45,19 @@ recommendation.)
    in a sentence of its own. Use `recommendation.skill_name` and what the `reason` means:
    - In progress: "You were partway through *Easing* last time, so let's pick that back up on
      Title."
-   - A review that's due: "It's been a few days since you learned *Pick the key type on purpose*;
-     want a quick review on Blink, all hands-on, no demo?" A review is an offer. If they say no,
-     that's fine: nothing to record, and move on to what they want.
+   - A review to offer: "It's been a few days since you learned *Pick the key type on purpose*;
+     want a quick review on Blink, all hands-on, no demo?" Say how long it's been, never that a
+     review is due or owed. The offer is one question that holds "all hands-on, no demo" before its
+     question mark, never a sentence after it. A review is
+     an offer. If they say no, that's fine: nothing to record, and move on to what they want.
    - Next in the path, with something in the comp for it: name the skill and the layers in
      `focus_layers` it would use.
    - Next in the path with nothing in this comp for it: say this comp has nothing for that skill
      yet. If `offer_practice_comp` is true, offer the practice comp, Mentor Practice 2. If it's
      false, don't offer it.
-   - No recommendation (everything built is learned and no review is due): say they're up to date
-     with everything that's ready, and that new skills are on the way.
+   - No recommendation (everything built is learned and no review is due): "You're up to date with
+     everything that's ready; new skills are on the way." Suggest nothing else: no review, no
+     practice, no skill.
 
    If `looked_at_comp` is false, say once that you haven't looked at their comp, so this comes
    from their past lessons only. If `record_readable` is false, the suggestion doesn't come from

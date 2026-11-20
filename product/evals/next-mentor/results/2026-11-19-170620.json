@@ -1,0 +1,308 @@
+{
+  "run_at": "2026-11-20T00:06:20.583Z",
+  "options": {
+    "only": "02",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.38,
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "02-review-due",
+      "title": "Opening, a review due: offered as a quick review (an offer, hands-on), not started",
+      "covers": [
+        "RQ-15",
+        "FR-070",
+        "FR-020"
+      ],
+      "hash": "19862055cc727fc5d89877c14b2e662cce832e0bd669cb9a3d0cc0bd53c6356d",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "1 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:offers_review",
+              "pass": true,
+              "detail": "turn 1: \"review\""
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:asks",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-REVIEW-OFFER",
+              "pass": true,
+              "reason": "The mentor says it's been a while since the learner learned the skill and offers a review on Cut, from focus_layers, as a question: \"want a quick review on Cut, all hands-on, no demo?\" It doesn't start the review or call it owed or overdue."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "The reply is a single sentence suggesting one skill by name, with its reason (time since it was learned), ending on the offer. There is no menu, no record recitation, no field names, and no lesson started."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Pick the key type on purpose\" and \"Cut\" both match the recommend_next result. \"About a month\" matches the record's last_practiced date of 2026-10-19 against today's date, and is said in plain words without reciting the record."
+            }
+          ],
+          "cost": 0.125518,
+          "session_id": "0ee9094a-69ce-410b-a42b-2418481b8f55",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-19T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Make another on/off change snap.\",\n      \"review_due\": \"2026-10-20\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T17:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"The 1.4 s pair was still fading at first.\",\n      \"next\": \"Make another on/off change snap.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Blink\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-BMuO6w/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"review\",\n    \"reason\": \"review_due\",\n    \"focus_layers\": [\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: It's been about a month since you learned *Pick the key type on purpose*, so want a quick review on Cut, all hands-on, no demo?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:offers_review",
+              "pass": true,
+              "detail": "turn 1: \"review\""
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:asks",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-REVIEW-OFFER",
+              "pass": true,
+              "reason": "The mentor says \"It's been about a month since you learned *Pick the key type on purpose*\" and asks \"Want a quick review on Cut, all hands-on, no demo?\", which is an offer on a focus layer that doesn't start the review or call it overdue."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "The reply is two sentences: one skill by name, a plain reason (it's been about a month), and a closing question, with no menu, no record recital, and no tool or field talk."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Pick the key type on purpose\" matches recommend_next's skill_name, \"Cut\" is in focus_layers, and \"about a month\" fits last_practiced 2026-10-19 against today, 2026-11-19."
+            }
+          ],
+          "cost": 0.12417600000000001,
+          "session_id": "14187f0b-4178-4b05-8577-d4a11417c854",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-19T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Make another on/off change snap.\",\n      \"review_due\": \"2026-10-20\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T17:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"The 1.4 s pair was still fading at first.\",\n      \"next\": \"Make another on/off change snap.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Blink\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-rW03OE/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"review\",\n    \"reason\": \"review_due\",\n    \"focus_layers\": [\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: It's been about a month since you learned *Pick the key type on purpose*. Want a quick review on Cut, all hands-on, no demo?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:offers_review",
+              "pass": true,
+              "detail": "turn 1: \"review\""
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:asks",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-REVIEW-OFFER",
+              "pass": true,
+              "reason": "The mentor says it's been a while since the learner learned the skill (\"It's been about a month since you learned *Pick the key type on purpose*\") and offers a review on Cut, which is in focus_layers, as a question (\"Want a quick review on Cut, all hands-on with no demo?\"); it doesn't call the review owed or overdue, promises no demo, and doesn't start it."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "It is one suggestion, the review of Pick the key type on purpose on Cut, with its reason in plain words, ending on the offer in two sentences; there is no menu, no recital of the record, no tool or field talk, and no teaching."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The skill name \"Pick the key type on purpose\" and the layer \"Cut\" both come from recommend_next, and \"about a month\" matches last_practiced 2026-10-19 in the learner record."
+            }
+          ],
+          "cost": 0.1282684,
+          "session_id": "4c79239f-35ab-4acf-80fa-9cfa90a2a846",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-19T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Make another on/off change snap.\",\n      \"review_due\": \"2026-10-20\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T17:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"The 1.4 s pair was still fading at first.\",\n      \"next\": \"Make another on/off change snap.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Blink\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-I8Fs7S/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"review\",\n    \"reason\": \"review_due\",\n    \"focus_layers\": [\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: It's been about a month since you learned *Pick the key type on purpose*. Want a quick review on Cut, all hands-on with no demo?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

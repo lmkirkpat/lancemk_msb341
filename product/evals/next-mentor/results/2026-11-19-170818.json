@@ -1,0 +1,292 @@
+{
+  "run_at": "2026-11-20T00:08:18.474Z",
+  "options": {
+    "only": "03",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.35,
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "03-next-in-path-with-focus",
+      "title": "Opening, next in the path with something in the comp: names the skill and the layers it would use",
+      "covers": [
+        "RQ-15",
+        "FR-070"
+      ],
+      "hash": "30a642bb47a1dada04b77484a1f62c414c8297d57ae95fc0034852d0c703e70d",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-NEXT-WITH-FOCUS",
+              "pass": true,
+              "reason": "The mentor names the recommended skill 'Pick the key type on purpose' and the two focus_layers 'Blink and Cut', then ends on 'Want to start there?'"
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "The reply is two sentences: one skill, its reason ('the next step after Easing'), and the offer; it has no menu, no recital of the record, no tool or field talk, and no teaching."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "'Pick the key type on purpose', 'Blink' and 'Cut' match the recommend_next result, and 'Easing' is a plain-words mention of the learned easing.basic in the record."
+            }
+          ],
+          "cost": 0.1184824,
+          "session_id": "e46acfbd-1c34-4b07-9379-81bfbc7aff67",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-UNEIq4/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"Blink\",\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up is **Pick the key type on purpose**, the next step after Easing, and your Blink and Cut layers are a good fit for it. Want to start there?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-NEXT-WITH-FOCUS",
+              "pass": true,
+              "reason": "The mentor names the recommended skill and both focus_layers, then offers to start: \"Next up is *Pick the key type on purpose*, and your Blink and Cut layers in this comp are good ones to practise it on. Want to start there?\""
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "The reply is two sentences suggesting one skill by name, with its reason (next up, plus layers that suit it), and ends on an offer; it has no menu, no recital of the record, no tool or field talk and no teaching."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The skill name \"Pick the key type on purpose\" and the layers Blink and Cut all match the recommend_next result exactly, and the record isn't recited."
+            }
+          ],
+          "cost": 0.116756,
+          "session_id": "9b46abb6-0b5b-4985-8258-2182d02ae1e7",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-sROMTR/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"Blink\",\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up is *Pick the key type on purpose*, and your Blink and Cut layers in this comp are good ones to practise it on. Want to start there?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-NEXT-WITH-FOCUS",
+              "pass": true,
+              "reason": "The mentor names the recommended skill and both focus_layers, then offers to start: \"Next up is *Pick the key type on purpose*, and your comp already has two good layers for it: Blink and Cut. Want to start there?\""
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "The reply is one skill, by name, in two sentences ending on the offer, with no menu, no record recital, no tool or field talk, and no teaching before the learner agrees."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Pick the key type on purpose\", Blink and Cut all appear exactly in the recommend_next result, and nothing is invented."
+            }
+          ],
+          "cost": 0.1191164,
+          "session_id": "9085b23a-60bb-48e0-9aab-89120457bf7c",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-uuT3Tg/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"Blink\",\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up is *Pick the key type on purpose*, and your comp already has two good layers for it: Blink and Cut. Want to start there?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

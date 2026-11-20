@@ -1,0 +1,293 @@
+{
+  "run_at": "2026-11-20T00:07:50.499Z",
+  "options": {
+    "only": "01",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.38,
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "01-in-progress",
+      "title": "Opening, a skill in progress: picks it back up, names its skill and a layer, in two sentences",
+      "covers": [
+        "RQ-15",
+        "FR-070",
+        "handover item 3"
+      ],
+      "hash": "ff42f82001f499c788986c4bdf319fb53967a91f20a8e15fc457f6a79cc7a67d",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-IN-PROGRESS",
+              "pass": true,
+              "reason": "Turn 1: the mentor says 'You were partway through *Pick the key type on purpose* last time' and offers to 'pick that back up on Blink and Cut', both of which are in the recommendation's focus_layers."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "Turn 1 suggests one skill by name in two sentences, ending on 'Want to jump in?'; the reason is one plain clause about the Blink fades rather than a recital of the record, and it names no tools or fields and starts no lesson."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Turn 1 uses 'Pick the key type on purpose' (recommend_next skill_name) and Blink and Cut (focus_layers), and 'one of the Blink fades snapping and the rest still fading' matches the record's 'One pair snapped; the rest still faded.'"
+            }
+          ],
+          "cost": 0.1273742,
+          "session_id": "7e12fd67-2f37-4d88-b4f5-ebd51306c5a7",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"keyframes.types\": {\n      \"status\": \"practicing\",\n      \"last_practiced\": \"2026-10-24T17:00:00.000Z\",\n      \"times_passed\": 0,\n      \"next\": \"Hold the second Blink pair so it snaps.\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-24T17:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Held one Blink pair; the other pairs still fade\",\n      \"result\": \"partial\",\n      \"demo_used\": false,\n      \"summary\": \"One pair snapped; the rest still faded.\",\n      \"next\": \"Hold the second Blink pair so it snaps.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Blink\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-lM54UL/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"continue\",\n    \"reason\": \"in_progress\",\n    \"focus_layers\": [\n      \"Blink\",\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: You were partway through *Pick the key type on purpose* last time, with one of the Blink fades snapping and the rest still fading, so let's pick that back up on Blink and Cut. Want to jump in?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-IN-PROGRESS",
+              "pass": true,
+              "reason": "The mentor says \"You were partway through *Pick the key type on purpose* last time\" in plain words and offers to pick it back up on Blink and Cut, both in recommend_next's focus_layers."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "One skill by name, a plain reason (\"got one Blink pair to snap\"), and an offer (\"Want to dive back in?\") in two sentences, with no menu, record recital, tool talk, or teaching."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Pick the key type on purpose\" matches skill_name, Blink and Cut are in focus_layers, and \"one Blink pair to snap\" is a brief plain-words memory from the record's last lesson."
+            }
+          ],
+          "cost": 0.1247722,
+          "session_id": "f2f80f13-e00b-4078-82a6-0607920b42af",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"keyframes.types\": {\n      \"status\": \"practicing\",\n      \"last_practiced\": \"2026-10-24T17:00:00.000Z\",\n      \"times_passed\": 0,\n      \"next\": \"Hold the second Blink pair so it snaps.\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-24T17:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Held one Blink pair; the other pairs still fade\",\n      \"result\": \"partial\",\n      \"demo_used\": false,\n      \"summary\": \"One pair snapped; the rest still faded.\",\n      \"next\": \"Hold the second Blink pair so it snaps.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Blink\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-WnVKQK/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"continue\",\n    \"reason\": \"in_progress\",\n    \"focus_layers\": [\n      \"Blink\",\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: You were partway through *Pick the key type on purpose* last time and got one Blink pair to snap, so let's pick it back up on Blink and Cut. Want to dive back in?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-IN-PROGRESS",
+              "pass": true,
+              "reason": "The mentor says \"You were partway through *Pick the key type on purpose* last time\" in plain words and offers to pick it back up on Blink and Cut, both in focus_layers."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "One skill is named with a short plain reason (\"one Blink pair snapping and the others still fading\") in two sentences ending on the offer \"Want to carry on?\", with no menu, tool talk or teaching."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Pick the key type on purpose\" matches recommend_next's skill_name, and Blink and Cut match its focus_layers; the Blink detail comes from the record's last lesson, said in plain words."
+            }
+          ],
+          "cost": 0.1244922,
+          "session_id": "b4b87de5-4556-414d-ad83-f5fa2f732c12",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"keyframes.types\": {\n      \"status\": \"practicing\",\n      \"last_practiced\": \"2026-10-24T17:00:00.000Z\",\n      \"times_passed\": 0,\n      \"next\": \"Hold the second Blink pair so it snaps.\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-24T17:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Held one Blink pair; the other pairs still fade\",\n      \"result\": \"partial\",\n      \"demo_used\": false,\n      \"summary\": \"One pair snapped; the rest still faded.\",\n      \"next\": \"Hold the second Blink pair so it snaps.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Blink\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-zrBsA4/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"continue\",\n    \"reason\": \"in_progress\",\n    \"focus_layers\": [\n      \"Blink\",\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: You were partway through *Pick the key type on purpose* last time, with one Blink pair snapping and the others still fading, so let's pick it back up on Blink and Cut. Want to carry on?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}
