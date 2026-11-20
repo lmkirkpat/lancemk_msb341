@@ -28,10 +28,10 @@ const section = (heading) => {
 const squash = (t) => t.replace(/\s+/g, " ").trim();
 const SOURCES = squash(section("16.") + section("19."));
 
-test("FR-057: named ask-mentor; allowed tools are describe_layers, preview_frame, give_answer, go_deeper (phase 2) and Skill, the mentor's all on the server", () => {
+test("FR-057: named ask-mentor; allowed tools are describe_layers, preview_frame, give_answer, go_deeper (phase 2), note_said (phase 3) and Skill, the mentor's all on the server", () => {
   assert.equal(field("name"), "ask-mentor");
   const tools = field("allowed-tools").split(",").map((t) => t.trim());
-  assert.deepEqual(tools, ["mcp__ae-mentor__describe_layers", "mcp__ae-mentor__preview_frame", "mcp__ae-mentor__give_answer", "mcp__ae-mentor__go_deeper", "Skill"]);
+  assert.deepEqual(tools, ["mcp__ae-mentor__describe_layers", "mcp__ae-mentor__preview_frame", "mcp__ae-mentor__give_answer", "mcp__ae-mentor__go_deeper", "mcp__ae-mentor__note_said", "Skill"]);
   for (const t of tools.filter((x) => x.startsWith("mcp__"))) assert.ok(TOOLS.find((x) => x.name === t.replace("mcp__ae-mentor__", "")), t);
 });
 
@@ -178,4 +178,29 @@ test("T037 fix (o): Sizes say when a shift shows, from the read, or else when it
   assert.match(sizes, /with when it peaks and, if read, when it's over a pixel:/);
   assert.match(sizes, /with when it shows, or else when it peaks\./);
   assert.doesNotMatch(SKILL, /how long it lasts|gone in about/);
+});
+
+// ---- Spec 014 T076 (FR-028 to FR-031, FR-041, FR-035; TD § 6 turns 3, 4 and 7, § 11).
+
+test("T076: turn 4 is a follow-up (a fresh read at the last read's time, no give_answer), with rule 3's sentence and no pass or fail", () => {
+  const done = squash(SKILL.slice(SKILL.indexOf("- **\"Done\""), SKILL.indexOf("- **They say how the steps went**")));
+  assert.match(done, /a follow-up, never a `give_answer`/);
+  assert.match(done, /`describe_layers` on the same layers at your last read's time/);
+  assert.match(done, /where a change landed if on another layer, as a hint; never pass or fail/);
+  assert.match(done, /"\[layer\] looks different from my last read; that may be its expression moving it"/);
+  assert.match(done, /never advise Edit > Undo/);
+});
+
+test("T076: note_said for how the steps went, a new question gets give_answer, just-the-steps holds, asking again is normal", () => {
+  const after = squash(SKILL.slice(SKILL.indexOf("## After the answer")));
+  assert.match(after, /call `note_said` first, in a few general words \("said the steps worked"\)\. Not for questions\./);
+  assert.match(after, /- \*\*A new question:\*\* another goal or layer: read again and answer it fresh with `give_answer`/);
+  assert.match(after, /"Just the steps", or the offer ignored:\*\* no further lesson offer in this thread until they ask, get stuck, or ask a new question\./);
+  assert.match(after, /Asking about something they've learned is normal:\*\* answer as fully as a first question/);
+  // FR-041's banned phrases are never spelled out in the prompt (prompt words come back in replies).
+  for (const banned of ["already learned this", "remember when", "as we covered"]) assert.ok(!SKILL.toLowerCase().includes(banned), banned);
+});
+
+test("T076: an answer gives its goal, in general motion words", () => {
+  assert.match(squash(SKILL), /\*\*`goal`:\*\* needed for an `answer`: what they want the motion to do, in a few general motion words, never their words copied, a name, or an effect's name\./);
 });
