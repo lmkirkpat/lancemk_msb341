@@ -109,7 +109,7 @@
       },
       {
         "id": "hand_back_line",
-        "must": "That was step \\d+; next is \\S|That was the last step",
+        "must": "That was step \\d+[;.,] ?[Nn]ext\\b[^.]*\\S|That was the last step",
         "in": "prose",
         "turns": [
           5
