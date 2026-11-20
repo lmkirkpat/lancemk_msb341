@@ -57,7 +57,7 @@
       },
       {
         "id": "no_keyframe_skill_named",
-        "never": "key type|speed graph|\\boffset\\b|\\bstagger\\b|\\bease\\b|\\beasing\\b",
+        "never": "key type|speed graph|\\boffset\\b|\\bstagger\\b|\\bshake\\b|\\b(?:ease|easing|eased|smooth|smoothing)\\s+(?:the|your|that|it|them|this|those|its)\\b|\\bcould be eased\\b",
         "turns": [
           1
         ]
@@ -68,5 +68,5 @@
     "R-NM-K4",
     "R-NM-SUGGESTS"
   ],
-  "note": "Spec 014 T058 (K4; the tool's side is mentor/test/recommend-k4.test.mjs). Uses the ask set's live Comp 1 capture. The record has only Easing learned and not due (the shared easing-learned record's review date is in the past, which would turn this into a review). Key types is next in the path, but Comp 1 has nothing it can use, so the tool skips it and the two after it; the case pins that, and that the words don't bring the skipped skills back. If the capture is re-taken and the pivot's focus list changes, update focus_layers."
+  "note": "Triage 2026-11-19: the check no longer bans the word Easing, because the learned skill is a fair reason for the pivot (\"Since you've got Easing down\"); it bans easing or smoothing the motion as an action, and the key-type, speed-graph and offset skills. Spec 014 T058 (K4; the tool's side is mentor/test/recommend-k4.test.mjs). Uses the ask set's live Comp 1 capture. The record has only Easing learned and not due (the shared easing-learned record's review date is in the past, which would turn this into a review). Key types is next in the path, but Comp 1 has nothing it can use, so the tool skips it and the two after it; the case pins that, and that the words don't bring the skipped skills back. If the capture is re-taken and the pivot's focus list changes, update focus_layers."
 }

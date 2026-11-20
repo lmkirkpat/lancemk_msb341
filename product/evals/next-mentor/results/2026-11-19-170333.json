@@ -1,0 +1,277 @@
+{
+  "run_at": "2026-11-20T00:03:33.210Z",
+  "options": {
+    "only": "05",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.37,
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "05-ae-unreachable",
+      "title": "Opening with After Effects unreachable: says it hasn't looked at the comp, suggests from past lessons only, claims nothing about the comp",
+      "covers": [
+        "RQ-15",
+        "FR-070"
+      ],
+      "hash": "cfbd6c39e280a6ccf27d62623f0a8e341bef78e8bc23c347b34e7b3401b18ba0",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:three_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 3)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:says_not_seen",
+              "pass": true,
+              "detail": "turn 1: \"couldn't see\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-BLIND",
+              "pass": true,
+              "reason": "The mentor says once \"I couldn't see your project just now, so this is based only on your past lessons\", which matches looked_at_comp: false, and it names no layer and makes no claim about the comp."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "It suggests only the returned skill, \"Pick the key type on purpose\", gives a plain reason (\"builds on the Easing you've already learned\") and ends on the offer \"Want to start it?\" in two sentences, with no menu, record recital, tool talk or teaching."
+            }
+          ],
+          "cost": 0.12146079999999998,
+          "session_id": "5176e309-3530-44bf-bdf9-97ea173e662a",
+          "transcript": "### Turn 1: next-mentor; the project is UNREACHABLE (After Effects not answering)\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-K2SaWs/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": false,\n  \"comp\": null,\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path_no_focus\",\n    \"focus_layers\": null,\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: I couldn't see your project just now, so this is based only on your past lessons: next up is *Pick the key type on purpose*, which builds on the Easing you've already learned. Want to start it?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:three_sentences",
+              "pass": true,
+              "detail": "3 sentences in turn 1 (at most 3)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:says_not_seen",
+              "pass": true,
+              "detail": "turn 1: \"couldn't see\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-BLIND",
+              "pass": true,
+              "reason": "The mentor says once, \"I couldn't see your After Effects project just now, so this suggestion comes only from your past lessons,\" and names no layer, count, or comp state, matching looked_at_comp: false."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "The reply suggests the one skill \"Pick the key type on purpose\" by name, gives its reason (\"Since you've already learned Easing\"), and ends on the offer \"Want to start it once your comp is open?\"; its third sentence is the allowed couldn't-see-the-comp note, and the short description is a clause rather than a sentence of its own, with no menu, record recital, tool talk, or teaching."
+            }
+          ],
+          "cost": 0.12344239999999998,
+          "session_id": "545d70a3-2cfc-40e3-a8e0-497bb5da47fa",
+          "transcript": "### Turn 1: next-mentor; the project is UNREACHABLE (After Effects not answering)\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-au095B/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": false,\n  \"comp\": null,\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path_no_focus\",\n    \"focus_layers\": null,\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: I couldn't see your After Effects project just now, so this suggestion comes only from your past lessons. Since you've already learned Easing, the next skill is *Pick the key type on purpose*, which is about choosing how each keyframe moves into the next one. Want to start it once your comp is open?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:three_sentences",
+              "pass": true,
+              "detail": "3 sentences in turn 1 (at most 3)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:says_not_seen",
+              "pass": true,
+              "detail": "turn 1: \"couldn't see\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-BLIND",
+              "pass": true,
+              "reason": "The mentor says once, \"I couldn't see your After Effects project just now, so this suggestion is based only on your past lessons,\" and names no layer or comp state, which matches looked_at_comp: false."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "It suggests one skill by name (\"Next up is Pick the key type on purpose, the step after Easing\") with a plain reason and ends on the offer \"Want to start it?\"; the third sentence is the allowed note about not seeing the comp, and nothing mentions a tool or field or starts teaching."
+            }
+          ],
+          "cost": 0.1212748,
+          "session_id": "3829be0e-f640-42ea-9371-81991d0cd4b1",
+          "transcript": "### Turn 1: next-mentor; the project is UNREACHABLE (After Effects not answering)\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-6f37xe/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": false,\n  \"comp\": null,\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path_no_focus\",\n    \"focus_layers\": null,\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: I couldn't see your After Effects project just now, so this suggestion is based only on your past lessons. Next up is *Pick the key type on purpose*, the step after Easing. Want to start it?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

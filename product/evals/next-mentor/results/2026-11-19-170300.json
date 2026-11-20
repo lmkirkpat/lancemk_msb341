@@ -1,0 +1,279 @@
+{
+  "run_at": "2026-11-20T00:03:00.460Z",
+  "options": {
+    "only": "14",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.35,
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "14-no-keyframe-skill-for-expression-motion",
+      "title": "K4: on Comp 1, where the motion is a null moved by expressions and the only keys are on a control, with Easing learned, the suggestion is Set the pivot on the layers that can use it; key types, speed graph and offset aren't suggested, and nothing is said about easing the shake",
+      "covers": [
+        "spec014-K4",
+        "FR-022",
+        "T048",
+        "T058"
+      ],
+      "hash": "2ac019560fda07c67b1da6a4c49dc469230abe95d9f8694af88813bd1bc84bc1",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_the_pivot_skill",
+              "pass": true,
+              "detail": "turn 1: \"pivot\""
+            },
+            {
+              "check": "say:no_keyframe_skill_named",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-K4",
+              "pass": true,
+              "reason": "Turn 1 suggests only the returned skill, Set the pivot (anchor point), on logo.png, General Logo Animation Graphics.png and rock.png, all from focus_layers; 'Since you've got easing down' cites the learned skill as the reason and never proposes easing, key types, the speed graph or offset as a way to change the expression-driven motion."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "Turn 1 is two sentences: one skill by name with a plain reason ('Since you've got easing down... the next step is'), its three listed layers, and the offer 'Want to start with one of those?', with no menu, record recital, tool talk or teaching."
+            }
+          ],
+          "cost": 0.119054,
+          "session_id": "a41ce2ff-1334-4764-ae75-34fe1dc89dd0",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-Uer5yv/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Comp 1\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"transform.anchor\",\n    \"skill_name\": \"Set the pivot (anchor point)\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"logo.png\",\n      \"General Logo Animation Graphics.png\",\n      \"rock.png\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Since you've got easing down, the next step is *Set the pivot (anchor point)*, which you can practice on logo.png, General Logo Animation Graphics.png and rock.png in Comp 1. Want to start with one of those?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_the_pivot_skill",
+              "pass": true,
+              "detail": "turn 1: \"pivot\""
+            },
+            {
+              "check": "say:no_keyframe_skill_named",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-K4",
+              "pass": true,
+              "reason": "Turn 1 suggests only the tool's skill, \"Set the pivot (anchor point)\", on logo.png, General Logo Animation Graphics.png and rock.png, all from focus_layers; it makes no mention of easing, key types, the speed graph, offset or easing the shake."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "Turn 1 is two sentences that suggest one skill by name, give the reason in plain words (\"Next up is…\"), and end on the offer \"Want to start?\"; the short gloss of the pivot sits inside the first sentence rather than in a sentence of its own, and it lists no menu, no record, no tool talk and no lesson."
+            }
+          ],
+          "cost": 0.11779399999999998,
+          "session_id": "24c98540-8a25-479f-8d72-ec97d37fc433",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-CpTVrd/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Comp 1\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"transform.anchor\",\n    \"skill_name\": \"Set the pivot (anchor point)\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"logo.png\",\n      \"General Logo Animation Graphics.png\",\n      \"rock.png\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up is *Set the pivot (anchor point)*, the spot a layer turns and scales around, and logo.png, General Logo Animation Graphics.png and rock.png in Comp 1 are good layers to practise it on. Want to start?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_the_pivot_skill",
+              "pass": true,
+              "detail": "turn 1: \"pivot\""
+            },
+            {
+              "check": "say:no_keyframe_skill_named",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-K4",
+              "pass": true,
+              "reason": "Turn 1 suggests only the returned skill, \"Set the pivot (anchor point)\", on logo.png, General Logo Animation Graphics.png and rock.png, all from focus_layers, and never mentions easing, key types, the speed graph, offset or easing the shake."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "Turn 1 is two sentences ending on the offer \"Want to start with that?\", suggests one skill with its reason (\"Next up\"), describes it only in a short aside rather than a sentence of its own, and names no tools or fields."
+            }
+          ],
+          "cost": 0.1158616,
+          "session_id": "231d7107-1647-4b7f-a4bb-c338c05e2890",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-6r9rFY/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Comp 1\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"transform.anchor\",\n    \"skill_name\": \"Set the pivot (anchor point)\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"logo.png\",\n      \"General Logo Animation Graphics.png\",\n      \"rock.png\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up is *Set the pivot (anchor point)*, the point a layer spins and scales around, and you could practise it on logo.png, General Logo Animation Graphics.png and rock.png in Comp 1. Want to start with that?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}
