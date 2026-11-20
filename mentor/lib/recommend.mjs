@@ -2,8 +2,9 @@
 // contracts/shared-tools.md › recommend_next). Pure and deterministic: everything it needs is passed
 // in, including `now`, so the same input always gives the same answer.
 
-import { isDue, pastTargetsIn } from "./reviews.mjs";
+import { isDue, localDate, pastTargetsIn } from "./reviews.mjs";
 import { applies, marksFor } from "./marks.mjs";
+import { askedOf } from "./learner-store.mjs";
 
 // "This session" for the one-review limit (research R8): an unprompted review offer counts for this
 // long, and so does a practice lesson on the same skill.
@@ -70,6 +71,7 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
   });
 
   let recommendation = null;
+  let raisedEntry = null;
 
   // 1. A built skill in progress, most recently practiced first. Never one whose hard prerequisite
   //    isn't learned (SC-005), even if the learner insisted on it before.
@@ -77,6 +79,26 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
     .filter((s) => isBuilt(s.id) && hardMet(s) && skills[s.id] && skills[s.id].status === "practicing")
     .sort((a, b) => String(skills[b.id].last_practiced || "").localeCompare(String(skills[a.id].last_practiced || "")));
   if (practicing.length) recommendation = result(practicing[0], "continue", "in_progress", focusOf(practicing[0].id));
+
+  // 1a. Spec 014 FR-042 (TD § 11): an unlearned skill the learner's steps used in an earlier answer,
+  //     when its finder finds something on this comp. Below a lesson in progress; once per entry
+  //     (`raised`), counted as for review offers: an entry raised in this session window may come back
+  //     on a repeat call, never after. Newest entry first; its skills in path order. The reply carries
+  //     the entry's goal (general terms already, FR-040) and how many days ago it was asked.
+  if (!recommendation && snapshot) {
+    const windowStart = now.getTime() - SESSION_WINDOW_HOURS * 3600 * 1000;
+    const entries = askedOf(record)
+      .filter((e) => !e.raised || Date.parse(e.raised) >= windowStart)
+      .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    for (const e of entries) {
+      const ids = Array.isArray(e.skills) ? e.skills : [];
+      const s = ordered.find((x) => ids.includes(x.id) && isBuilt(x.id) && !learned(x.id) && hardMet(x) && (focusOf(x.id) || { count: 0 }).count > 0);
+      if (!s) continue;
+      recommendation = { ...result(s, "lesson", "asked_before", focusOf(s.id)), asked: { goal: typeof e.goal === "string" ? e.goal : null, days_ago: daysAgo(e.date, now) } };
+      raisedEntry = e.date;
+      break;
+    }
+  }
 
   // 2. A due review, only with the comp in view (it needs a new target), at most one per session,
   //    and none on a skill practiced in this session (FR-020). Once a review has been offered in
@@ -109,6 +131,8 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
     recommendation,
   };
   if (!recommendation) out.reason = "nothing_left";
+  // For the tool to mark the entry raised; never in the reply (contracts/shared-tools.md).
+  if (raisedEntry) Object.defineProperty(out, "raised_entry", { value: raisedEntry, enumerable: false });
 
   if (requested_skill !== undefined && requested_skill !== null) {
     const asked = String(requested_skill).trim();
@@ -126,4 +150,12 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
     }
   }
   return out;
+}
+
+// Whole local calendar days from an ISO time to `now` (0 today), or null.
+function daysAgo(iso, now) {
+  const t = Date.parse(iso);
+  if (!Number.isFinite(t)) return null;
+  const day = (d) => { const [y, m, dd] = localDate(d).split("-").map(Number); return new Date(y, m - 1, dd); };
+  return Math.round((day(now) - day(new Date(t))) / 86400000);
 }

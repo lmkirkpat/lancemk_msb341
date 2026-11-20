@@ -9,6 +9,7 @@ import { runSnippet } from "../bridge-client.mjs";
 import * as session from "../lib/session.mjs";
 import * as learner from "../lib/learner-store.mjs";
 import * as reviews from "../lib/reviews.mjs";
+import { markRaised } from "../lib/asked-record.mjs";
 import { readPath, skillName } from "../lib/path.mjs";
 import { recommend } from "../lib/recommend.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
@@ -230,6 +231,14 @@ async function recommendNext({ requested_skill } = {}, { skills, finders }) {
       session.recordReviewOffer(result.recommendation.skill);
     } catch {
       // Remembering the offer is best effort; the recommendation still stands.
+    }
+  }
+  // Spec 014 FR-042: the asked entry this raised, marked once (best effort; the suggestion stands).
+  if (result.raised_entry) {
+    try {
+      markRaised(result.raised_entry);
+    } catch {
+      // A record that can't take it keeps the entry raisable; the suggestion still stands.
     }
   }
   return json(result);
