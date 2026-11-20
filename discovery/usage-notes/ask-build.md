@@ -177,3 +177,38 @@ Full run at `4370e67`: 63/68 (93%), $57.87, `results/2026-11-19-145824.json`. Ev
 
 **What it changes:** a rule followed by its exceptions reads as the rule; lead with the exception. A learner line
 that could answer the mentor's last ask will be taken as that answer, so case turns say what was done.
+
+### T059: null-parenting, next-mentor and ask on B1
+
+**Null** (full run at `08b7729`): 52/58 (90%), $46.68, `results/2026-11-19-154146.json`; no hard-rule break.
+- 56 (new): the `never` regex took "rather than on a second null" (a refusal) for an offer; it now skips a negated
+  match (`1e21e8f`). Later one run echoed the prompt's own "never a second null"; both prompt lines now say "teach
+  no null on top of it" (`45bdca5`). 3/3.
+- 57 (new, real): step 1's `refused` handling covered a layer that follows a null but not a step that names the
+  control null itself (`reason: "null"`), so the mentor called the pivot lesson a prerequisite and asked for a
+  group. A route line in the rubric's Pass-line words (`4d2964b`, `3cf759b`). 3/3; 52 and 53 3/3.
+- 43: the regex didn't take "keyframes … at once" (a right refusal). Fixed. 3/3.
+- 08 and 30: the judge failed a suggested next move (Rotation) as invented; R-NAMES-REAL now exempts suggestions
+  and example names (`1e21e8f`, builder to confirm). 11 and 55: noise, 3/3 unchanged.
+
+**Next-mentor** (`--repeat 3` at `4d2964b`): 6/10, $5.65. Not a regression: 02 and 09 failed the same way on 11-09.
+- 02 and 09: the model copied step 3's label "A review that's due" ("a quick review is due" reads as owed), then
+  split "all hands-on, no demo" into a third sentence. Now: say how long it's been, never "due"; the offer is one
+  question holding "all hands-on, no demo". 3/3 each.
+- 04: after that edit it offered practice and dropped "up to date"; the nothing-left line is now spelled out and
+  suggests nothing else. 3/3. 01, 03 and 06 re-run 3/3 (same step 3).
+- 14 (new, K4): the check banned the bare word "easing", but "since you've got *Easing* down" is a fair reason;
+  the regex now bans easing only as a way to change the motion (`f06c59b`). 3/3. 05: one past-lesson layer name, 5/6.
+- Set: 8/10 with 07 and 08 the known FR-082 gaps (`64377de`). Triage and fixes about $4.
+
+**Ask** (`--repeat 3` at `64377de`): 19/19 (100%), $12.36, `results/2026-11-19-171822.json`; no FR-061 check failed.
+Single-run misses: 02 and 03 R-ONE-IDEA (two or three choices in the closing offer; 03 at 165 words), 11 one run
+with prose next to the answer (`answer_prose_empty`, plumbing, not FR-061) and 3 refusals. Case 19 is A only.
+
+**T059 met for all four sets.** B1 spend for T059: about $165. Offset and key types got the step 0 fix without a
+run; easing, key types, speed graph and offset got the new stop rule without a run (same text in every skill):
+both are checked at the ship step's six-set A run.
+
+**What it changes:** prompt words are read as wording the model may say: a label ("A review that's due") or a
+prohibition ("never a second null") comes back in the reply. Name rules without the forbidden words, and keep
+labels neutral. Re-run the cases that share an edited step, not only the ones that failed.

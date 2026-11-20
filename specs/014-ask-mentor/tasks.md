@@ -283,7 +283,7 @@ open, so Home's Ask stayed paused and follow-ups went into the lesson); cockpit 
   last reply visible: the lesson closes, `panel-session.json` ends, Home's Ask and the thread's follow-up bar
   open, and the next thread send carries the after-lesson wrapper (amendment (e)). Tests, including T038's
   repro: stop in words, then a Home follow-up logs `thread: "ask"`.
-- [ ] T108 [P] (eval-engineer) One case per lesson set (numbers from the cockpit): the learner says "end lesson"
+- [x] T108 [P] (eval-engineer) One case per lesson set (numbers from the cockpit): the learner says "end lesson"
   mid-lesson; checks: `end_lesson` called, no `record_lesson`, no demo or check after it, at most two sentences.
   Runs with T059's sets; the spec-writer adds the FR at T063.
 
@@ -300,20 +300,20 @@ open, so Home's Ask stayed paused and follow-ups went into the lesson); cockpit 
   `panel/lib/copy.js`, chosen by skill and the check's `passed`. Tests for each skill.
 - [x] T057 (panel-builder) A `b1` panel shows no Go deeper for any result (SC-011); panel and helper suites pass;
   every new and changed MU id has a test (SC-011: 100%).
-- [ ] T058 [P] (eval-engineer) Cases (numbers from the cockpit): ask situations 16 (`runtimes: ["a"]`) and 18;
+- [x] T058 [P] (eval-engineer) Cases (numbers from the cockpit): ask situations 16 (`runtimes: ["a"]`) and 18;
   next-mentor K4; pivot: AB held 1 through a hand-in (K7), AB held 3 (padded PNG, rule 2), rule 1 on a child of an
   expression-driven parent; null: rule 1 and routing. Checks: no "review" in a learned-skill go-deeper; no lesson
   started without a yes.
-- [ ] T059 (eval-engineer) On B1 at the branch's merge commit, one set at a time: anchor, null-parenting,
+- [x] T059 (eval-engineer) On B1 at the branch's merge commit, one set at a time: anchor, null-parenting,
   next-mentor, ask. Each meets its SC-006 with every hard check passing; T058's cases 3 of 3 (SC-007 for pivot
   and null).
 
 ## Phase 2 gate
 
-- [ ] T060 (reviewer) Review the skill-builder branch against FR-022 to FR-027, FR-033 and FR-034 for pivot and
+- [x] T060 (reviewer) Review the skill-builder branch against FR-022 to FR-027, FR-033 and FR-034 for pivot and
   null, and contracts/hand-in.md.
-- [ ] T061 (design-reviewer) Review the panel branch against MU › Going deeper and FR-050 to FR-052.
-- [ ] T062 (cockpit) Merge both, between sittings; then T059's runs on the merge commit if they ran on the branch.
+- [x] T061 (design-reviewer) Review the panel branch against MU › Going deeper and FR-050 to FR-052.
+- [x] T062 (cockpit) Merge both, between sittings; then T059's runs on the merge commit if they ran on the branch.
 - [ ] T063 (spec-writer) Fold T058 to T062 into the spec. **Go deeper is ready for A.**
 
 **Checkpoint:** the MVP (phases 1 and 2) is ready for the ship step.
