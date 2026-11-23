@@ -19,6 +19,7 @@ import { check, demoRefusal, JUMP_PX, p2For, REFUSAL_REASONS, REFUSED_MESSAGE, r
 import { motionFrom, sourcesOf } from "../lib/motion-sources.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
+import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
@@ -259,7 +260,7 @@ async function nullParentCheck({ null: nullName, region, chain_on_purpose } = {}
   const { result, skill_data } = check(lesson.baseline, current, lesson, input);
   // A passed lesson is closed: a later check still answers, but stores and marks nothing.
   if (!lesson.passed && result.comp_matches && skill_data) session.setSkillData(SKILL, lesson.comp_id, skill_data);
-  if (!lesson.passed && result.comp_matches && result.graded) session.markChecked(result.passed, { demoUndone: result.demo_undone });
+  if (!lesson.passed && result.comp_matches && result.graded) session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
   return json(result);
 }
 

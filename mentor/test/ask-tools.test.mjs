@@ -64,8 +64,9 @@ test("give_answer is registered from its own file, with TOOLS only: no skill ID 
   assert.equal(askModule.SKILLS, undefined);
   assert.equal(askModule.FINDERS, undefined);
   assert.ok(!SKILLS.some((s) => s.startsWith("ask")));
-  // Phase 2 (R13): pivot and null take a hand-in; the other four wait for phase 3.
-  assert.deepEqual(Object.keys(FINDERS).filter((id) => FINDERS[id].hand_in === true).sort(), ["parenting.null", "transform.anchor"]);
+  // Phase 3 (R13): all six take a hand-in, each with its skill folder.
+  assert.deepEqual(Object.keys(FINDERS).filter((id) => FINDERS[id].hand_in === true).sort(), ["easing.basic", "easing.speed_graph", "keyframes.types", "parenting.null", "timing.offset", "transform.anchor"]);
+  for (const id of Object.keys(FINDERS)) if (FINDERS[id].hand_in) assert.match(FINDERS[id].skill_command, /^[a-z-]+-mentor$/);
 });
 
 test(`reply shape on B1 (${LIVE ? "live" : "derived"} Comp 1): the accepted fields plus comp, runtime and tags; no offer`, async () => {
@@ -92,6 +93,7 @@ test("tags come from path.json's short names, for every tagged skill", async () 
     steps: [{ text: "Select Title's last two Position keys and open the speed graph.", skill: "Speed graph", layer: "Title" }],
     offered_skills: ["easing.speed_graph"],
     closing_offer: "Try it, or want to go deeper with *Speed graph*?",
+    goal: "a softer landing",
   });
   assert.deepEqual(softer.tags, { "easing.speed_graph": "Speed graph" });
   assert.equal(softer.steps[0].skill, "easing.speed_graph");
@@ -108,35 +110,49 @@ test("the session's ask block holds the checked offer and the goal, even on B1",
   assert.deepEqual(ask.offered_skills, ["transform.anchor"]);
   assert.equal(ask.goal, "a shake that turns from where it's hit");
   assert.equal(ask.steps.length, 4);
-  assert.equal(ask.entry_date, null);
+  // Phase 3: the asked entry it wrote (FR-038), by its date.
+  const entry = JSON.parse(fs.readFileSync(LEARNER, "utf8")).asked.find((e) => e.date === ask.entry_date);
+  assert.ok(entry, "linked to the record's asked entry");
 });
 
-test("on A, an offer needs a lesson that takes a hand-in: Set the pivot does (phase 2), Speed graph doesn't yet; no offer is fine", async () => {
+test("on A, an offer needs a lesson that takes a hand-in: all six do from phase 3; one without the flag is refused; no offer is fine", async () => {
   process.env.AE_MENTOR_RUNTIME = "a";
   const r = await call(td16());
   assert.equal(r.runtime, "a");
   assert.deepEqual(r.offered_skills, ["transform.anchor"]);
   fs.rmSync(SESSION);
   use(PRACTICE);
-  await refuses({
+  const speed = {
     kind: "answer",
     explanation: "In Mentor Practice, Title moves on its own Position keys.",
     steps: [{ text: "Select Title's last two Position keys and open the speed graph.", skill: "Speed graph", layer: "Title" }],
     offered_skills: ["easing.speed_graph"],
     closing_offer: "Try it, or want to go deeper with *Speed graph*?",
-  }, "OFFER_NOT_READY");
+    goal: "a softer landing",
+  };
+  FINDERS["easing.speed_graph"].hand_in = false;
+  try {
+    await refuses(speed, "OFFER_NOT_READY");
+  } finally {
+    FINDERS["easing.speed_graph"].hand_in = true;
+  }
   assert.equal(fs.existsSync(SESSION), false, "a refusal saves nothing");
+  assert.deepEqual((await call(speed)).offered_skills, ["easing.speed_graph"], "phase 3: Speed graph takes a hand-in");
+  fs.rmSync(SESSION);
   use(COMP1);
   const none = await call({ ...td16(), offered_skills: [], closing_offer: "Try them?" });
   assert.deepEqual(none.offered_skills, []);
 });
 
-test("read-only: one default snapshot, no other snippet, no edits, no learner record (phase 1)", async () => {
+test("read-only: one default snapshot, no other snippet, no edits; the record gains only an asked entry for the answer (phase 3)", async () => {
   await call(td16());
   await call({ kind: "describe", explanation: "In Comp 1, Sweep Control is a null whose Position drives the Center of the CC Light Sweep on Black Solid 1.", steps: [], offered_skills: [], closing_offer: "Want to know what moves Sweep Control?" });
   assert.deepEqual(reads, ["default", "default"]);
   assert.equal(fs.existsSync(EDITS), false, "no fixture edit, so nothing in the project changed");
-  assert.equal(fs.existsSync(LEARNER), false, "no learner record write in phase 1");
+  const rec = JSON.parse(fs.readFileSync(LEARNER, "utf8"));
+  assert.deepEqual(rec.skills, {}, "no skill state");
+  assert.deepEqual(rec.lessons, [], "no lesson");
+  assert.equal(rec.asked.length, 1, "one entry for the answer, none for the describe");
   const src = fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "tools", "ask.mjs"), "utf8");
   assert.doesNotMatch(src, /bridge-client|runSnippet|undo\s*:/, "no way into AE but the snapshot read");
 });
@@ -172,8 +188,14 @@ test("goal is checked like a record field: no personal details, no copied expres
   await refuses({ ...td16(), goal: "shake for someone@example.com" }, "UNSAFE_RECORD");
   await refuses({ ...td16(), goal: "Rock shake with multiple impacts (Position + shared array)" }, "RECORD_HAS_EXPRESSION");
   assert.equal(fs.existsSync(SESSION), false);
-  const r = await call({ ...td16(), goal: undefined });
-  assert.equal(r.kind, "answer");
+  // Phase 3: an answer with steps needs a goal, since its asked entry keeps it (contracts/ask-tools.md).
+  await refuses({ ...td16(), goal: undefined }, "GOAL_NOT_GENERAL");
+  await refuses({ ...td16(), goal: "x".repeat(121) }, "GOAL_NOT_GENERAL");
+  await refuses({ ...td16(), goal: "a cc light sweep across the logo" }, "GOAL_NOT_GENERAL");
+  assert.equal(fs.existsSync(SESSION), false);
+  // Kinds with no entry still don't need one.
+  const d = await call({ kind: "describe", explanation: "In Comp 1, Sweep Control is a null.", steps: [], offered_skills: [], closing_offer: "Want to know what moves it?" });
+  assert.equal(d.kind, "describe");
   assert.equal(JSON.parse(fs.readFileSync(SESSION, "utf8")).ask.goal, null);
 });
 
@@ -218,4 +240,97 @@ test("eval fix (a): every accepted reply ends with a plain done note that's safe
 test("eval fix (b): the schema says the closing is required for answer, describe, howto and outside", () => {
   const d = TOOLS.find((t) => t.name === "give_answer").inputSchema.properties.closing_offer.description;
   assert.match(d, /Required for answer, describe, howto and outside; null only for clarify and no_comp\./);
+});
+
+// ---- Spec 014 T066 (FR-038 to FR-041): give_answer writes one asked entry for kind answer only.
+
+const recordWith = (skills) => fs.writeFileSync(LEARNER, JSON.stringify({ version: 1, skills, lessons: [] }));
+
+test("T066: an answer writes one asked entry from the tool's read; after_learning from the record; no skill state changes", async () => {
+  const skills = { "transform.anchor": { status: "learned", last_practiced: "2026-11-10T10:00:00.000Z", times_passed: 1, next: "n", review_due: "2026-11-30", reviews_passed_in_row: 1 } };
+  recordWith(skills);
+  await call({ ...td16(), comp: "Other" });
+  const rec = JSON.parse(fs.readFileSync(LEARNER, "utf8"));
+  assert.deepEqual(rec.skills, skills, "FR-039: status, times passed, review date, reviews in a row unchanged");
+  assert.deepEqual(rec.lessons, []);
+  assert.equal(rec.asked.length, 1);
+  const e = rec.asked[0];
+  assert.equal(e.project, "Comp 1.aep");
+  assert.equal(e.comp, "Comp 1", "from the read, never the input");
+  assert.deepEqual(e.layers, ["Shake Control"]);
+  assert.equal(e.goal, "a shake that turns from where it's hit");
+  assert.deepEqual(e.skills, ["transform.anchor"], "skill IDs only: no not-taught, no untagged");
+  assert.deepEqual(e.after_learning, ["transform.anchor"]);
+  assert.equal(e.went_deeper, null);
+  assert.equal("said" in e, false);
+  assert.equal(JSON.parse(fs.readFileSync(SESSION, "utf8")).ask.entry_date, e.date);
+});
+
+test("T066: describe, howto, clarify, outside and no_comp write no entry; a refusal writes none", async () => {
+  await refuses({ ...td16(), goal: undefined }, "GOAL_NOT_GENERAL");
+  await call({ kind: "describe", explanation: "In Comp 1, Sweep Control is a null.", steps: [], offered_skills: [], closing_offer: "Want to know what moves it?" });
+  await call({ kind: "howto", explanation: "The speed graph shows how fast a property changes.", steps: [], offered_skills: [], closing_offer: "Want to learn it on one of your layers?" });
+  await call({ kind: "outside", explanation: "Render settings are outside what I cover.", steps: [], offered_skills: [], closing_offer: "Want to ask about how something in your comp moves?" });
+  assert.equal(fs.existsSync(LEARNER), false);
+});
+
+test("T066: the entry never holds the learner's question or expression text (FR-040, FR-045)", async () => {
+  await call(td16());
+  const text = fs.readFileSync(LEARNER, "utf8");
+  assert.doesNotMatch(text, /thisComp|wiggle|Math\.|amps/);
+  assert.doesNotMatch(text, /explanation|closing_offer|Pan Behind/, "no answer text either: the goal and names only");
+});
+
+test("T066: an unreadable record doesn't block the answer; it's left as it is and the answer has no entry", async () => {
+  fs.writeFileSync(LEARNER, "{ broken");
+  const r = await call(td16());
+  assert.equal(r.kind, "answer");
+  assert.equal(fs.readFileSync(LEARNER, "utf8"), "{ broken");
+  assert.equal(JSON.parse(fs.readFileSync(SESSION, "utf8")).ask.entry_date, null);
+});
+
+test("T066: go_deeper sets went_deeper on the answer's entry", async () => {
+  process.env.AE_MENTOR_RUNTIME = "a";
+  await call(td16());
+  const go = TOOLS.find((t) => t.name === "go_deeper").handler;
+  await go({ skill: "transform.anchor" });
+  assert.equal(JSON.parse(fs.readFileSync(LEARNER, "utf8")).asked[0].went_deeper, "transform.anchor");
+});
+
+test("T066: read_learner_record leaves asked entries out (FR-041, FR-043); a record without them reads as before", async () => {
+  await call(td16());
+  const read = TOOLS.find((t) => t.name === "read_learner_record").handler;
+  const r = JSON.parse((await read({})).content[0].text);
+  assert.equal("asked" in r, false);
+  assert.ok(Array.isArray(r.lessons));
+});
+
+// ---- T081 (the builder's decision): turn 4 repeated as a card is refused FOLLOW_UP_NOT_ANSWER.
+
+test("T081: the same answer again (same comp, step layers and texts) is refused as a follow-up; nothing more is saved", async () => {
+  await call(td16());
+  const before = fs.readFileSync(LEARNER, "utf8");
+  await refuses({ ...td16(), explanation: "In Comp 1, nothing changed since my last read.", goal: "a shake that turns from the hit" }, "FOLLOW_UP_NOT_ANSWER");
+  assert.equal(fs.readFileSync(LEARNER, "utf8"), before, "no second asked entry");
+  // A real new question: another step, or the same steps on another comp, is an answer.
+  const other = td16();
+  other.steps = other.steps.slice(2);
+  assert.equal((await call(other)).kind, "answer");
+});
+
+test("T081: a describe or howto repeats only with the same explanation too; another describe on the same comp is fine", async () => {
+  const d = { kind: "describe", explanation: "In Comp 1, Sweep Control is a null.", steps: [], offered_skills: [], closing_offer: "Want to know what moves it?" };
+  await call(d);
+  await refuses(d, "FOLLOW_UP_NOT_ANSWER");
+  assert.equal((await call({ ...d, explanation: "In Comp 1, Shake Control is a null moved by expressions." })).kind, "describe");
+});
+
+test("T081: an earlier answer outside the session window doesn't count; the message names no field", async () => {
+  const session = await import("../lib/session.mjs");
+  const r = await call(td16());
+  const saved = JSON.parse(fs.readFileSync(SESSION, "utf8")).ask;
+  session.saveAnswer({ ...saved }, { now: Date.now() - 4 * 3600 * 1000 });
+  assert.equal((await call(td16())).kind, r.kind);
+  const { MESSAGES } = await import("../errors.mjs");
+  assert.doesNotMatch(MESSAGES.FOLLOW_UP_NOT_ANSWER, /_|give_answer/);
 });

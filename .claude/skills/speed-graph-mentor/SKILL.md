@@ -59,6 +59,10 @@ Rules particular to this skill:
   0.7 s Title is near the top of the frame"). Never say how far along its own move it is, or a
   percentage of the distance: a parent's move shows in the frame too, and you can't see it.
 
+- **A session that started with a question stays a lesson.** When the learner asked about their own
+  comp before this lesson, don't offer a review; the snapshot opens a lesson then, and you go on from
+  it.
+
 ## Before the lesson: is easing there?
 
 This skill builds on easing. Your first tool call is `speed_graph_snapshot` without
@@ -84,6 +88,9 @@ after step 7 says what to do). Then look at the Easing entry in `learner.other_s
 - **Unknown** (`learned` null: your notes couldn't be read): say nothing about whether they've
   done easing, don't offer it, and teach this lesson.
 - **Key types** never blocks this lesson; don't bring it up.
+
+If `mode_source` is hand_in or hand_in_lost (the learner said yes to going deeper from an answer), skip
+the easing offer and run **From an answer** below instead of step 1's proposal.
 
 Also note, for the focus: `learner.eased_layers`, the layers easing lessons worked on. Step 1's
 second call sends them as `eased_layers`. Never read the record file yourself.
@@ -175,6 +182,12 @@ When they say yes, run the review; its first call is this one, already made. Whe
    handle sideways along the bottom to make it longer, and shorten the start key's." Never say
    where the peak will move. Step 5's first sentence ends this same turn; no turn ends between
    steps 3 and 5.
+
+   **Where the motion comes from** (rule 1): read `motion_from` for the focus layer (it's there
+   only on newer reads). When it lists a parent that moves the layer or an expression of its own,
+   say so in one sentence before the idea, naming that layer or property, and that shaping this
+   layer's own keys won't change that part; then teach on its keys. When it lists neither, or isn't
+   there, say nothing about it.
 
 4. **I do: one demonstration, only when asked or clearly stuck.** Call `speed_graph_demo` with
    the `demo_target` from the latest `speed_graph_snapshot`. Then call `preview_frame` early in
@@ -323,10 +336,33 @@ Call `record_lesson` once per lesson or review:
   second move was still the default shape at the first check, then passed" is enough.
 - `next`: one concrete thing ("Shape Subtitle Position, or try a review on a new move").
 
-If it returns `UNSAFE_RECORD`, rewrite without the personal detail and try again. If it returns
-`RECORD_MISMATCH`, fix the field it names and record again, without mentioning it. A short "I've
-noted that for next time" is enough.
+Write only what a check saw or the learner told you: a layer no check reported as changed is never
+the learner's change in `attempted`, `summary` or `next`. On any refusal, fix what it names and
+save again, without mentioning it. A short "I've noted that for next time" is enough.
 Name what comes next in words, never a slash command.
+
+## From an answer
+
+The learner asked a question, got steps, and said yes to going deeper on one of them. They're still
+in the same conversation, so you have their words and the answer; the snapshot's `hand_in` gives
+the layer, the step's number and the steps after it. Everything in the lesson above still holds
+(one demonstration, hints not fixes, the check, the record), with these changes:
+
+1. **The opening skips the intent question and the proposal.** The reply's `focus` is the answer's
+   layer: make step 1's second call as usual (the focus stays) and propose nothing. Open as a
+   continued lesson, in one sentence, with their goal in their words, then step 2 on it. No memory
+   clause and no list of layers.
+   - `hand_in.keyed` false: one sentence that the layer has no keys this lesson can work on, then
+     what the answer's step still lets them do on their own, and stop.
+   - `hand_in` with no layer (a how-to): open as a first lesson.
+   - `mode_source` hand_in_lost: one sentence that you couldn't find that layer in this comp now,
+     then open as a first lesson.
+2. **Already learned** (`practice` true in `hand_in`): it's practice, so never call it a review,
+   and a check that doesn't pass says what's still off and where, with no fail words.
+3. **Last, after `record_lesson` (or `end_lesson` on a stop):** its reply's `hand_back` gives the
+   step and the next one. End the lesson on one line, "That was step [n]; next is [step n+1].", with
+   `next_step`'s text, or "That was the last step." when it's null. Nothing after it; no slash
+   command.
 
 ## Stopping early
 

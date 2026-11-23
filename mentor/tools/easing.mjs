@@ -7,8 +7,12 @@ import { diff } from "../lib/diff.mjs";
 import { demoLayer } from "../lib/demo-layer.mjs";
 import { isKeptLinear } from "../lib/marks.mjs";
 import * as session from "../lib/session.mjs";
+import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { json } from "../lib/reply.mjs";
+import { peekRecord } from "../lib/learner-store.mjs";
+import { carriedFocus, handInSlice, noKeysReply, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
+import { layerInfo } from "../lib/layer-info.mjs";
 
 export const SKILLS = ["easing.basic"];
 
@@ -25,12 +29,55 @@ export const FINDERS = {
       return { count: pairs.length, layers: [...new Set(pairs.map((s) => s.layer.name))] };
     },
     review: false,
+    // Spec 014 K6 (R13, phase 3): a lesson can open from an answer's hand-in; skill_command is its
+    // skill folder, for the ask's Skill call.
+    hand_in: true,
+    skill_command: "ease-mentor",
   },
 };
 
+const SKILL = "easing.basic";
+
+// Spec 014 K6: easing has no opening read (no review), so its snapshot takes the hand-in itself, the
+// same way opening() does for the others: once, for this comp, within the session window. A hand-in
+// sets the focus to its layer when that layer has keys and the call names none.
+function takeHandIn(snapshot) {
+  const h = session.takeHandIn(SKILL, snapshot.comp.id);
+  if (!h) return null;
+  const info = layerInfo(snapshot);
+  const list = info.known ? info.layers : snapshot.layers || [];
+  const lost = h.layer !== null && h.layer !== undefined && !list.some((l) => l && l.name === h.layer);
+  return { h, lost };
+}
+
 async function snapshotProject({ focus_layers } = {}) {
   const snapshot = await takeSnapshot();
-  const { lesson, analysis } = session.start(snapshot, { focus_layers });
+  const taken = takeHandIn(snapshot);
+  const opts = { focus_layers };
+  let extra = {};
+  if (taken) {
+    const kept = lessonHandIn(taken.h);
+    const keyed = !taken.lost && kept.layer ? keyedLayer(snapshot, kept.layer) : undefined;
+    if (keyed && !(focus_layers && focus_layers.length)) opts.focus_layers = [kept.layer];
+    opts.hand_in = keyed ? { ...kept, focus_layers: [kept.layer] } : kept;
+    const record = peekRecord();
+    const learner = { status: record && record.skills && record.skills[SKILL] ? record.skills[SKILL].status : "not_started" };
+    extra = { mode_source: taken.lost ? "hand_in_lost" : "hand_in", hand_in: handInSlice(taken.h, learner, keyed === undefined ? {} : { keyed }) };
+    if (keyed === false) return json(noKeysReply(snapshot, extra));
+  }
+  if (!taken && !(focus_layers && focus_layers.length)) {
+    const carried = carriedFocus(session, SKILL, snapshot);
+    if (carried) opts.focus_layers = carried;
+  }
+  const { lesson, analysis, session: s } = session.start(snapshot, opts);
+  // A continued lesson opened from a hand-in still carries its slice (for the hand-back line).
+  if (!taken && s.hand_in) {
+    const record = peekRecord();
+    extra = { hand_in: handInSlice(s.hand_in, { status: record && record.skills && record.skills[SKILL] ? record.skills[SKILL].status : "not_started" }) };
+  }
+  // Spec 015 FR-015 (K3), spec 014 FR-033: where each focus and finding layer's motion comes from,
+  // only on a read with R2.
+  const mf = motionFromFor(s.baseline, layerNames(analysis.focus, analysis.findings));
   return json({
     lesson,
     project: snapshot.project,
@@ -44,6 +91,8 @@ async function snapshotProject({ focus_layers } = {}) {
     demo_target: analysis.demo_target,
     no_demo_reason: analysis.no_demo_reason,
     counts: analysis.counts,
+    ...(mf ? { motion_from: mf } : {}),
+    ...extra,
   });
 }
 
@@ -65,7 +114,7 @@ async function diffSinceLast() {
   const lesson = session.currentLesson();
   const current = await takeSnapshot();
   const result = diff(lesson.baseline, current, lesson);
-  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone });
+  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
   return json(result);
 }
 

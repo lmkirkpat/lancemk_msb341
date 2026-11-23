@@ -55,6 +55,8 @@ most; they ease the rest with their own hands.
    `last_practiced`.
 
 1. **Look.** Call `snapshot_project` with no focus.
+   If its reply has `mode_source` hand_in or hand_in_lost (the learner said yes to going deeper from an
+   answer), run **From an answer** below instead of steps 2 and 3.
 
 2. **Open with a short summary, then propose a focus.** Keep it to a few sentences:
    - How many linear pairs you found and on how many layers. Count layers only from the layers
@@ -106,6 +108,12 @@ most; they ease the rest with their own hands.
    Ease** (F9); the diamonds turn into hourglasses." No bolded "How to…" heading or block: the
    how-to is that one sentence in the paragraph. Step 5 ends this same turn; no turn ends between
    them.
+
+   **Where the motion comes from** (rule 1): read `motion_from` for the focus layer (it's there
+   only on newer reads). When it lists a parent that moves the layer or an expression of its own,
+   say so in one sentence before the idea, naming that layer or property, and that easing this
+   layer's own keys won't change that part; then teach on its keys. When it lists neither, or isn't
+   there, say nothing about it.
 
    If the skill is `learned`, shorten this to a one-line reminder and a frame. Spend the time on
    what's new about this focus instead (a nested property, separated dimensions, an effect).
@@ -242,11 +250,32 @@ most; they ease the rest with their own hands.
     - `next`: one concrete thing for next time ("Try Bar: separated X Position and Trim Paths
       End").
 
-    If it returns `UNSAFE_RECORD`, rewrite the text without the personal detail and try again.
-    If it returns `RECORD_MISMATCH`, your `result` or `demo_used` didn't match the checks. Fix
-    the field it names and record again, without mentioning it to the learner.
-    You don't need to announce the save. A short "I've noted that for next time" is enough.
+    Write only what a check saw or the learner told you: a layer no check reported as changed is
+    never the learner's change in `attempted`, `summary` or `next`. On any refusal, fix what it
+    names and save again, without mentioning it. A short "I've noted that for next time" is enough.
     Name what comes next in words, never a slash command.
+
+## From an answer
+
+The learner asked a question, got steps, and said yes to going deeper on one of them. They're still
+in the same conversation, so you have their words and the answer; the snapshot's `hand_in` gives
+the layer, the step's number and the steps after it. Everything in the lesson above still holds
+(one demonstration, hints not fixes, the check, the record), with these changes:
+
+1. **The opening skips the intent question and the proposal.** The reply's `focus` is the answer's
+   layer, already set. Open as a continued lesson, in one sentence, with their goal in their words,
+   then step 4 on it. No memory clause and no list of layers.
+   - `hand_in.keyed` false: one sentence that the layer has no keys this lesson can work on, then
+     what the answer's step still lets them do on their own, and stop.
+   - `hand_in` with no layer (a how-to): open as a first lesson.
+   - `mode_source` hand_in_lost: one sentence that you couldn't find that layer in this comp now,
+     then open as a first lesson.
+2. **Already learned** (`practice` true in `hand_in`): it's practice, so never call it a review,
+   and a check that doesn't pass says what's still off and where, with no fail words.
+3. **Last, after `record_lesson` (or `end_lesson` on a stop):** its reply's `hand_back` gives the
+   step and the next one. End the lesson on one line, "That was step [n]; next is [step n+1].", with
+   `next_step`'s text, or "That was the last step." when it's null. Nothing after it; no slash
+   command.
 
 ## Stopping early
 

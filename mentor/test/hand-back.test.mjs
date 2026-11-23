@@ -32,6 +32,7 @@ const td16 = (pivotStep = 3) => {
     explanation: "In Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- All three hits are the same size.\n- Rotation moves the rock about 9 px at most, near 2.6 s.",
     steps, offered_skills: ["transform.anchor"],
     closing_offer: `Try them, or want to go deeper on step ${pivotStep} with *Set the pivot*?`,
+    goal: "a shake that turns from where it's hit",
   };
 };
 const record = (over = {}) => ({ skill: "transform.anchor", project: "Comp 1.aep", comp: "Comp 1", attempted: "Set Shake Control's pivot where the hits land", result: "partial", demo_used: false, summary: "Tried once; the pivot hadn't moved yet.", next: "Set the null's pivot without its layers moving", ...over });

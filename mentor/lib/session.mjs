@@ -311,8 +311,21 @@ export function recordDemo(targetId) {
 }
 
 // demoUndone: the check saw the demo pair needing ease again. From then on it's the learner's pair.
-export function markChecked(passed, { demoUndone = false } = {}) {
+// attributed (spec 014 K5, research R9): the changes this check reported, [{ layer, property }], added
+// to the lesson's `attributed` list with the time, for record_lesson's guard. A lesson without any
+// keeps no list, so its session data is as before.
+export function markChecked(passed, { demoUndone = false, attributed = [] } = {}) {
   return updateCurrent((lesson) => {
+    if (Array.isArray(attributed) && attributed.length) {
+      const at = new Date().toISOString();
+      const list = Array.isArray(lesson.attributed) ? lesson.attributed : [];
+      for (const a of attributed) {
+        if (!a || typeof a.layer !== "string") continue;
+        const property = typeof a.property === "string" ? a.property : null;
+        if (!list.some((x) => x.layer === a.layer && x.property === property)) list.push({ layer: a.layer, property, at });
+      }
+      lesson.attributed = list;
+    }
     lesson.status = "checked";
     lesson.checked = true; // stays true after a later demo, unlike status
     // A saved pass stays a pass: a later check answers a question, it doesn't reopen the lesson.
@@ -404,7 +417,8 @@ export function reviewOffers() {
 // stays until the window lapses (FR-032's test, phase 3). `entry_date` links the asked entry in the
 // record (phase 3); null until then. An unreadable file behaves as for every other reader here:
 // it's set aside and SESSION_UNREADABLE is thrown, and the next call starts fresh.
-const ASK_FIELDS = ["comp_id", "project", "comp", "kind", "steps", "offered_skills", "goal"];
+// `explanation` (T081): kept only so give_answer can tell a repeated no-step answer from a new one.
+const ASK_FIELDS = ["comp_id", "project", "comp", "kind", "steps", "offered_skills", "goal", "explanation"];
 const inWindow = (iso, now) => typeof iso === "string" && Date.parse(iso) >= windowStart(now);
 
 export function saveAnswer(answer, { now = Date.now() } = {}) {

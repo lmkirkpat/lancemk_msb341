@@ -49,12 +49,17 @@ at most; they stagger the rest with their own hands.
 - **Never say the group is everything that moves.** The read only sees keys: something driven by
   an expression with no keys is invisible to it. Name the group; don't call it the whole comp.
 - **Nothing about parents.** Don't mention parenting or say that layers attached to something no
-  longer move together on screen. The check reads each layer's own keys only.
+  longer move together on screen. The check reads each layer's own keys only. Rule 1's one sentence
+  (step 2) is the only exception.
 - **No keyboard shortcuts** for moving keys or layers (nudges need different keys on different
   Mac keyboards). Describe the drag. Quick Offset (below) is a drag with keys held, not a nudge,
   and it has its own rule.
 - **Don't teach Sequence Layers** (Animation > Keyframe Assistant). If the learner uses it, the
   check reads it like any other method.
+
+- **A session that started with a question stays a lesson.** When the learner asked about their own
+  comp before this lesson, don't offer a review; the snapshot opens a lesson then, and you go on from
+  it.
 
 ## Where things are (After Effects 26.5)
 
@@ -98,6 +103,8 @@ start.
      returns `server_current` false, say once, in plain words, that your tools were updated since
      this session started and you need a restart (a new Claude Code session) before the lesson,
      then stop; true or null says nothing.
+   - **`mode_source` is hand_in or hand_in_lost** (the learner said yes to going deeper from an
+     answer): run **From an answer** below instead of step 1.
    - If `learner.error` is there, your notes couldn't be read: say once, in the error's words, that
      you couldn't read your notes, and teach a first lesson. That one sentence is all you say about
      your notes in this lesson.
@@ -154,6 +161,12 @@ start.
    idea in one sentence: "When everything moves at once, nothing leads the eye." Then step 3's
    question as the turn's last sentence. Step 3's rules (the `skill_options` calls,
    `order_unmatched`, `refused_members`) run on the learner's answer, in the next turn.
+
+   **Where the motion comes from** (rule 1): read `motion_from` for the focus layer (it's there
+   only on newer reads). When it lists a parent that moves the layer or an expression of its own,
+   say so in one sentence before the idea, naming that layer or property, and that shifting this
+   layer's own keys won't change that part; then teach on its keys. When it lists neither, or isn't
+   there, say nothing about it.
 
    **When the turn after the opening has nothing to ask** (they gave order and gap with their
    choice, or `stored_choices` was true and they confirmed it, since step 1's confirm was the
@@ -331,10 +344,33 @@ start.
       pass, never a fault the check didn't report. End it at the thing itself: "Stagger the
       properties within a single layer.", not "... so that no two start or land together."
 
-    If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
-    `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short
-    "I've noted that for next time" is enough.
+    Write only what a check saw or the learner told you: a layer no check reported as changed is
+    never the learner's change in `attempted`, `summary` or `next`. On any refusal, fix what it
+    names and save again, without mentioning it. A short "I've noted that for next time" is enough.
     Name what comes next in words, never a slash command.
+
+## From an answer
+
+The learner asked a question, got steps, and said yes to going deeper on one of them. They're still
+in the same conversation, so you have their words and the answer; the snapshot's `hand_in` gives
+the layer, the step's number and the steps after it. Everything in the lesson above still holds
+(one demonstration, hints not fixes, the check, the record), with these changes:
+
+1. **The opening skips the intent question and the proposal.** The reply's group is the answer's
+   layer and any other layer its step names. Open as a continued lesson, in one sentence, with their
+   goal in their words, then step 2 on it, with step 3 asking only what the answer's step didn't
+   already say (which goes first, how far apart). No memory clause and no list of layers.
+   - `hand_in.keyed` false: one sentence that the layer has no keys this lesson can work on, then
+     what the answer's step still lets them do on their own, and stop.
+   - `hand_in` with no layer (a how-to): open as a first lesson.
+   - `mode_source` hand_in_lost: one sentence that you couldn't find that layer in this comp now,
+     then open as a first lesson.
+2. **Already learned** (`practice` true in `hand_in`): it's practice, so never call it a review,
+   and a check that doesn't pass says what's still off and where, with no fail words.
+3. **Last, after `record_lesson` (or `end_lesson` on a stop):** its reply's `hand_back` gives the
+   step and the next one. End the lesson on one line, "That was step [n]; next is [step n+1].", with
+   `next_step`'s text, or "That was the last step." when it's null. Nothing after it; no slash
+   command.
 
 ## The review
 

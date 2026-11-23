@@ -9,6 +9,8 @@ import { runSnippet } from "../bridge-client.mjs";
 import * as session from "../lib/session.mjs";
 import * as learner from "../lib/learner-store.mjs";
 import * as reviews from "../lib/reviews.mjs";
+import { markRaised } from "../lib/asked-record.mjs";
+import { unattributed } from "../lib/attributed.mjs";
 import { readPath, skillName } from "../lib/path.mjs";
 import { recommend } from "../lib/recommend.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
@@ -21,6 +23,8 @@ import { MentorError, registerErrors } from "../errors.mjs";
 
 // Spec 015 FR-020 (OQ-7): the record never holds text copied from the learner's expressions.
 registerErrors({
+  // Spec 014 K5 (data-model § 8): not for the learner; the mentor rewrites and saves again.
+  RECORD_UNATTRIBUTED: "The record says the learner changed a layer no check saw them change. Rewrite that sentence so it says only what a check saw or they said, keep everything else, and save again.",
   RECORD_HAS_EXPRESSION: "The learner record can't hold text copied from the project's expressions. Say what happened in your own words, then save again.",
 });
 
@@ -147,7 +151,9 @@ async function previewFrame({ time, layer } = {}) {
 // skill comes back with its review fields worked out (spec 004 FR-023: older records have none) and
 // whether a review is due today, so the mentor never does date arithmetic. Reading never writes.
 async function readLearnerRecord() {
-  const record = learner.readRecord();
+  // Spec 014 FR-041, FR-043: asked entries are for scheduling and recommend_next only, never something
+  // the mentor reads back to the learner, so this reply leaves them out (a record without any is as before).
+  const { asked: _asked, ...record } = learner.readRecord();
   const now = new Date();
   const skills = {};
   for (const [id, s] of Object.entries(record.skills)) skills[id] = { ...reviews.withReviewFields(s), review_is_due: reviews.isDue(s, now) };
@@ -230,6 +236,14 @@ async function recommendNext({ requested_skill } = {}, { skills, finders }) {
       // Remembering the offer is best effort; the recommendation still stands.
     }
   }
+  // Spec 014 FR-042: the asked entry this raised, marked once (best effort; the suggestion stands).
+  if (result.raised_entry) {
+    try {
+      markRaised(result.raised_entry);
+    } catch {
+      // A record that can't take it keeps the entry raisable; the suggestion still stands.
+    }
+  }
   return json(result);
 }
 
@@ -261,6 +275,14 @@ export function commonTools(options) {
     const copied = lesson ? ["attempted", "summary", "next"].filter((f) => copiesExpression(entry[f], lesson.baseline)) : [];
     // OQ-9: the server logs this call without these fields' values (calls.jsonl).
     if (copied.length) throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: copied });
+    // K5 (FR-036, research R9): a summary or next that says a layer changed must be about a layer the
+    // lesson's checks attributed, or the lesson's own targets and focus.
+    if (lesson) {
+      const own = [...(Array.isArray(lesson.target_refs) ? lesson.target_refs.map((r) => r && r.layer) : []), ...(Array.isArray(lesson.focus) ? lesson.focus : [])]
+        .filter((n) => typeof n === "string");
+      const ctx = { snapshot: lesson.baseline, attributed: Array.isArray(lesson.attributed) ? lesson.attributed : [], own };
+      if (["attempted", "summary", "next"].some((f) => unattributed(entry[f], ctx).length)) throw new MentorError("RECORD_UNATTRIBUTED");
+    }
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     if (lesson && entry.result === "passed") session.markPassSaved();
     if (lesson) session.markRecorded(); // spec 014 T106: end_lesson then ends it without a second record

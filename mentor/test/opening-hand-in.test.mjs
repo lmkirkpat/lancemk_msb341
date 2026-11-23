@@ -81,7 +81,8 @@ test("lapsed after the session window", () => {
 
 test("a skill whose finder doesn't take a hand-in never takes one, even its own", () => {
   handIn({ skill: "keyframes.types" });
-  const r = opening({ skill: "keyframes.types", snapshot: SNAP, finder: FINDERS["keyframes.types"], now: NOW });
+  // Phase 3: all six take one, so a finder without the flag stands in.
+  const r = opening({ skill: "keyframes.types", snapshot: SNAP, finder: { ...FINDERS["keyframes.types"], hand_in: false }, now: NOW });
   assert.notEqual(r.mode_source, "hand_in");
   assert.equal(session.peekHandIn().used, false);
 });
@@ -124,4 +125,33 @@ test("with no hand-in, opening() writes nothing to session.json", () => {
   fs.rmSync(LEARNER);
   open();
   assert.equal(fs.existsSync(SESSION), false);
+});
+
+// ---- Spec 014 T072 (FR-032, research R6, rule 5): no due review opens a session started with a question.
+
+const ask = (at) => session.saveAnswer({ comp_id: COMP_ID, project: SNAP.project, comp: SNAP.comp.name, kind: "answer", steps: [], offered_skills: [], goal: "g" }, { now: at });
+
+test("T072: an ask in this session window: the due review isn't the opening; a lesson, and no review offer remembered", () => {
+  ask(NOW.getTime() - HOUR);
+  const r = open();
+  assert.equal(r.mode, "lesson");
+  assert.equal(r.mode_source, "default");
+  assert.equal(session.reviewOffers().length, 0);
+});
+
+test("T072: a describe or how-to counts as an ask too (any answer started the session)", () => {
+  session.saveAnswer({ comp_id: null, project: null, comp: null, kind: "howto", steps: [], offered_skills: [], goal: null }, { now: NOW.getTime() - HOUR });
+  assert.equal(open().mode_source, "default");
+});
+
+test("T072: an ask before the window doesn't hold the review back", () => {
+  ask(NOW.getTime() - 4 * HOUR);
+  assert.equal(open().mode_source, "review_due");
+});
+
+test("T072: the learner can still ask for the review, and a hand-in still comes first", () => {
+  ask(NOW.getTime() - HOUR);
+  assert.equal(open({ mode: "review" }).mode, "review");
+  handIn();
+  assert.equal(open().mode_source, "hand_in");
 });

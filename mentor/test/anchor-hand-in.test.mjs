@@ -194,6 +194,7 @@ const td16 = () => ({
   ],
   offered_skills: ["transform.anchor"],
   closing_offer: "Try them, or want to go deeper on step 3 with *Set the pivot*?",
+  goal: "a shake that turns from where it's hit",
 });
 
 beforeEach(() => {

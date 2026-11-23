@@ -10,9 +10,11 @@ import { analyze, check, demoRefusal, finder, refused, SKILL, transformFirst } f
 import { matchLayer } from "../lib/offset-keys.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
+import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
+import { carriedFocus, handInSlice, noKeysReply, keyedLayer, layerNames, lessonHandIn, motionFromFor, otherLayersNamed } from "../lib/hand-in-lesson.mjs";
 
 export const SKILLS = [SKILL];
 
@@ -25,6 +27,9 @@ export const FINDERS = {
       return finder(snapshot, { exclude });
     },
     review: true,
+    // Spec 014 K6 (R13, phase 3): a lesson can open from an answer's hand-in.
+    hand_in: true,
+    skill_command: "offset-mentor",
   },
 };
 
@@ -41,16 +46,29 @@ async function offsetSnapshot({ mode: asked, focus_layers, skill_options } = {})
   // FR-048: without a mode, the tool picks lesson or review (spec 004 › The opening read).
   const open = opening({ skill: SKILL, mode: asked, snapshot, finder: FINDERS[SKILL] });
   const mode = open.mode;
+  // K6: a hand-in opens a new lesson on its layer and any other layer its step names (the group).
+  const taken = open.mode_source === "hand_in" && open.hand_in && open.hand_in.layer ? open.hand_in : null;
+  const keyed = taken ? keyedLayer(snapshot, taken.layer) : undefined;
+  if (taken && keyed === false) {
+    return json(noKeysReply(snapshot, { mode: "lesson", mode_source: open.mode_source, learner: open.learner, hand_in: handInSlice(taken, open.learner, { keyed }) }));
+  }
+  const named = focus_layers && focus_layers.length;
+  if (taken && keyed && !named) focus_layers = [taken.layer, ...otherLayersNamed(snapshot, taken)];
+  else if (!taken && !named) focus_layers = carriedFocus(session, SKILL, snapshot, mode) || focus_layers;
   const opts = { skill: SKILL, analyze, mode };
   if (focus_layers) opts.focus_layers = focus_layers;
   if (skill_options !== undefined) opts.skill_options = skill_options;
+  if (taken) opts.hand_in = taken && keyed ? { ...lessonHandIn(taken), focus_layers: [...focus_layers] } : lessonHandIn(taken);
   const { lesson, session: s, analysis, stored_choices } = session.start(snapshot, opts);
+  const handInFields = s.hand_in ? { hand_in: handInSlice(s.hand_in, open.learner, taken ? { keyed } : {}) }
+    : open.hand_in ? { hand_in: handInSlice(open.hand_in, open.learner) } : {};
 
   // The group and the learner's choices are read on the lesson's baseline, which the targets come
   // from, so a continued lesson still describes the group as it was before the learner moved it.
   const base = lesson === "new" ? analysis : analyze(s.baseline, { focus_layers, exclude: s.exclude || [], skill_options: s.skill_options || {} });
   const fps = s.baseline.comp.frame_rate;
   const host = parseHost(snapshot);
+  const mf = motionFromFor(s.baseline, layerNames(s.focus, base.group ? base.group.members : [], base.other_group ? base.other_group.members : []));
   return json({
     lesson,
     mode: s.mode,
@@ -79,6 +97,8 @@ async function offsetSnapshot({ mode: asked, focus_layers, skill_options } = {})
     ...(base.gap_frames != null ? { floor_check: { gap_frames: base.gap_frames, gap_seconds: r3(base.gap_frames / fps), gap_under_floor: base.gap_under_floor } } : {}),
     server_current: await serverCurrent(), // FR-044
     stored_choices, // FR-043, FR-046
+    ...(mf ? { motion_from: mf } : {}), // spec 015 FR-015, spec 014 FR-033: only on a read with R2
+    ...handInFields,
   });
 }
 
@@ -145,7 +165,7 @@ async function offsetCheck({ split } = {}) {
   const lesson = ownLesson();
   const current = await takeSnapshot();
   const result = check(lesson.baseline, current, lesson, { split: split || [] });
-  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone });
+  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
   return json(result);
 }
 

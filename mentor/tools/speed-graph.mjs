@@ -9,9 +9,11 @@ import { parseSegmentId } from "../lib/analyze.mjs";
 import { parseHost } from "../lib/host.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
+import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
+import { carriedFocus, handInSlice, noKeysReply, keyedLayer, layerNames, lessonHandIn, motionFromFor } from "../lib/hand-in-lesson.mjs";
 import { DEMO_IN, DEMO_OUT, analyze, check, finder, pairsFor } from "../lib/speed-graph.mjs";
 
 const SKILL = "easing.speed_graph";
@@ -25,6 +27,9 @@ export const FINDERS = {
       return finder(snapshot, { exclude, kept_linear });
     },
     review: true,
+    // Spec 014 K6 (R13, phase 3): a lesson can open from an answer's hand-in.
+    hand_in: true,
+    skill_command: "speed-graph-mentor",
   },
 };
 
@@ -95,15 +100,27 @@ async function speedGraphSnapshot({ focus_layers, mode: asked, skill_options } =
     const o = so && typeof so === "object" ? so : {};
     return Array.isArray(o.eased_layers) && o.eased_layers.length ? o : { ...o, eased_layers: eased };
   };
+  // K6: a hand-in opens a new lesson on its layer (contracts/hand-in.md › Per skill).
+  const taken = open.mode_source === "hand_in" && open.hand_in && open.hand_in.layer ? open.hand_in : null;
+  const keyed = taken ? keyedLayer(snapshot, taken.layer) : undefined;
+  if (taken && keyed === false) {
+    return json(noKeysReply(snapshot, { mode: "lesson", mode_source: open.mode_source, learner: { ...open.learner, eased_layers: eased }, hand_in: handInSlice(taken, open.learner, { keyed }) }));
+  }
   const opts = {
     skill: SKILL,
     // The session doesn't pass the mode to the analyzer; a review picks one or two pairs (FR-021).
     analyze: (snap, o) => analyze(snap, { ...o, skill_options: withEased(o.skill_options), mode }),
-    focus_layers,
+    focus_layers: focus_layers && focus_layers.length ? focus_layers
+      : taken ? (keyed ? [taken.layer] : focus_layers)
+        : carriedFocus(session, SKILL, snapshot, mode) || focus_layers,
     mode,
   };
   if (skill_options !== undefined) opts.skill_options = cleanOptions(skill_options);
+  if (taken) opts.hand_in = keyed ? { ...lessonHandIn(taken), focus_layers: [taken.layer] } : lessonHandIn(taken);
   const { lesson, session: l, analysis, stored_choices } = session.start(snapshot, opts);
+  const handInFields = l.hand_in ? { hand_in: handInSlice(l.hand_in, open.learner, taken ? { keyed } : {}) }
+    : open.hand_in ? { hand_in: handInSlice(open.hand_in, open.learner) } : {};
+  const mf = motionFromFor(l.baseline, layerNames(analysis.focus, analysis.pairs, analysis.other_candidates));
   const noDemoReason = analysis.demo_target ? null : l.demo ? "demo_used" : analysis.no_demo_reason;
   return json({
     host: parseHost(snapshot),
@@ -126,6 +143,8 @@ async function speedGraphSnapshot({ focus_layers, mode: asked, skill_options } =
     other_candidates: analysis.other_candidates,
     server_current: await serverCurrent(), // FR-044
     stored_choices, // FR-043, FR-046
+    ...(mf ? { motion_from: mf } : {}), // spec 015 FR-015, spec 014 FR-033: only on a read with R2
+    ...handInFields,
   });
 }
 
@@ -157,7 +176,7 @@ async function speedGraphCheck({ seen_shaped = [] } = {}) {
   const lesson = ownLesson();
   const current = await takeSnapshot();
   const result = check(lesson.baseline, current, lesson, { seen_shaped });
-  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone });
+  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
   return json(result);
 }
 

@@ -122,9 +122,12 @@ test("NO_ANSWER: no answer in the session, or one from before the window", async
   await refuses({ skill: "transform.anchor" }, "NO_ANSWER");
 });
 
-test("NOT_OFFERED: a skill the answer didn't offer, a step's tag that wasn't offered, not-taught, or a name that isn't a skill", async () => {
+test("NOT_OFFERED: a skill neither offered nor on a step, not-taught, or a name that isn't a skill; a step's tag that wasn't offered is accepted (T081, turn 4's offer)", async () => {
   await callGive({ ...td16(), offered_skills: [], closing_offer: "Try them?" });
-  await refuses({ skill: "transform.anchor", step: 3 }, "NOT_OFFERED");
+  const r = await call({ skill: "transform.anchor", step: 3 });
+  assert.equal(r.command_skill, "anchor-mentor");
+  assert.equal(onDisk().hand_in.step_number, 3);
+  fs.rmSync(path.join(home, "session.json"));
   await callGive(td16());
   await refuses({ skill: "parenting.null" }, "NOT_OFFERED");
   await refuses({ skill: "not_taught" }, "NOT_OFFERED");
@@ -133,9 +136,16 @@ test("NOT_OFFERED: a skill the answer didn't offer, a step's tag that wasn't off
 });
 
 test("OFFER_NOT_READY: an offer saved for a lesson that can't take a hand-in (saved on B1, say) is refused on A", async () => {
-  session.saveAnswer({ comp_id: 1, project: "p", comp: "Comp 1", kind: "howto", steps: [], offered_skills: ["easing.speed_graph"], goal: null });
-  await refuses({ skill: "easing.speed_graph" }, "OFFER_NOT_READY");
-  assert.equal(onDisk().hand_in, undefined);
+  // Phase 3: all six take one (R13), so the guard is shown with one finder's flag turned off.
+  const { FINDERS } = await import("../tools/index.mjs");
+  FINDERS["easing.speed_graph"].hand_in = false;
+  try {
+    session.saveAnswer({ comp_id: 1, project: "p", comp: "Comp 1", kind: "howto", steps: [], offered_skills: ["easing.speed_graph"], goal: null });
+    await refuses({ skill: "easing.speed_graph" }, "OFFER_NOT_READY");
+    assert.equal(onDisk().hand_in, undefined);
+  } finally {
+    FINDERS["easing.speed_graph"].hand_in = true;
+  }
 });
 
 test("a how-to's yes hands in no layer and no step (PQ-4)", async () => {
@@ -181,15 +191,19 @@ test("practice: true when the record has the skill learned (FR-023); an unreadab
   assert.equal(r.missing_prerequisite, null);
 });
 
-test("read-only: no fixture edit, and no learner record write", async () => {
+test("read-only: no fixture edit; the record gains only the answer's asked entry, marked went deeper (phase 3)", async () => {
   await callGive(td16());
   await call({ skill: "transform.anchor" });
   assert.equal(fs.existsSync(EDITS), false);
-  assert.equal(fs.existsSync(LEARNER), false);
+  const rec = JSON.parse(fs.readFileSync(LEARNER, "utf8"));
+  assert.deepEqual(rec.skills, {});
+  assert.deepEqual(rec.lessons, []);
+  assert.equal(rec.asked.length, 1);
+  assert.equal(rec.asked[0].went_deeper, "transform.anchor");
 });
 
 test("the refusal messages are data-model § 8's, with no field names", () => {
-  assert.equal(MESSAGES.NOT_OFFERED, "Only a skill the last answer offered can start from it.");
+  assert.equal(MESSAGES.NOT_OFFERED, "Only a skill the last answer offered, or one its steps are tagged with, can start from it.");
   assert.equal(MESSAGES.NOT_ON_THIS_RUNTIME, "The lesson can't start from here. Say so in one sentence and name where to start it.");
   assert.equal(MESSAGES.NO_ANSWER, "There's no answer in this session yet.");
   for (const code of ["NOT_OFFERED", "NOT_ON_THIS_RUNTIME", "NO_ANSWER", "WRONG_STEP", "OFFER_NOT_READY", "ROUTE_TO_PIVOT"]) {

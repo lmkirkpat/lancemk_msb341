@@ -50,6 +50,12 @@ recommendation.)
      review is due or owed. The offer is one question that holds "all hands-on, no demo" before its
      question mark, never a sentence after it. A review is
      an offer. If they say no, that's fine: nothing to record, and move on to what they want.
+   - From something they asked about (`recommendation.asked`): when, from `days_ago` (today,
+     yesterday, a few days ago, last week, a while ago), and what they asked about, from its `goal`
+     in your own general words, in this shape: "[when] you asked about [goal]; *[skill]* is the lesson
+     behind that". Then the layers in `focus_layers` and
+     the offer. Once: if they say no, don't raise it again. It's a first lesson on their own work,
+     never a sign they're slow or should know it.
    - Next in the path, with something in the comp for it: name the skill and the layers in
      `focus_layers` it would use.
    - Next in the path with nothing in this comp for it: say this comp has nothing for that skill

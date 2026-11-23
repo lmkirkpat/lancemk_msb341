@@ -91,6 +91,10 @@ const ACTIONS = [
 ];
 
 // Expression code in prose: the language's own words and calls (review S4).
+// note_said's text (T081 review, FR-045): the same no-code test as an answer's shown text, for text
+// with no read beside it: no backtick, no expression code, no skill ID or other underscore name.
+export const hasCode = (t, ids = []) => typeof t === "string" && (t.includes("`") || CODE.test(t) || ids.some((id) => t.includes(id)) || /\b[A-Za-z]+_[A-Za-z_]+\b/.test(t));
+
 const CODE = /\bthis(?:Comp|Layer|Property)\b|\bvalue\s*[+*\/-]|\btime\s*[*\/+-]\s*[\d(]|\b(?:Math\.\w+|wiggle|loopOut|loopIn|loopOutDuration|loopInDuration|valueAtTime|velocityAtTime|linear|ease|easeIn|easeOut|seedRandom|random|clamp|toComp|fromComp|length|degreesToRadians)\s*\(/;
 const isStr = (v) => typeof v === "string";
 const isObj = (v) => !!v && typeof v === "object" && !Array.isArray(v);

@@ -13,6 +13,9 @@
 // due (FR-023). Only for a skill whose finder takes one (hand_in: true). It's taken once: its layer
 // gone from the comp gives hand_in_lost, still a lesson. A `mode: "lesson"` from the call takes it
 // too (both say lesson); `mode: "review"` leaves it for later.
+//
+// Phase 3 (FR-032): step 3, the due review, is skipped when an ask started in the session window. The
+// learner can still ask for a review (`mode: "review"`, step 1).
 
 import { MentorError, MESSAGES } from "../errors.mjs";
 import { readRecord } from "./learner-store.mjs";
@@ -107,7 +110,9 @@ export function opening({ skill, mode, snapshot, fresh = false, finder, now = ne
   if (handIn) return { ...done("lesson", hasLayer(snapshot, handIn.layer) ? "hand_in" : "hand_in_lost"), hand_in: handIn };
   if (mode === "lesson") return done(mode, "asked");
   if (MODES.includes(carried)) return done(carried, "in_progress");
-  if (record) {
+  // Spec 014 FR-032 (research R6, rule 5): no due review opens a session the learner started with a
+  // question: once an ask is in this session window, the review waits for another session.
+  if (record && !session.askStartedAt({ now: now.getTime() })) {
     const offers = session.reviewOffers();
     if (reviewFor({ skill, record, finders: { [skill]: finder }, snapshot, now, offers })) {
       // Remembered as recommend_next remembers its offers, so FR-020's one review per session holds

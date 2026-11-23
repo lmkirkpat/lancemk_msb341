@@ -9,10 +9,12 @@ import { parseHost } from "../lib/host.mjs";
 import { demoLayer } from "../lib/demo-layer.mjs";
 import { analyze, check, describePairs, finder, grade } from "../lib/key-types.mjs";
 import * as session from "../lib/session.mjs";
+import { attributedFrom } from "../lib/attributed.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { json } from "../lib/reply.mjs";
 import { opening } from "../lib/opening.mjs";
+import { handInSlice, keyedLayer, noKeysReply, layerNames, lessonHandIn, motionFromFor, namesWhole, stepText } from "../lib/hand-in-lesson.mjs";
 
 const SKILL = "keyframes.types";
 export const SKILLS = [SKILL];
@@ -24,8 +26,23 @@ export const FINDERS = {
       return finder(snapshot, { exclude, kept_linear });
     },
     review: true,
+    // Spec 014 K6 (R13, phase 3): a lesson can open from an answer's hand-in.
+    hand_in: true,
+    skill_command: "key-types-mentor",
   },
 };
+
+// Spec 014 K6: the focus a hand-in gives, when the call names none: the layer's properties the
+// answer's step names (Opacity, Position...), or the layer alone when it has one keyed property.
+// Null when the step names none of several, so the lesson asks which should snap, on that layer only.
+function handInFocus(snapshot, h) {
+  const layers = (snapshot.layers || []).filter((l) => l.name === h.layer);
+  if (!layers.length) return null;
+  const props = [...new Set(layers.flatMap((l) => l.properties.filter((p) => p.keys.length >= 2).map((p) => p.display_name)))];
+  const named = props.filter((p) => namesWhole(stepText(h), p));
+  if (named.length) return named.map((property) => ({ layer: h.layer, property }));
+  return props.length === 1 ? [{ layer: h.layer }] : null;
+}
 
 const REF = {
   type: "object",
@@ -53,12 +70,27 @@ async function keyTypesSnapshot({ mode: asked, fresh = false, skill_options } = 
   // FR-048: without a mode, the tool picks lesson or review (spec 004 › The opening read).
   const open = opening({ skill: SKILL, mode: asked, snapshot, fresh, finder: FINDERS[SKILL] });
   const mode = open.mode;
-  const focus = skill_options && Array.isArray(skill_options.focus) ? skill_options.focus : [];
+  // K6: a hand-in opens a new lesson on its layer (contracts/hand-in.md › Per skill).
+  const taken = open.mode_source === "hand_in" && open.hand_in && open.hand_in.layer ? open.hand_in : null;
+  const keyed = taken ? keyedLayer(snapshot, taken.layer) : undefined;
+  if (taken && keyed === false) {
+    return json(noKeysReply(snapshot, { mode: "lesson", mode_source: open.mode_source, learner: open.learner, hand_in: handInSlice(taken, open.learner, { keyed }) }));
+  }
+  let options = skill_options;
+  if (taken && keyed && options === undefined) {
+    const f = handInFocus(snapshot, taken);
+    if (f) options = { focus: f };
+  }
+  const focus = options && Array.isArray(options.focus) ? options.focus : [];
   const focus_layers = focus.length ? [...new Set(focus.map((r) => r.layer))] : undefined;
   const opts = { skill: SKILL, analyze, mode, fresh };
   if (focus_layers) opts.focus_layers = focus_layers;
-  if (skill_options !== undefined) opts.skill_options = skill_options;
+  if (options !== undefined) opts.skill_options = options;
+  if (taken) opts.hand_in = lessonHandIn(taken);
   const { lesson, session: les, analysis, stored_choices } = session.start(snapshot, opts); // LESSON_UNDERWAY passes through
+  const handInFields = les.hand_in ? { hand_in: handInSlice(les.hand_in, open.learner, taken ? { keyed } : {}) }
+    : open.hand_in ? { hand_in: handInSlice(open.hand_in, open.learner) } : {};
+  const mf = motionFromFor(les.baseline, layerNames(les.focus, analysis.candidates));
   return json({
     host: parseHost(snapshot),
     lesson,
@@ -80,6 +112,8 @@ async function keyTypesSnapshot({ mode: asked, fresh = false, skill_options } = 
     should_move: (les.skill_options && les.skill_options.should_move) || [],
     server_current: await serverCurrent(), // FR-044
     stored_choices, // FR-043, FR-046
+    ...(mf ? { motion_from: mf } : {}), // spec 015 FR-015, spec 014 FR-033: only on a read with R2
+    ...handInFields,
   });
 }
 
@@ -113,7 +147,7 @@ async function keyTypesCheck({ should_move = [], constant_speed = null } = {}) {
   let result = check(lesson.baseline, current, lesson, { should_move, constant_speed });
   if (!result.comp_matches) return json({ ...result, constant_speed: null });
 
-  session.markChecked(result.passed, { demoUndone: result.demo_undone });
+  session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
   const cs = result.constant_speed;
   if (cs) cs.marked = false;
   if (cs && cs.verdict === "linear") {
@@ -124,7 +158,7 @@ async function keyTypesCheck({ should_move = [], constant_speed = null } = {}) {
       if (e.code !== "NOT_KEPT_LINEAR") throw e;
       // Research R6: reported as not linear, and nothing is stored.
       result = grade({ ...result, constant_speed: { ...cs, verdict: "not_linear", marked: false } }, { mode });
-      session.markChecked(result.passed, { demoUndone: result.demo_undone });
+      session.markChecked(result.passed, { demoUndone: result.demo_undone, attributed: attributedFrom(result) }); // K5
     }
   }
   return json(result);
