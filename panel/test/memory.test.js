@@ -108,3 +108,82 @@ test("an empty record's memory line still reads on Skills", async () => {
   h.app.act("tab", { tab: "skills" });
   assert.ok(plain(renderApp(h.app.model()).view).includes(COPY.home.memory_empty));
 });
+
+// ---------- spec 014 T070 (FR-043, data-model § 3): asked entries never show ----------
+// The learner record's `asked` list (written by give_answer, go_deeper and note_said on the mentor's
+// side) is the mentor's own scheduling data. The panel draws nothing from it: no entry in What the
+// mentor remembers, no "asked again", no history row, no skill state. A record with the list and the
+// same record without it render byte for byte the same, on every screen that reads the record.
+const { SIX_PATH, SKILLS_BUILT } = require("./app-harness.js");
+
+const WITH_ASKED = () => readLearnerRecord({ home: path.join(RECORDS, "with-asked") }).record;
+const withoutAsked = (r) => { const c = JSON.parse(JSON.stringify(r)); delete c.asked; return c; };
+// Words the asked entries hold (goal, said, comp, layers) and wording FR-043 rules out.
+const ASKED_WORDS = /point of impact|soften a title|said the steps worked|Shake Control|Comp 1|asked again|asked about|after learning/i;
+
+test("T070: a record with asked entries reads as ok, and the rest of it is as it was", () => {
+  const r = readLearnerRecord({ home: path.join(RECORDS, "with-asked") });
+  assert.equal(r.status, "ok");
+  assert.equal(r.record.asked.length, 2);
+  assert.deepEqual(withoutAsked(r.record), readLearnerRecord({ home: path.join(RECORDS, "one-lesson") }).record);
+});
+
+test("T070: an odd asked list (not a list, junk inside, null) never makes a record unreadable", () => {
+  for (const asked of ["x", 3, null, {}, [null, 7, "x", { kind: "asked" }]]) {
+    const rec = Object.assign(withoutAsked(WITH_ASKED()), { asked });
+    assert.equal(isValidRecord(rec), true, JSON.stringify(asked));
+    assert.deepEqual(memoryView(rec, { names: NAMES }), memoryView(withoutAsked(rec), { names: NAMES }));
+  }
+});
+
+test("T070: What the mentor remembers shows the latest lesson, even when an asked entry is newer", () => {
+  const rec = WITH_ASKED();
+  assert.ok(rec.asked.every((a) => a.date > rec.lessons[rec.lessons.length - 1].date), "the fixture's asked entries come after its lesson");
+  const m = memoryView(rec, { names: NAMES });
+  assert.deepEqual(m, memoryView(withoutAsked(rec), { names: NAMES }));
+  assert.equal(m.skill, "Easing");
+  assert.equal(m.next, "Practice note 1.");
+  assert.doesNotMatch(JSON.stringify(m), ASKED_WORDS);
+});
+
+test("T070: asked entries with no lessons read as an empty memory, as no record does", () => {
+  const rec = { version: 1, skills: {}, lessons: [], asked: WITH_ASKED().asked };
+  assert.deepEqual(memoryView(rec, { names: NAMES }), { empty: true, text: COPY.home.memory_empty });
+});
+
+// Every screen that reads the record: Home, Skills, and each built skill's detail.
+async function screensOf(record) {
+  const h = await ready({ memory: { status: "ok", record }, pathData: SIX_PATH, skillsBuilt: SKILLS_BUILT });
+  const out = {};
+  const draw = () => { const r = renderApp(h.app.model()); return r.nav + r.view; };
+  out.home = { state: h.app.model().state, html: draw() };
+  h.app.act("tab", { tab: "skills" });
+  out.skills = { state: h.app.model().state, html: draw() };
+  for (const id of Object.keys(SKILLS_BUILT.skills)) {
+    h.app.act("open_skill", { skill: id });
+    out[id] = { state: h.app.model().state, html: draw() };
+    h.app.act("back_skills");
+  }
+  return out;
+}
+
+test("T070: Home, Skills and every skill's detail render the same with and without asked entries", async () => {
+  const rec = WITH_ASKED();
+  const withA = await screensOf(rec);
+  const without = await screensOf(withoutAsked(rec));
+  assert.deepEqual(Object.keys(withA), ["home", "skills", ...Object.keys(SKILLS_BUILT.skills)]);
+  for (const k of Object.keys(withA)) {
+    assert.equal(withA[k].state, without[k].state, `${k}: same state`);
+    assert.equal(withA[k].html, without[k].html, `${k}: same screen`);
+    assert.doesNotMatch(plain(withA[k].html), ASKED_WORDS, `${k}: nothing from an asked entry`);
+  }
+});
+
+test("T070: an asked entry about a skill never makes it look tried, learned or due", async () => {
+  // Only asked entries: the pivot was asked about and went deeper on, easing asked about after learning.
+  const rec = { version: 1, skills: {}, lessons: [], asked: WITH_ASKED().asked };
+  const withA = await screensOf(rec);
+  const without = await screensOf(withoutAsked(rec));
+  for (const k of Object.keys(withA)) assert.equal(withA[k].html, without[k].html, k);
+  assert.equal(withA["transform.anchor"].state, without["transform.anchor"].state);
+});

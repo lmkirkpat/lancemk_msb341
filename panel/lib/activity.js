@@ -33,6 +33,9 @@ const STATUS = {
   // Spec 014 phase 2: Go deeper's hand-over (MU ask-deeper-starting's own status line) and T106's stop.
   go_deeper: "Getting your lesson ready…",
   end_lesson: "Ending your lesson…", // not in MU; the shortest plain line, for design review
+  // Spec 014 phase 3: the learner said how the steps went (turn 4). Called inside the ask thread, whose
+  // own timed line stays, so it's normally unseen; it still needs a line (FR-062), never "Working…".
+  note_said: "Noting how the steps went…", // not in MU; plain, for design review
 };
 
 function statusFor(toolName) {

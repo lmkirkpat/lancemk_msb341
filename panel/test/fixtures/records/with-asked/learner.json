@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "learned",
+      "last_practiced": "2026-10-01T18:00:00.000Z",
+      "times_passed": 1,
+      "next": "Practice note 1."
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-01T18:00:00.000Z",
+      "skill": "easing.basic",
+      "project": "Practice.aep",
+      "comp": "Mentor Practice",
+      "result": "passed",
+      "next": "Practice note 1."
+    }
+  ],
+  "asked": [
+    {
+      "kind": "asked",
+      "date": "2026-10-05T18:00:00.000Z",
+      "project": "Practice.aep",
+      "comp": "Comp 1",
+      "layers": ["Shake Control"],
+      "goal": "turn a shake from the point of impact",
+      "skills": ["transform.anchor"],
+      "after_learning": [],
+      "went_deeper": "transform.anchor",
+      "said": "said the steps worked",
+      "raised": "2026-10-06T18:00:00.000Z"
+    },
+    {
+      "kind": "asked",
+      "date": "2026-10-07T18:00:00.000Z",
+      "project": "Practice.aep",
+      "comp": "Comp 1",
+      "layers": ["Title"],
+      "goal": "soften a title's landing",
+      "skills": ["easing.basic"],
+      "after_learning": ["easing.basic"],
+      "went_deeper": null
+    }
+  ]
+}

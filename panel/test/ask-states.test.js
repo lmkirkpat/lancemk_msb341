@@ -513,3 +513,37 @@ test("T035 item 5: a malformed answer falls back to the words with the steps' te
   assert.doesNotMatch(screen(h).html, /class="steps-lbl"|stepsblock|class="check steps"|data-action="go_deeper"|<ol/);
   assert.equal(h.app.model().thread.latest_steps, null, "no dock");
 }));
+
+// Spec 014 phase 3 (turn 4): "that worked" is a follow-up where the mentor calls note_said, then
+// describe_layers, then says what changed in prose. note_said's { saved } reply is no answer: the
+// steps dock and the earlier answer stay, nothing folds, and no "Working…" line shows.
+test("phase 3 turn 4: note_said in a follow-up changes nothing the thread draws", async () => {
+  const h = await answered();
+  assert.equal(h.app.followUp("That worked."), true);
+  const a = h.adapter();
+  a.emit("tool_call", { name: "note_said" });
+  assert.equal(text(h).includes("Working…"), false);
+  a.emit("tool_result", { name: "note_said", ok: true, text: JSON.stringify({ saved: true }), images: [], json: { saved: true } });
+  a.emit("tool_call", { name: "describe_layers" });
+  a.emit("tool_result", { name: "describe_layers", ok: true, text: "{}", images: [], json: {} });
+  a.emit("text", { text: "rock.png now turns from its base. Next is step 2." });
+  a.emit("turn_end", { ok: true, kind: "followup" });
+  const t = text(h);
+  for (const m of ["That worked.", "rock.png now turns from its base.", A.your_steps(4), "In Comp 1, rock.png rides on Shake Control"]) assert.ok(t.includes(m), m);
+  assert.equal(st(h), "ask-followup", "MU's follow-up state, as for any prose follow-up");
+  assert.equal(h.app.model().thread.questions.filter((q) => q.folded).length, 0, "a follow-up never folds the answer");
+});
+
+test("phase 3 turn 4: a note_said refusal is quiet too; the mentor's prose carries on", async () => {
+  const h = await answered();
+  h.app.followUp("That worked.");
+  const a = h.adapter();
+  a.emit("tool_call", { name: "note_said" });
+  a.emit("tool_result", { name: "note_said", ok: false, text: "NO_ANSWER: There's no answer to keep it with.", images: [] });
+  a.emit("text", { text: "Good. Next is step 2." });
+  a.emit("turn_end", { ok: true, kind: "followup" });
+  const t = text(h);
+  assert.ok(t.includes("Good. Next is step 2."));
+  assert.ok(t.includes(A.your_steps(4)));
+  assert.equal(t.includes("NO_ANSWER"), false);
+});

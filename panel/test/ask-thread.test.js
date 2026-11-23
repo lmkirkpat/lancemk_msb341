@@ -195,3 +195,165 @@ test("T053: read back, a return keeps its divider and line; a lesson still open 
   assert.equal(open.after_deeper, true, "its conversation is still on the lesson's skill");
   assert.equal(t.fromSaved(JSON.parse(JSON.stringify(offered()))).after_deeper, false);
 });
+
+// ---------- spec 014 T070 (FR-043, TD § 6 turn 4 and § 7.4): turn 4 is a read, not a check ----------
+// After the learner says how a try went ("it didn't work", "done"), the mentor reads the same layers
+// again (describe_layers), may note what they said (note_said) and answers in prose: turn 4 is a
+// follow-up, never a give_answer (contracts/panel-ask.md › Context after a lesson, clarified (f);
+// ask-mentor SKILL.md; the mentor refuses a repeated answer card with FOLLOW_UP_NOT_ANSWER). Ask mode
+// has no check: none of it ticks or crosses anything anywhere in the panel, reloads the record or
+// changes a lesson's result. Results shaped by contracts/ask-tools.md (the mentor half is built on
+// another branch, so these are fixtures).
+const { ready: readyApp, plain: plainText, SIX_PATH, SKILLS_BUILT, LESSON } = require("./app-harness.js");
+const { renderApp } = require("../lib/screens.js");
+const { reduceLesson, initialLesson } = require("../lib/lesson.js");
+const checklist = require("../lib/checklist/index.js");
+const COMP1 = require("./fixtures/ask/comp1-answer.json");
+
+const TICKS = /[✓✗◐⊘]/; // the checklist's pass, off, partly and can't-check glyphs
+const ASKED_WORDS = /asked again|asked about|after learning|you already learned|remember when|as we covered/i;
+const RES = (name, json) => ({ name, ok: true, text: JSON.stringify(json), images: [], json });
+const READ = RES("describe_layers", { comp: { name: "Comp 1" }, layers: [{ name: "Shake Control" }, { name: "rock.png" }] });
+const SAID = RES("note_said", { saved: true });
+// Not turn 4's shape: a give_answer in the follow-up bar is a send the mentor took as a new question
+// (amendment (d)), so the panel folds the earlier answer and treats this one as new. The tests below
+// pin that, so a give_answer here is never read as "folds nothing". The last two fields are ones a
+// phase 3 reply might carry (the asked entry it linked); the panel must draw neither.
+const TURN4 = (kind) => RES("give_answer", Object.assign(
+  kind === "describe"
+    ? { kind: "describe", explanation: "Shake Control's pivot is still in its middle. The change landed on rock.png, which rides on it.", steps: [], offered_skills: [], closing_offer: "Want the steps again for Shake Control?" }
+    : { kind: "answer", explanation: "Shake Control's pivot is still in its middle. The change landed on rock.png, which rides on it.", steps: [{ text: "Select Shake Control and Pan Behind its pivot to where the hammer hits.", skill: "transform.anchor", layer: "Shake Control" }], offered_skills: ["transform.anchor"], closing_offer: "Try it there, or want to go deeper on Set the pivot?" },
+  { runtime: "a", tags: { "transform.anchor": "Set the pivot" }, after_learning: ["transform.anchor"], asked: { linked: true, went_deeper: null } },
+));
+
+async function asked(runtime) {
+  let reads = 0;
+  const h = await readyApp({ runtime, memory: { status: "ok", record: LESSON }, pathData: SIX_PATH, skillsBuilt: SKILLS_BUILT, setTimeout: () => 0, readRecord: () => { reads++; return Promise.resolve({ status: "ok", record: LESSON }); } });
+  h.reads = () => reads;
+  h.app.setDraft("How can I make the rock shake from the hammer hit?");
+  h.app.act("ask_home");
+  const a = h.adapter();
+  a.emit("tool_result", READ);
+  a.emit("tool_result", RES("give_answer", Object.assign({}, COMP1, { runtime })));
+  a.emit("turn_end", { ok: true, kind: "question" });
+  return h;
+}
+// The whole screen: the thread draws in the chat layout (r.lesson), other screens in r.view.
+function draw(h) {
+  const r = renderApp(h.app.model());
+  if (!r.lesson) return r.nav + r.view;
+  const c = r.lesson.chat;
+  return [r.nav, r.lesson.head, r.lesson.banner, c.earlier || "", ...c.items, r.lesson.list, r.lesson.status, r.lesson.actions, r.lesson.ask, r.view || ""].join("\n");
+}
+// Skills and each skill's detail, drawn from wherever the panel is, then put back.
+function skillsScreens(h) {
+  const m = h.app.model();
+  const back = { tab: m.tab };
+  h.app.act("tab", { tab: "skills" });
+  const out = [draw(h)];
+  for (const id of Object.keys(SKILLS_BUILT.skills)) { h.app.act("open_skill", { skill: id }); out.push(draw(h)); h.app.act("back_skills"); }
+  h.app.act("tab", back);
+  return out;
+}
+
+for (const runtime of ["a", "b1"]) {
+  for (const shape of ["answer", "describe", "prose"]) {
+    test(`T070 (${runtime}, ${shape}): turn 4 ticks and crosses nothing, reloads no record, and leaves Skills as it was`, async () => {
+      const h = await asked(runtime);
+      const skillsBefore = skillsScreens(h);
+      const reads = h.reads();
+      assert.equal(h.app.followUp("I tried it and it didn't work."), true);
+      const a = h.adapter();
+      a.emit("tool_result", READ);
+      a.emit("tool_result", SAID);
+      if (shape === "prose") a.emit("text", { text: "Shake Control's pivot is still in its middle; the change landed on rock.png." });
+      else a.emit("tool_result", TURN4(shape));
+      a.emit("turn_end", { ok: true, kind: "followup" });
+      const m = h.app.model();
+      assert.equal(m.lesson, null, "no lesson opened or changed");
+      const html = draw(h);
+      assert.ok(plainText(html).includes("The change landed on rock.png") || plainText(html).includes("the change landed on rock.png"), "the turn's answer is on screen");
+      assert.doesNotMatch(html, TICKS, "no ✓ or ✗ in the thread");
+      assert.doesNotMatch(plainText(html), ASKED_WORDS);
+      assert.doesNotMatch(plainText(html), /\bpass(ed)?\b|\bfail(ed)?\b/i, "no pass or fail words from the panel");
+      assert.equal(h.reads(), reads, "the record isn't read again: nothing in it changed for the panel");
+      assert.deepEqual(skillsScreens(h), skillsBefore, "Skills and every skill's detail, unchanged");
+      const line = h.turns[h.turns.length - 1];
+      assert.equal(line.thread, "ask");
+      assert.equal(line.lesson_passed, false);
+      const th = m.thread;
+      const s = t.split(th);
+      if (shape === "prose") return; // turn 4 as the contract has it: a follow-up under the same answer
+      // A give_answer here is a new question (amendment (d)): the original answer folds into Earlier
+      // questions (1), and Your steps holds the new step, or goes away for a describe.
+      assert.equal(t.latest(th).kind, "question", "the send became a question");
+      assert.equal(s.earlier_count, 1);
+      assert.deepEqual(s.earlier.map((q) => q.text), ["How can I make the rock shake from the hammer hit?"]);
+      assert.ok(plainText(html).includes(COPY_ASK.earlier(1)), "Earlier questions (1) on screen");
+      if (shape === "answer") {
+        assert.deepEqual(th.latest_steps.map((x) => x.text), ["Select Shake Control and Pan Behind its pivot to where the hammer hits."]);
+        assert.ok(plainText(html).includes(COPY_ASK.your_steps(1)), "Your steps holds the new step");
+        assert.equal(plainText(html).includes(COPY_ASK.your_steps(4)), false, "not the first answer's four");
+      } else {
+        assert.equal(th.latest_steps, null, "a describe has no steps: Your steps goes away");
+        assert.doesNotMatch(plainText(html), /Your steps/);
+      }
+    });
+  }
+}
+
+test("T070: the ask tools are never checks, snapshots or demos, and a lesson's view ignores them", () => {
+  for (const tool of ["describe_layers", "give_answer", "note_said", "go_deeper"]) {
+    assert.equal(checklist.isCheck(tool), false, tool);
+    assert.equal(checklist.isSnapshot(tool), false, tool);
+    assert.equal(checklist.changeLine(tool, {}), null, tool);
+  }
+  const v = Object.assign(initialLesson({ skill: "transform.anchor" }), { passed: false, checks: 1 });
+  for (const ev of [READ, SAID, TURN4("answer"), TURN4("describe")]) {
+    assert.equal(reduceLesson(v, Object.assign({ type: "tool_result" }, ev)), v, ev.name);
+  }
+});
+
+// A go-deeper lesson with its check list on screen, then the learner says how it went inside the
+// lesson (FR-046's ask box) and ask tool results arrive in that turn (a stray give_answer included,
+// which the contract never sends there): the list, the stage and the result stay as the check left
+// them.
+const PASSED_CHECK = RES("anchor_check", { comp_matches: true, passed: true, layers: [{ layer: "Shake Control", item1: { passed: true, wanted: "your_call", place_now: "middle-left" }, item2: { passed: true }, item3: { set_away_from_rest: false }, item4: null, item5: { passed: true, moved_layers: [] }, cant_check: [], credit: "learner" }], other_changes: [] });
+const OFF_CHECK = RES("anchor_check", { comp_matches: true, passed: false, layers: [{ layer: "Shake Control", item1: { passed: true, wanted: "your_call", place_now: "middle-left" }, item2: { passed: true }, item3: { set_away_from_rest: false }, item4: null, item5: { passed: false, moved_layers: ["rock.png"] }, cant_check: [], credit: "learner" }], other_changes: [] });
+
+async function inDeeperLesson(check) {
+  const h = await asked("a");
+  h.app.act("go_deeper", { skill: "transform.anchor" });
+  const a = h.adapter();
+  a.emit("tool_call", { name: "go_deeper" });
+  a.emit("tool_result", RES("go_deeper", { skill_name: "Set the pivot (anchor point)", short_name: "Set the pivot", command_skill: "anchor-mentor", practice: false, missing_prerequisite: null }));
+  a.emit("tool_result", RES("anchor_snapshot", { lesson: "new", mode: "lesson", mode_source: "hand_in", focus: ["Shake Control"], comp: { name: "Comp 1" }, targets: [], hand_in: { layer: "Shake Control", step_number: 3, steps_after: ["Play it back and watch the turn."], place_named: true, practice: false } }));
+  a.emit("text", { text: "We're on Shake Control. Select it and press A, then Shift+P." });
+  a.emit("turn_end", { ok: true, kind: "go_deeper", total_ms: 4000 });
+  h.app.act("check");
+  a.emit("tool_result", check);
+  if (check.json.passed) a.emit("tool_result", RES("record_lesson", { saved: true, skill: { status: "learned", next: null }, hand_back: { step_number: 3, next_step: "Play it back and watch the turn." } }));
+  a.emit("text", { text: check.json.passed ? "Shake Control's pivot is where you said." : "The pivot moved, but so did rock.png." });
+  a.emit("turn_end", { ok: true, kind: "check" });
+  return h;
+}
+
+for (const [label, check, glyph] of [["passed", PASSED_CHECK, "✓"], ["not yet", OFF_CHECK, "✗"]]) {
+  test(`T070 (${label}): ask tools in a lesson's turn change nothing to its ${glyph} rows, stage or result`, async () => {
+    const h = await inDeeperLesson(check);
+    const r0 = renderApp(h.app.model()).lesson;
+    assert.ok(r0.list.includes(glyph), `the check drew a ${glyph}`);
+    const before = { list: r0.list, head: r0.head, passed: h.app.model().lesson.passed };
+    h.app.ask("I tried it and it didn't work.");
+    const a = h.adapter();
+    a.emit("tool_result", READ);
+    a.emit("tool_result", SAID);
+    a.emit("tool_result", TURN4("answer"));
+    a.emit("text", { text: "Shake Control's pivot is still in its middle." });
+    a.emit("turn_end", { ok: true, kind: "ask" });
+    const r1 = renderApp(h.app.model()).lesson;
+    assert.equal(r1.list, before.list, "the check list, row for row");
+    assert.equal(r1.head, before.head, "the stage ticks");
+    assert.equal(h.app.model().lesson.passed, before.passed);
+  });
+}
