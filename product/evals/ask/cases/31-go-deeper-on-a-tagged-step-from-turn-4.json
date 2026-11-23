@@ -1,0 +1,103 @@
+{
+  "id": "31-go-deeper-on-a-tagged-step-from-turn-4",
+  "title": "T081 (A only): after \"it didn't work\" the learner says yes to going deeper on the pivot step. A skill a step was tagged with starts the lesson even when the answer didn't offer it: go_deeper is never refused, the hand-over is silent, and the pivot lesson opens on Shake Control",
+  "covers": [
+    "TD 6 turn 4",
+    "FR-020",
+    "FR-025",
+    "T081",
+    "T078"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "lesson_skill": "anchor-mentor",
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "I did steps 1 to 3 and it still looks the same.",
+      "followup": true
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "Yes, go deeper on Set the pivot.",
+      "yes": true
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "OK, both are showing.",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ],
+        "step_skills_include": [
+          "transform.anchor"
+        ]
+      }
+    ],
+    "no_answer_turns": [
+      3,
+      4
+    ],
+    "follow_up_not_answer": [
+      {
+        "turn": 2
+      }
+    ],
+    "go_deeper_never_refused": true,
+    "handover": [
+      {
+        "turn": 3,
+        "skill": "anchor-mentor",
+        "snapshot": "anchor_snapshot",
+        "mode_source": "hand_in",
+        "go_deeper": {
+          "skill": "transform.anchor"
+        }
+      }
+    ],
+    "tools_not_called": [
+      "anchor_demo"
+    ],
+    "text": [
+      {
+        "id": "opens_on_shake_control",
+        "must": "Shake Control",
+        "in": "prose",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_intent_question",
+        "never": "which layer|turn or grow|nothing comes to mind|want to try that one",
+        "in": "prose",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_review",
+        "never": "\\breview",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-OVER-OPENS",
+    "R-TRY-READ"
+  ],
+  "note": "Spec 014 T078 follow-up (T081: go_deeper takes any hand-in-ready skill tagged on a step of the latest answer, because turn 4 may offer to go deeper on the step that didn't land). Whether the first answer offered the pivot isn't forced: Set the pivot is a tagged step either way, so the case pins that the yes works from turn 4 and that no go_deeper is refused with NOT_OFFERED. The tool's own tagged-but-not-offered path is the builder's unit test (ask-go-deeper.test.mjs)."
+}

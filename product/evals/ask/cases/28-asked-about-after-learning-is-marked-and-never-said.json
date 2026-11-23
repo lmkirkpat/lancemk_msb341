@@ -1,0 +1,56 @@
+{
+  "id": "28-asked-about-after-learning-is-marked-and-never-said",
+  "title": "Situation 18, record side: Set the pivot is learned and the learner asks a question that sits inside it. The asked entry marks the skill as asked about after learning, no skill's state changes, and nothing in the reply mentions that mark",
+  "covers": [
+    "TD 17.18",
+    "FR-041",
+    "FR-039",
+    "SC-010",
+    "T078"
+  ],
+  "learner_record": "product/evals/ask/records/pivot-learned.json",
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ],
+        "step_skills_include": [
+          "transform.anchor"
+        ]
+      }
+    ],
+    "asked_entry": {
+      "count": 1,
+      "after_learning": [
+        "transform.anchor"
+      ],
+      "said": false
+    },
+    "text": [
+      {
+        "id": "never_says_the_mark",
+        "never": "after learning|asked about|asked (?:this|that|it) before|you(?:'ve| have)? (?:already )?(?:asked|learned|done|covered)|remember (?:when|how|that)|as we (?:covered|discussed)|last time|once more|one more time",
+        "in": "all"
+      },
+      {
+        "id": "no_review_words",
+        "never": "\\breview|\\bquiz|refresher|\\bdue\\b",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-ASKED-AGAIN"
+  ],
+  "note": "Spec 014 T078 (FR-041: for scheduling only; never something the mentor says). Case 20 pins the answer half; this one pins the record half (after_learning) and that the mark never reaches the words. The regex covers FR-041's banned phrases and the same-day variants 'once more' and 'asked it before'. The record starts as case 20's: Set the pivot learned, review not due."
+}

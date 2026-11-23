@@ -17,7 +17,7 @@ test("a hand-in with a skill, a layer, a step number and steps is valid; absent 
 });
 
 test("each way a hand-in can be wrong is named", () => {
-  assert.match(handInProblems({ ...GOOD, skill: "easing.basic" })[0], /skill must be one of/);
+  assert.match(handInProblems({ ...GOOD, skill: "color.grade" })[0], /skill must be one of/);
   assert.match(handInProblems({ ...GOOD, step_number: 3 })[0], /past the last step/);
   assert.match(handInProblems({ ...GOOD, steps: [] })[0], /needs the answer's steps/);
   assert.match(handInProblems({ ...GOOD, layer: 4 })[0], /layer name or null/);
@@ -44,5 +44,23 @@ test("the mentor's own session code takes it: for its skill, any comp, once", as
   assert.equal(taken.layer, "Shake Control");
   assert.equal(taken.step_number, 2);
   assert.equal(session.takeHandIn("transform.anchor", 5), null, "once");
+  fs.rmSync(home, { recursive: true, force: true });
+});
+
+test("a case that asked first seeds an ask in the window, so no due review opens the lesson; with a hand-in both are in one file", async () => {
+  const { seedSession, sessionProblems } = await import("../hand-in.mjs");
+  const { spawnSync } = await import("node:child_process");
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-"));
+  // The session module reads its folder once, so each read runs in its own process.
+  const read = (src) => spawnSync(process.execPath, ["--input-type=module", "-e", `import * as s from ${JSON.stringify(path.join(REPO, "mentor", "lib", "session.mjs"))}; console.log(JSON.stringify(${src}));`], { env: { ...process.env, AE_MENTOR_HOME: home }, encoding: "utf8" }).stdout.trim();
+  seedSession(home, { ask_started: true });
+  assert.notEqual(read("s.askStartedAt()"), "null", "the ask is in the window");
+  seedSession(home, { ask_started: true, hand_in: GOOD });
+  assert.notEqual(read("s.askStartedAt()"), "null");
+  assert.match(read('s.takeHandIn("transform.anchor", 5)'), /Shake Control/);
+  seedSession(home, { hand_in: GOOD });
+  assert.equal(read("s.askStartedAt()"), "null", "no ask without ask_started");
+  assert.deepEqual(sessionProblems({ ask_started: true }), []);
+  assert.match(sessionProblems({ ask_started: "yes" })[0], /true or false/);
   fs.rmSync(home, { recursive: true, force: true });
 });

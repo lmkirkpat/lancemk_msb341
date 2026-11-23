@@ -12,7 +12,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export const HAND_IN_SKILLS = ["transform.anchor", "parenting.null"]; // phase 2: the skills with `hand_in: true`
+export const HAND_IN_SKILLS = ["transform.anchor", "parenting.null", "easing.basic", "keyframes.types", "easing.speed_graph", "timing.offset"]; // the skills with `hand_in: true` (phase 2: pivot and null; phase 3: the other four)
 
 export function handInProblems(h) {
   if (h === undefined) return [];
@@ -49,4 +49,21 @@ export function handInSession(h, now = new Date()) {
 
 export function seedHandIn(home, h, now = new Date()) {
   fs.writeFileSync(path.join(home, "session.json"), JSON.stringify(handInSession(h, now)));
+}
+
+// A session in which the learner asked a question first (spec 014 FR-032, data-model § 2 `ask`): a case says
+// `"ask_started": true`, and the file holds an ask that began now, so no due review opens the lesson. It may sit
+// beside a hand-in in the same file.
+export function askStarted(now = new Date()) {
+  return { at: now.toISOString(), comp_id: null, project: null, comp: null, kind: "answer", steps: [], offered_skills: [], goal: null, entry_date: null, started_at: now.toISOString() };
+}
+
+// Problems in a case's session keys, for a runner's validate().
+export const sessionProblems = (c) => [...handInProblems(c.hand_in), ...(c.ask_started !== undefined && typeof c.ask_started !== "boolean" ? ["ask_started must be true or false"] : [])];
+
+// The session.json a case starts with, from its `hand_in` and `ask_started`. Written only when the case has either.
+export function seedSession(home, c, now = new Date()) {
+  const s = c.hand_in ? handInSession(c.hand_in, now) : { version: 1, current: null, lessons: {} };
+  if (c.ask_started) s.ask = askStarted(now);
+  fs.writeFileSync(path.join(home, "session.json"), JSON.stringify(s));
 }

@@ -233,10 +233,10 @@ test("fixtureFacts reports a dangling reference", () => {
   assert.equal(f.problems.length, 2);
 });
 
-test("case files: each is valid JSON with the keys the runner needs, and the numbers run 01 to 20", () => {
+test("case files: each is valid JSON with the keys the runner needs, and the numbers run 01 to 31", () => {
   const dir = path.join(HERE, "..", "cases");
   const files = fs.readdirSync(dir).filter((f) => /^\d\d-.*\.json$/.test(f)).sort();
-  assert.deepEqual(files.map((f) => f.slice(0, 2)), Array.from({ length: 20 }, (_, i) => String(i + 1).padStart(2, "0")));
+  assert.deepEqual(files.map((f) => f.slice(0, 2)), Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, "0")));
   for (const f of files) {
     const c = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
     assert.equal(c.id, f.replace(/\.json$/, ""));
@@ -377,4 +377,99 @@ test("case 19's yes is the panel's Go deeper request; End lesson and the first f
   assert.equal(c.turns[1].say, panel.goDeeperRequest("Set the pivot").request);
   assert.equal(panel.endDeeperRequest().request, "/ask-mentor I've ended that lesson.");
   assert.equal(panel.followUpRequest("What about step 2?", { afterDeeper: true }).request, "/ask-mentor What about step 2?");
+});
+
+// ---------- phase 3 (spec 014 T078) ----------
+
+const readAt = (time, input = {}) => ({ kind: "tool", name: "describe_layers", input, ok: true, result: JSON.stringify({ comp: { name: "Comp 1", time }, layers: [] }) });
+const FX3 = [{ comp: "Comp 1", layers: ["Shake Control", "rock.png"], indexes: { "Shake Control": 25, "rock.png": 28 }, sweeps: false }, { comp: "Comp 1", layers: ["Shake Control", "rock.png"], indexes: { "Shake Control": 25, "rock.png": 28 }, sweeps: false }];
+const REREAD = { answers: [{ turn: 1, kind: "answer", steps: [2, 4] }], reread: [{ turn: 2, of: 1, at_time: true, layers: true }] };
+const first = turn(readAt(3.403, { layers: ["Shake Control"] }), call(good()));
+
+test("reread: turn 4 reads the same layers at the earlier read's time", () => {
+  const ok = [first, turn(readAt(1.2, { layers: ["Shake Control"], at_time: 3.403 }))];
+  assert.equal(byName(run(ok, REREAD, { fixtures: FX3 }), "reread@2").pass, true);
+  const byIndex = [first, turn(readAt(1.2, { layers: [25], at_time: 3.403 }))];
+  assert.equal(byName(run(byIndex, REREAD, { fixtures: FX3 }), "reread@2").pass, true);
+  const whole = [first, turn(readAt(1.2, { at_time: 3.403 }))];
+  assert.equal(byName(run(whole, REREAD, { fixtures: FX3 }), "reread@2").pass, true);
+});
+
+test("reread fails with no read, the playhead's time, or a layer left out", () => {
+  assert.match(byName(run([first, turn()], REREAD, { fixtures: FX3 }), "reread@2").detail, /no describe_layers read/);
+  assert.match(byName(run([first, turn(readAt(1.2, { layers: ["Shake Control"] }))], REREAD, { fixtures: FX3 }), "reread@2").detail, /earlier read's time/);
+  assert.match(byName(run([first, turn(readAt(1.2, { layers: ["rock.png"], at_time: 3.403 }))], REREAD, { fixtures: FX3 }), "reread@2").detail, /left out Shake Control/);
+});
+
+const entry = (over = {}) => ({ kind: "asked", date: "2026-11-19T10:00:00.000Z", project: "A.aep", comp: "Comp 1", layers: ["Shake Control"], goal: "turn a shake from a point on the art", skills: ["transform.anchor"], after_learning: [], went_deeper: null, ...over });
+const withAsked = (list) => ({ start: null, end: { version: 1, skills: {}, lessons: [], asked: list } });
+const Q = [{ say: "/ask-mentor Make the rock shake from where the hammer hits." }];
+
+test("asked_entry: one entry with a general goal passes", () => {
+  const ex = { asked_entry: { count: 1, said: false, went_deeper: null, goal: { from_turn: 1, max_chars: 120, no_run_of: 5, never_names: ["Shake Control", "rock.png"] } } };
+  const c = run([answerTurn()], ex, { record: withAsked([entry()]), c: { turns: Q } });
+  assert.deepEqual(failed(c), []);
+});
+
+test("asked_goal fails a goal that copies five words of the question, or names a layer", () => {
+  const ex = { asked_entry: { goal: { from_turn: 1, no_run_of: 5, never_names: ["Shake Control", "rock.png"] } } };
+  const copy = run([answerTurn()], ex, { record: withAsked([entry({ goal: "make the rock shake from a point" })]), c: { turns: Q } });
+  assert.match(byName(copy, "asked_goal").detail, /copies "make the rock shake from"/);
+  const named = run([answerTurn()], ex, { record: withAsked([entry({ goal: "turn the Shake Control null from a point" })]), c: { turns: Q } });
+  assert.match(byName(named, "asked_goal").detail, /names Shake Control/);
+  const four = run([answerTurn()], ex, { record: withAsked([entry({ goal: "make the rock move from a corner" })]), c: { turns: Q } });
+  assert.equal(byName(four, "asked_goal").pass, true, "four shared words is not a run of five");
+});
+
+test("asked_entry: said, after_learning, count and extra fields", () => {
+  const c = (ex, list) => byName(run([answerTurn()], { asked_entry: ex }, { record: withAsked(list), c: { turns: Q } }), "asked_entry");
+  assert.equal(c({ said: true }, [entry({ said: "said the steps worked" })]).pass, true);
+  assert.match(c({ said: false }, [entry({ said: "said it worked" })]).detail, /said was set/);
+  assert.match(c({ said: true }, [entry()]).detail, /said wasn't set/);
+  assert.match(c({ said: true, said_never: "Shake Control" }, [entry({ said: "worked on Shake Control" })]).detail, /matches/);
+  assert.equal(c({ after_learning: ["transform.anchor"] }, [entry({ after_learning: ["transform.anchor"] })]).pass, true);
+  assert.match(c({ after_learning: ["transform.anchor"] }, [entry()]).detail, /after_learning was \[\]/);
+  assert.match(c({ count: 2 }, [entry()]).detail, /1 asked entries \(wanted 2\)/);
+  assert.match(c({ count: 1 }, []).detail, /0 asked entries/);
+  assert.match(c({}, [entry({ verdict: "passed" })]).detail, /has a verdict/);
+  assert.match(c({}, []).detail, /no asked entry was written/);
+  assert.equal(c({ count: 0 }, []).pass, true);
+});
+
+test("the shared turn_tools check runs in the ask set", () => {
+  const ex = { turn_tools: [{ turn: 2, called: ["note_said"], not_called: ["give_answer"] }] };
+  const said = { kind: "tool", name: "note_said", input: { said: "said the steps worked" }, ok: true, result: "{}" };
+  assert.equal(byName(run([answerTurn(), turn(said)], ex), "turn_tools@2").pass, true);
+  assert.equal(byName(run([answerTurn(), turn(read)], ex), "turn_tools@2").pass, false);
+});
+
+test("the fixtures for cases 21 and 22 differ from their sources only where the case says", () => {
+  const f = fixtures();
+  assert.equal(f["comp1-playhead-moved.json"].comp.time, 1.2);
+  assert.equal(f["comp1.json"].comp.time, 3.403);
+  const bar = (s, prop) => s.layers.find((l) => l.name === "Bar").properties.find((p) => p.display_name === prop).keys.map((k) => k.in_type).join();
+  assert.equal(bar(f["practice-bar-eased.json"], "End"), "bezier,bezier");
+  assert.equal(bar(f["practice-bar-eased.json"], "X Position"), bar(f["practice.json"], "X Position"));
+  assert.equal(JSON.stringify(f["practice-bar-eased.json"].layers.find((l) => l.name === "Title")), JSON.stringify(f["practice.json"].layers.find((l) => l.name === "Title")));
+});
+
+test("follow_up_not_answer: prose only, or a refused repeat card then prose, passes; an accepted card or another refusal fails", () => {
+  const ex = { follow_up_not_answer: [{ turn: 2 }] };
+  const say = { kind: "say", text: "Shake Control looks the same in what I read." };
+  const repeat = call("That's the same answer as last time (FOLLOW_UP_NOT_ANSWER), so this is a follow-up.", false);
+  assert.equal(byName(run([answerTurn(), turn(read, say)], ex), "follow_up_not_answer@2").pass, true);
+  const c = byName(run([answerTurn(), turn(read, repeat, say)], ex), "follow_up_not_answer@2");
+  assert.equal(c.pass, true);
+  assert.match(c.detail, /refused 1x, then prose/);
+  assert.match(byName(run([answerTurn(), turn(read, call(good()), say)], ex), "follow_up_not_answer@2").detail, /accepted give_answer/);
+  assert.match(byName(run([answerTurn(), turn(read, call("refused: BAD_OFFER", false), say)], ex), "follow_up_not_answer@2").detail, /BAD_OFFER/);
+  assert.match(byName(run([answerTurn(), turn(read, repeat)], ex), "follow_up_not_answer@2").detail, /no prose/);
+});
+
+test("go_deeper_never_refused: an accepted call passes; a NOT_OFFERED refusal or no call fails", () => {
+  const gd = (ok) => ({ kind: "tool", name: "go_deeper", input: {}, ok, result: ok ? "{}" : "NOT_OFFERED" });
+  const ex = { go_deeper_never_refused: true };
+  assert.equal(byName(run([turn(gd(true))], ex), "go_deeper_never_refused").pass, true);
+  assert.equal(byName(run([turn(gd(false), gd(true))], ex), "go_deeper_never_refused").pass, false);
+  assert.match(byName(run([turn()], ex), "go_deeper_never_refused").detail, /never called/);
 });

@@ -1,0 +1,54 @@
+{
+  "id": "45-rule-one-a-parent-moves-the-layer",
+  "title": "Rule 1: Dot 2 is in the stagger, and Dot 2 also rides on its parent Plate. The explanation turn says so in one sentence, naming Plate, and that shifting Dot 2's own keys won't change that part",
+  "covers": [
+    "FR-033",
+    "FR-034",
+    "T074",
+    "T079"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "dots-dot-2-on-plate.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "dots-dot-2-on-plate.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "dots-dot-2-on-plate.json",
+      "say": "Dot 2's properties, please."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "offset_snapshot"
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "offset_check"
+    ],
+    "say": [
+      {
+        "id": "names_the_parent",
+        "must": "\\bPlate\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "own_keys_wont_change_it",
+        "must": "(?:won|wouldn)['’]t (?:change|affect|touch|move|fix|stop)|doesn['’]t (?:change|affect|touch)|(?:won|wouldn)['’]t make (?:a )?difference|can['’]t (?:change|reach)|(?:not|n['’]t) (?:change|affect)",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-RULE-ONE",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 014 T079 (rule 1). Mentor Practice 2 with spec 015's expression reads and Dot 2 parented to Plate, which has its own Position keys (fixtures/synthetic/make-p3-fixtures.mjs). The set's two expression-read fixtures (dots-extras-expression-follows and -staggered, used by case 44) carry motion_from now; it lists no parent or own expression for Dot 1 to Dot 3 (Tab, which follows Dot 3, is outside the group and not in motion_from), so case 44's 'never Tab' check isn't affected: checked by reading the snapshot in fixture mode, not by a run."
+}

@@ -1,0 +1,51 @@
+{
+  "id": "38-rule-one-a-parent-moves-the-layer",
+  "title": "Rule 1: Title's Opacity should snap, and Title also rides on its parent CTRL. The explanation turn says so in one sentence, naming CTRL, and that holding Title's own keys won't change that part",
+  "covers": [
+    "FR-033",
+    "FR-034",
+    "T074",
+    "T079"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "expressions/practice.json": "live"
+  },
+  "turns": [
+    {
+      "project": "expressions/practice.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "expressions/practice.json",
+      "say": "Title's Opacity should snap."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "key_types_snapshot"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "names_the_parent",
+        "must": "\\bCTRL\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "own_keys_wont_change_it",
+        "must": "(?:won|wouldn)['’]t (?:change|affect|touch|move|fix|stop)|doesn['’]t (?:change|affect|touch)|(?:won|wouldn)['’]t make (?:a )?difference|can['’]t (?:change|reach)|(?:not|n['’]t) (?:change|affect)",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-RULE-ONE",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 014 T079 (rule 1). The builder's Mentor Practice capture with spec 015's expression reads (no older capture in this set carries them): Title is a candidate, parented to CTRL, which has Position keys. Turn 2 is the explanation turn."
+}

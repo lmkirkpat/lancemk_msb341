@@ -1,0 +1,77 @@
+{
+  "id": "15-asked-suggestion-said-once",
+  "title": "FR-042: the learner asked about turning a shake from a point on the art and hasn't learned Set the pivot. The suggestion says once, in general words, that they asked about it, then names the skill and the layers; it isn't a sign they're slow",
+  "covers": [
+    "FR-042",
+    "TD 11",
+    "T069",
+    "T079"
+  ],
+  "learner_record": "product/evals/next-mentor/records/asked-pivot-easing-learned.json",
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/next-mentor"
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "recommend_next"
+    ],
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "transform.anchor",
+          "recommendation.kind": "lesson",
+          "recommendation.reason": "asked_before"
+        }
+      }
+    ],
+    "say_max_sentences": [
+      {
+        "id": "three_sentences",
+        "turns": [
+          1
+        ],
+        "max": 3
+      }
+    ],
+    "say": [
+      {
+        "id": "says_they_asked",
+        "must": "\\basked\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_the_pivot_skill",
+        "must": "pivot",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "said_once",
+        "never": "(?:asked about|you asked|you['’]d asked)[\\s\\S]*(?:asked about|you asked|you['’]d asked)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_slow_or_should_know",
+        "never": "\\b(?:slow|behind|should (?:already )?know|already know|forgot)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-ASKED-ONCE",
+    "R-NM-SUGGESTS"
+  ],
+  "note": "Spec 014 T079 (FR-042, T068, T069). The record is the easing-learned one plus an asked entry (a goal in general words, the pivot as its skill, a date a week or so back). On Comp 1 Set the pivot has layers to use, so recommend_next returns reason asked_before with the entry's goal and days_ago (checked in fixture mode). 'Said once' is that the asked clause isn't repeated in the turn; the time word is the model's ('last week', 'a few days ago'), so none is pinned."
+}

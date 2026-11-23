@@ -1,0 +1,75 @@
+{
+  "id": "26-the-learner-says-it-worked",
+  "title": "The learner says how the steps went (\"the shake works now\"). The mentor calls note_said, the asked entry keeps what was said in general words, and the reply is a short follow-up that doesn't announce the note",
+  "covers": [
+    "FR-038",
+    "TD 11",
+    "T076",
+    "T078"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "I did the steps and the shake works now.",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ]
+      }
+    ],
+    "no_answer_turns": [
+      2
+    ],
+    "turn_tools": [
+      {
+        "turn": 2,
+        "called": [
+          "note_said"
+        ],
+        "not_called": [
+          "give_answer"
+        ]
+      }
+    ],
+    "asked_entry": {
+      "count": 1,
+      "said": true,
+      "said_never": "Shake Control|rock\\.png|hammer"
+    },
+    "text": [
+      {
+        "id": "does_not_announce",
+        "never": "\\b(?:noted|noting|I(?:'ll| will) remember|saved|record(?:ed|ing)?|your record|writing (?:that )?down)\\b",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      }
+    ],
+    "prose_max_sentences": [
+      {
+        "id": "short_reply",
+        "turns": [
+          2
+        ],
+        "max": 3
+      }
+    ]
+  },
+  "rubric": [
+    "R-NOTE-QUIET"
+  ],
+  "note": "Spec 014 T078 (FR-038: what the learner said back, marked as said, only when they said it). `said` is set by note_said, 120 characters at most, general words; the check says no layer name or the learner's own word 'hammer' in it. Turn 2 says the steps were done and how they went, so it can't be read as the answer to the closing offer."
+}

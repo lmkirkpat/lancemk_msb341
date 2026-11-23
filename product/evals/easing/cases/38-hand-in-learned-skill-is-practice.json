@@ -1,0 +1,87 @@
+{
+  "id": "38-hand-in-learned-skill-is-practice",
+  "title": "From an answer (A), Easing already learned: practice, never a review. A miss says what's still off and where, with no fail words, and nothing makes the learner feel they should remember",
+  "covers": [
+    "FR-023",
+    "TD 17.18",
+    "T074",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "easing.basic",
+    "layer": "Title",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select Title's Position, Scale and Opacity keys and choose Easy Ease (F9), so it lands softer.",
+        "skill": "easing.basic",
+        "layer": "Title"
+      },
+      {
+        "text": "Play it back and watch how Title lands.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "learners/learned-title.json",
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "partial",
+      "say": "I eased Title's Position pairs. Done."
+    }
+  ],
+  "expect": {
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode_source": "hand_in",
+          "hand_in.practice": true
+        }
+      }
+    ],
+    "set_ease_max": 0,
+    "tools_called": [
+      "diff_since_last"
+    ],
+    "tools_not_called": [
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "never_review",
+        "never": "\\breview\\b|\\btest\\b|\\bpassed the\\b"
+      },
+      {
+        "id": "no_fail_words",
+        "never": "\\b(?:fail(?:ed|s)?|wrong|not quite|incorrect|mistake)\\b"
+      },
+      {
+        "id": "no_memory_words",
+        "never": "you already|you['’]ve (?:already )?(?:learned|done|covered)|remember (?:when|how|that)|as we (?:covered|discussed)|last time"
+      },
+      {
+        "id": "names_what_is_off",
+        "must": "\\b(?:Scale|Opacity)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-PRACTICE-WORDS",
+    "R-NAMES-LAYERS"
+  ],
+  "note": "Spec 014 T079. 'partial' is the older capture with Title's Position eased and Scale and Opacity still linear, so the check names Scale and Opacity. The record is the easing set's learned one (no review is due; a hand-in opens a lesson over a due review anyway, FR-023)."
+}

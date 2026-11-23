@@ -1,0 +1,82 @@
+{
+  "id": "42-stop-in-a-go-deeper-lesson-ends-on-the-hand-back-line",
+  "title": "OQ-10 (A): 'end lesson' in a lesson that started from an answer, before anything is tried: end_lesson is called, nothing is recorded, and the reply ends on the hand-back line in place of the pick-it-up sentence",
+  "covers": [
+    "T106",
+    "FR-026",
+    "OQ-10",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "easing.basic",
+    "layer": "Title",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select Title's Position, Scale and Opacity keys and choose Easy Ease (F9), so it lands softer.",
+        "skill": "easing.basic",
+        "layer": "Title"
+      },
+      {
+        "text": "Play it back and watch how Title lands.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "end lesson"
+    }
+  ],
+  "expect": {
+    "last_turn_tools_called": [
+      "end_lesson"
+    ],
+    "last_turn_tools_not_called": [
+      "record_lesson",
+      "set_ease",
+      "diff_since_last"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "at_most_two",
+        "turns": [
+          2
+        ],
+        "max": 2
+      }
+    ],
+    "say_ends_with": [
+      {
+        "id": "hand_back_line",
+        "turn": 2,
+        "pattern": "^That was step 1[;.] next is (?:step 2: )?(?:to )?play it back and watch how Title lands"
+      }
+    ],
+    "say": [
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-BACK",
+    "R-STOP-WITH-NOTHING-TO-SAVE"
+  ],
+  "note": "Spec 014 T079 (OQ-10: 'a stop in a go-deeper lesson'; the skill: 'When either tool's reply has hand_back, end on its hand-back line in place of the pick-it-up sentence'). The panel's own wording for the stop isn't pinned: 'end lesson' is what case 63 and T038 used."
+}

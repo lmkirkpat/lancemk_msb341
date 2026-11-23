@@ -1,0 +1,51 @@
+{
+  "id": "24-the-asked-entry-holds-a-general-goal",
+  "title": "Situation 17: an answer with steps writes one asked entry. It holds the comp, the step layers and a goal in general motion words: no run of five words from the question, no layer or effect name, at most 120 characters, nothing said back, and no skill's state changes",
+  "covers": [
+    "TD 17.17",
+    "FR-038",
+    "FR-039",
+    "FR-040",
+    "FR-061",
+    "T078"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ]
+      }
+    ],
+    "asked_entry": {
+      "count": 1,
+      "said": false,
+      "went_deeper": null,
+      "goal": {
+        "from_turn": 1,
+        "max_chars": 120,
+        "no_run_of": 5,
+        "never_names": [
+          "Shake Control",
+          "rock.png",
+          "Sweep Control",
+          "CC Light Sweep",
+          "Black Solid 1"
+        ]
+      }
+    }
+  },
+  "rubric": [
+    "R-ONE-IDEA"
+  ],
+  "note": "Spec 014 T078 (situation 17). The runner reads the learner record at the end of the case: `asked` holds one entry, `skills` and `lessons` are as they began (the generic record_skills_unchanged check). The question's five-word runs ('make the rock shake from', 'the rock shake from where', ...) are compared with the goal, lower-cased, so a goal that copies the question fails; GOAL_NOT_GENERAL may cost a retry, which shows in the refusals line, not as a failure."
+}

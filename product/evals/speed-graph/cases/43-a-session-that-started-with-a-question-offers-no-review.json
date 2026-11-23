@@ -1,0 +1,47 @@
+{
+  "id": "43-a-session-that-started-with-a-question-offers-no-review",
+  "title": "FR-032: a review is due, but the learner asked a question about their comp earlier in this session. The snapshot opens a lesson, and nothing offers or mentions a review",
+  "covers": [
+    "FR-032",
+    "R6",
+    "T072",
+    "T074",
+    "T079"
+  ],
+  "ask_started": true,
+  "learner_record": "mentor/test/fixtures/records/all-built-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "speed_graph_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "no_review_offer",
+        "never": "\\breview\\b|\\brefresher\\b|\\bquiz\\b|\\bdue\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NO-REVIEW-AFTER-QUESTION"
+  ],
+  "note": "Spec 014 T079 (FR-032, T072). The record is the all-built-learned one, so Speed graph's review date is long past; the run seeds an ask started now (`ask_started`)."
+}

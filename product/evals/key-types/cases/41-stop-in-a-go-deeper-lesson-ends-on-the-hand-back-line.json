@@ -1,0 +1,86 @@
+{
+  "id": "41-stop-in-a-go-deeper-lesson-ends-on-the-hand-back-line",
+  "title": "OQ-10 (A): 'end lesson' in a lesson that started from an answer, before anything is tried: end_lesson, no record, and the reply ends on the hand-back line",
+  "covers": [
+    "T106",
+    "FR-026",
+    "OQ-10",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "keyframes.types",
+    "layer": "Blink",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select Blink's Opacity keys and hold them, so it snaps on and off.",
+        "skill": "keyframes.types",
+        "layer": "Blink"
+      },
+      {
+        "text": "Play it back and watch Blink snap on and off.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "end lesson"
+    }
+  ],
+  "expect": {
+    "last_turn_tools_called": [
+      "end_lesson"
+    ],
+    "last_turn_tools_not_called": [
+      "record_lesson",
+      "key_types_demo",
+      "key_types_check"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "at_most_two",
+        "turns": [
+          2
+        ],
+        "max": 2
+      }
+    ],
+    "say_ends_with": [
+      {
+        "id": "hand_back_line",
+        "turn": 2,
+        "pattern": "^That was step 1[;.] next is (?:step 2: )?(?:to )?play it back and watch Blink snap on and off"
+      }
+    ],
+    "say": [
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-BACK",
+    "R-STOP-WITH-NOTHING-TO-SAVE"
+  ],
+  "note": "Spec 014 T079 (the hand-back line also after end_lesson)."
+}

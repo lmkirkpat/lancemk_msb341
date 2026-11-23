@@ -1,0 +1,95 @@
+{
+  "id": "30-a-repeat-answer-card-on-turn-4-is-refused",
+  "title": "T081: after \"done\" the mentor must reply in prose. If it tries to send the same answer card again, give_answer refuses it (FOLLOW_UP_NOT_ANSWER) and the mentor then replies in prose; no answer card is accepted on that turn",
+  "covers": [
+    "TD 6 turn 4",
+    "FR-029",
+    "FR-031",
+    "T081",
+    "T078"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "I did step 3 and played it back. It still shakes the same.",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ]
+      }
+    ],
+    "follow_up_not_answer": [
+      {
+        "turn": 2,
+        "allowed_refusals": [
+          "FOLLOW_UP_NOT_ANSWER"
+        ]
+      }
+    ],
+    "turn_first_tool": [
+      {
+        "turn": 2,
+        "tool": "describe_layers"
+      }
+    ],
+    "reread": [
+      {
+        "turn": 2,
+        "of": 1,
+        "layers": true
+      }
+    ],
+    "turn_tools": [
+      {
+        "turn": 2,
+        "not_called": [
+          "go_deeper",
+          "Skill"
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "never_you_moved",
+        "never": "(?<!\\b(?:if|whether|unless) )\\byou(?:['’]ve| have)? (?:moved|changed|dragged|adjusted|panned|edited|reset|nudged)\\b",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      },
+      {
+        "id": "no_verdict",
+        "never": "\\b(?:pass(?:ed)?|fail(?:ed|s)?|well done|nailed it|nice work|great job|good job|you did it|you got it|that worked|correct(?:ly)?|incorrect|mistake)\\b",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      }
+    ],
+    "prose_max_sentences": [
+      {
+        "id": "short_read",
+        "turns": [
+          2
+        ],
+        "max": 5
+      }
+    ]
+  },
+  "rubric": [
+    "R-TRY-READ"
+  ],
+  "note": "Spec 014 T078 follow-up (T081, the builder's decision: only a new question gets give_answer; contracts/panel-ask.md). The fixture is unchanged between the turns, which is the tempting case: the same read makes the same card. Unlike case 21, which fails on any give_answer call in turn 2, this one allows a refused repeat (FOLLOW_UP_NOT_ANSWER) and fails on an accepted card, on any other refusal, or on no prose. The guard firing isn't forced; a mentor that goes straight to prose passes."
+}

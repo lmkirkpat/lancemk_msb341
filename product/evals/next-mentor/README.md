@@ -113,3 +113,9 @@ Review dates in the existing records are in the past, so the reviews they hold a
 Same as the other sets: `results/<YYYY-MM-DD-HHMMSS>.json`, `summary`, `cases[].runs[]` with `checks`,
 `rubric`, `transcript`, `cost`. `not_run_on_runtime` lists the cases left out. The target is SC-006: at least
 80% passing and every hard-rule check passing.
+
+## Phase 3 cases (spec 014 T079, written 2026-11-19, dry-run only)
+
+3 cases, ids 15 to 17: **15** an asked skill raised once (FR-042, `R-NM-ASKED-ONCE`; record `records/asked-pivot-easing-learned.json`: easing learned plus one asked entry), **16** an asked skill the comp has nothing for is not raised (`R-NM-ASKED-NOT-RAISED`; `records/asked-speed-graph-easing-learned.json`), **17** (A only) 'end lesson' after a hand-over ends the lesson plainly (OQ-10, `R-STOP-WITH-NOTHING-TO-SAVE`). Cases 15 and 16 run on B1 and A; the days-ago word in 15 is the model's, so none is pinned. Dry-run only until T080.
+
+T081 follow-up: an asked suggestion now ranks below a due review. Cases 15 and 16 use records with no review due, so they still hold (checked in fixture mode). Not covered yet (a proposed case 18): a due review and an asked entry together suggest the review and say nothing of the question.

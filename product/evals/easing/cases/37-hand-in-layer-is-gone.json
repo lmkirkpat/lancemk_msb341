@@ -1,0 +1,68 @@
+{
+  "id": "37-hand-in-layer-is-gone",
+  "title": "From an answer (A), lost layer: the layer the answer named (Hammer) isn't in the comp now. One sentence says it couldn't find it, then the lesson opens as a first lesson",
+  "covers": [
+    "FR-026",
+    "T074",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "easing.basic",
+    "layer": "Hammer",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select Hammer's keys and choose Easy Ease (F9).",
+        "skill": "easing.basic",
+        "layer": "Hammer"
+      },
+      {
+        "text": "Play it back and watch the Hammer.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    }
+  ],
+  "expect": {
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode_source": "hand_in_lost"
+        }
+      }
+    ],
+    "set_ease_max": 0,
+    "say": [
+      {
+        "id": "says_it_couldnt_find_it",
+        "must": "(?:couldn['’]t|can['’]t|didn['’]t|don['’]t) (?:find|see)|isn['’]t (?:in|there)|not (?:in|there)|no longer",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_the_layer",
+        "must": "\\bHammer\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-IN-LOST"
+  ],
+  "note": "Spec 014 T079. 'couldn't see' is allowed here: it is the lesson's own words for a layer the read doesn't return, said once, not a claim about a layer it returned (the ask set's no_cant_see check isn't in this set)."
+}

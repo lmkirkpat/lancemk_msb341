@@ -1,0 +1,60 @@
+{
+  "id": "43-stop-after-a-check-records-and-never-ends",
+  "title": "OQ-10: a stop after a check that didn't pass records the lesson as partial and never calls end_lesson",
+  "covers": [
+    "T106",
+    "OQ-10",
+    "T079"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-one-held.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "blink-one-held.json",
+      "say": "I held them. Done."
+    },
+    {
+      "project": "blink-one-held.json",
+      "say": "Let's stop here for today."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "key_types_check",
+      "record_lesson"
+    ],
+    "tools_not_called": [
+      "end_lesson"
+    ],
+    "record_lesson": {
+      "skill": "keyframes.types",
+      "result": "partial"
+    },
+    "turn_tools": [
+      {
+        "turn": 4,
+        "called": [
+          "record_lesson"
+        ],
+        "not_called": [
+          "end_lesson"
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-RECORD-HONEST"
+  ],
+  "note": "Spec 014 T079 (OQ-10: a stop after a check records). Runs on B1 and A."
+}

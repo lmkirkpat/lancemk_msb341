@@ -1,0 +1,85 @@
+{
+  "id": "40-hand-back-after-a-stop-that-records",
+  "title": "From an answer (A): a check that doesn't pass, then 'stop': the lesson is recorded as partial and the last line hands back to the answer's next step, with nothing after it",
+  "covers": [
+    "FR-026",
+    "T106",
+    "T074",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "easing.speed_graph",
+    "layer": "Subtitle",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Open Subtitle's Position in the speed graph and drag the landing key's handle longer, so it lands softly.",
+        "skill": "easing.speed_graph",
+        "layer": "Subtitle"
+      },
+      {
+        "text": "Play it back and watch how Subtitle lands.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "subtitle-opening.json": "synthetic",
+    "subtitle-pair1-shaped.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "subtitle-opening.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "subtitle-pair1-shaped.json",
+      "say": "I shaped Subtitle's first move. Done."
+    },
+    {
+      "project": "subtitle-pair1-shaped.json",
+      "say": "Let's stop here for today."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "speed_graph_check",
+      "record_lesson"
+    ],
+    "tools_not_called": [
+      "end_lesson"
+    ],
+    "record_lesson": {
+      "skill": "easing.speed_graph",
+      "result": "partial"
+    },
+    "say_ends_with": [
+      {
+        "id": "hand_back_line",
+        "turn": 3,
+        "pattern": "^That was step 1[;.] next is (?:step 2: )?(?:to )?play it back and watch how Subtitle lands"
+      }
+    ],
+    "say": [
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-BACK",
+    "R-RECORD-HONEST"
+  ],
+  "note": "Spec 014 T079. The pass flow here needs the reading step and several checks (case 37), so the hand-back after record_lesson is pinned on a stop that records (the reply has hand_back either way)."
+}

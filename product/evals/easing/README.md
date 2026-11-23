@@ -350,3 +350,24 @@ B1 baseline compared: `2026-11-11-225131.json`, 32/33 (97%); gap 0 points.
 ## Spec 015 T036 re-baseline (2026-11-16, B1, at `edc0a1e`)
 
 **Full run: `results/2026-11-16-144917.json`, 32/33 (97%), $18.67.** SC-006 met, no hard-rule check failed, no timeouts. Last B1 baseline 32/33. The one miss, 01 (R-NAMES-LAYERS, 'all starting at 0.5 s' for four Title pairs), was noise: `--repeat 3` `-190718` had 1 pass and 2 judge `ETIMEDOUT` (plumbing), then `-193122` 3/3 ($0.68).
+
+## Phase 3 cases (spec 014 T079, written 2026-11-19, dry-run only)
+
+10 cases, ids 34 to 43: rule 1 (the sentence from `motion_from`), a lesson opened from an answer, the hand-back line, the stop rules (`end_lesson`, and a stop after a check records), a session that began with a question never offering a review, and K5 (a refused record is rewritten without a word). Each says which requirement it covers in `covers`.
+
+| Case | Runs on | What | Rubric |
+|---|---|---|---|
+| 34-rule-one-a-parent-moves-the-layer | b1,a | Rule 1 | R-RULE-ONE, R-NAMES-LAYERS |
+| 35-hand-in-opens-on-the-layer | a | From an answer (A) | R-HAND-IN-OPENS, R-ONE-IDEA |
+| 36-hand-in-layer-has-no-keys | a | From an answer (A), keyed false | R-HAND-IN-UNKEYED |
+| 37-hand-in-layer-is-gone | a | From an answer (A), lost layer | R-HAND-IN-LOST |
+| 38-hand-in-learned-skill-is-practice | a | From an answer (A), Easing already learned | R-PRACTICE-WORDS, R-NAMES-LAYERS |
+| 39-hand-back-after-the-pass | a | From an answer (A) | R-HAND-BACK |
+| 40-end-lesson-before-anything-is-tried | b1,a | OQ-10 | R-STOP-WITH-NOTHING-TO-SAVE |
+| 41-stop-after-a-check-records-and-never-ends | b1,a | OQ-10 | R-RECORD-HONEST |
+| 42-stop-in-a-go-deeper-lesson-ends-on-the-hand-back-line | a | OQ-10 (A) | R-HAND-BACK, R-STOP-WITH-NOTHING-TO-SAVE |
+| 43-record-rewrite-is-silent | b1,a | K5 | R-RECORD-REWRITE-SILENT, R-RECORD-HONEST |
+
+New expect keys (shared, `../lib/phase3-checks.mjs`, unit-tested in `lib/test/phase3-checks.test.mjs`): `turn_tools` (in one turn: successful calls and calls that must not happen), `record_text_never` (no saved record_lesson text matches a regex), `record_recovers` (a refused record_lesson is followed by a saved one), `say_ends_with` (the last sentence of a turn matches: the hand-back line), `say_never_when_called` (nothing said about a refusal). New case keys: `hand_in` (the state go_deeper leaves, seeded as in the anchor and null sets; `lib/hand-in.mjs`), `ask_started: true` (an ask began in this session window, so no due review opens the lesson), and `runtimes` (a hand-in case runs on A only, as the ask set's case 19 and next-mentor's hand-over cases do; the seed and the tools behave the same on B1, so dropping `runtimes` would run them there). Not run: dry-run only until T080.
+
+T081 follow-up: case 36 (hand-in on a layer with no keys) now also expects `lesson: null` in the snapshot reply and no record_lesson, since the tool starts no lesson then. Cases 40 to 42 still match the skill's Stopping early section; the hand-back-on-stop line is in From an answer item 3.

@@ -509,3 +509,19 @@ The demo turn's example sentence now says the shift "later by your gap". Results
 Cases that reach a demonstration (`demo_calls_min` 1): 03, 16, 40, 41. All four were run; none skipped.
 
 Case 41 in all three runs said the gap as "4 frames" ("later by your gap of 4 frames") and the judge passed it, so the SKILL.md allowance for the learner's own gap in frames and the Fail line "numbers" did not collide in these runs. In all three, the mentor also reported that the preview frame came back plain dark and showed nothing. That is the runner's flat frame (`lib/blank-frame.mjs`, written for every offset case at `run.mjs` line 579), not a case 41 fixture issue.
+
+## Phase 3 cases (spec 014 T079, written 2026-11-19, dry-run only)
+
+7 cases, ids 45 to 51: rule 1 (the sentence from `motion_from`), a lesson opened from an answer, the hand-back line, the stop rules (`end_lesson`, and a stop after a check records), a session that began with a question never offering a review, and K5 (a refused record is rewritten without a word). Each says which requirement it covers in `covers`.
+
+| Case | Runs on | What | Rubric |
+|---|---|---|---|
+| 45-rule-one-a-parent-moves-the-layer | b1,a | Rule 1 | R-RULE-ONE, R-NAMES-REAL |
+| 46-hand-in-opens-on-the-layers | a | From an answer (A) | R-HAND-IN-OPENS, R-ONE-IDEA |
+| 47-hand-back-after-a-stop-that-records | a | From an answer (A) | R-HAND-BACK, R-RECORD-HONEST |
+| 48-stop-in-a-go-deeper-lesson-ends-on-the-hand-back-line | a | OQ-10 (A) | R-HAND-BACK, R-STOP-WITH-NOTHING-TO-SAVE |
+| 49-end-lesson-before-anything-is-tried | b1,a | OQ-10 | R-STOP-WITH-NOTHING-TO-SAVE |
+| 50-a-session-that-started-with-a-question-offers-no-review | b1,a | FR-032 | R-NO-REVIEW-AFTER-QUESTION |
+| 51-record-rewrite-is-silent | b1,a | K5 | R-RECORD-REWRITE-SILENT, R-RECORD-HONEST |
+
+New expect keys (shared, `../lib/phase3-checks.mjs`, unit-tested in `lib/test/phase3-checks.test.mjs`): `turn_tools` (in one turn: successful calls and calls that must not happen), `record_text_never` (no saved record_lesson text matches a regex), `record_recovers` (a refused record_lesson is followed by a saved one), `say_ends_with` (the last sentence of a turn matches: the hand-back line), `say_never_when_called` (nothing said about a refusal). New case keys: `hand_in` (the state go_deeper leaves, seeded as in the anchor and null sets; `lib/hand-in.mjs`), `ask_started: true` (an ask began in this session window, so no due review opens the lesson), and `runtimes` (a hand-in case runs on A only, as the ask set's case 19 and next-mentor's hand-over cases do; the seed and the tools behave the same on B1, so dropping `runtimes` would run them there). Not run: dry-run only until T080.

@@ -1,0 +1,47 @@
+{
+  "id": "34-rule-one-a-parent-moves-the-layer",
+  "title": "Rule 1: Title's motion also comes from its parent CTRL. In the explanation turn the mentor says so in one sentence, naming CTRL, and that easing Title's own keys won't change that part, then teaches on its keys",
+  "covers": [
+    "FR-033",
+    "FR-034",
+    "T074",
+    "T079"
+  ],
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/expressions/practice.json",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "mentor/test/fixtures/expressions/practice.json",
+      "say": "Title sounds good."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "snapshot_project"
+    ],
+    "set_ease_max": 0,
+    "say": [
+      {
+        "id": "names_the_parent",
+        "must": "\\bCTRL\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "own_keys_wont_change_it",
+        "must": "(?:won|wouldn)['’]t (?:change|affect|touch|move|fix|stop)|doesn['’]t (?:change|affect|touch)|(?:won|wouldn)['’]t make (?:a )?difference|can['’]t (?:change|reach)|(?:not|n['’]t) (?:change|affect)",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-RULE-ONE",
+    "R-NAMES-LAYERS"
+  ],
+  "note": "Spec 014 T079 (rule 1). The fixture is the builder's Mentor Practice capture with spec 015's expression reads (the sets' older captures carry none, so they say nothing, by design): Title rides on CTRL, which has Position keys, so motion_from lists CTRL by keys. The sentence belongs to the explanation turn (turn 2), not the opening. A layer's own expression isn't pinned for easing: an expression-driven property is skipped from the findings, so no easing focus has one."
+}

@@ -1,0 +1,56 @@
+{
+  "id": "38-rule-one-a-parent-moves-the-layer",
+  "title": "Rule 1: Subtitle's Position is the focus, and Subtitle also rides on its parent CTRL. The explanation turn says so in one sentence, naming CTRL, and that shaping Subtitle's own keys won't change that part",
+  "covers": [
+    "FR-033",
+    "FR-034",
+    "T074",
+    "T079"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "expressions/practice.json": "live"
+  },
+  "turns": [
+    {
+      "project": "expressions/practice.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "expressions/practice.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "expressions/practice.json",
+      "say": "I think it's fastest in the middle."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "speed_graph_snapshot",
+      "preview_frame"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "names_the_parent",
+        "must": "\\bCTRL\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "own_keys_wont_change_it",
+        "must": "(?:won|wouldn)['’]t (?:change|affect|touch|move|fix|stop)|doesn['’]t (?:change|affect|touch)|(?:won|wouldn)['’]t make (?:a )?difference|can['’]t (?:change|reach)|(?:not|n['’]t) (?:change|affect)",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-RULE-ONE",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 014 T079 (rule 1). The builder's Mentor Practice capture with spec 015's expression reads: the focus is Subtitle's Position (its pairs are Easy Ease), parented to CTRL, which has Position keys. The sentence belongs to step 3's explanation, the turn after the learner reads the graph (turn 3, as in case 01); CTRL is also named in the opening's leave-outs (a null), so the check is on turn 3 only."
+}

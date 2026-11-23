@@ -1,0 +1,71 @@
+{
+  "id": "49-end-lesson-before-anything-is-tried",
+  "title": "OQ-10: 'end lesson' after the order and gap are given and before any demonstration or check: end_lesson is called, nothing is recorded, two sentences at most, no new step",
+  "covers": [
+    "T106",
+    "OQ-10",
+    "T079"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "end lesson"
+    }
+  ],
+  "expect": {
+    "last_turn_tools_called": [
+      "end_lesson"
+    ],
+    "last_turn_tools_not_called": [
+      "record_lesson",
+      "offset_demo",
+      "offset_check"
+    ],
+    "tools_not_called": [
+      "record_lesson",
+      "offset_demo",
+      "offset_check"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "at_most_two",
+        "turns": [
+          3
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "no_new_step",
+        "never": "\\?",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-STOP-WITH-NOTHING-TO-SAVE"
+  ],
+  "note": "Spec 014 T079 (OQ-10). Runs on B1 and A."
+}

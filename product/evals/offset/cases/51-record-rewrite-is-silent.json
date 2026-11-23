@@ -1,0 +1,69 @@
+{
+  "id": "51-record-rewrite-is-silent",
+  "title": "K5: the learner says they changed another layer by mistake and undid it. No check saw it, so the saved record never pairs a change word with Badge; a refused save is rewritten and saved with no word of it to the learner",
+  "covers": [
+    "FR-036",
+    "K5",
+    "T071",
+    "T079"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "layers-pass.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "layers-pass.json",
+      "say": "I staggered them. Done. Earlier I moved Badge by mistake and undid it."
+    },
+    {
+      "project": "layers-pass.json",
+      "say": "Thanks, that's all for today."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "record_lesson": {
+      "skill": "timing.offset",
+      "result": "passed"
+    },
+    "record_recovers": true,
+    "demo_calls_max": 0,
+    "record_text_never": [
+      {
+        "id": "no_unseen_change_on_badge",
+        "pattern": "Badge[^.|]*\\b(?:moved|undid|undo|changed|reverted|reset|mistake|fixed)\\b|\\b(?:moved|undid|changed|reverted|reset|fixed)\\b[^.|]*Badge"
+      }
+    ],
+    "say_never_when_called": [
+      {
+        "id": "refusal_not_said_3",
+        "turn": 3,
+        "tool": "record_lesson",
+        "pattern": "unattributed|\\brefus|couldn['’]t (?:save|record)|wouldn['’]t (?:save|record)|didn['’]t (?:save|record)|try(?:ing)? (?:to (?:save|record) )?again|\\brewr[io]te|no check (?:saw|reported)|record(?:ing)? (?:error|failed)"
+      },
+      {
+        "id": "refusal_not_said_4",
+        "turn": 4,
+        "tool": "record_lesson",
+        "pattern": "unattributed|\\brefus|couldn['’]t (?:save|record)|wouldn['’]t (?:save|record)|didn['’]t (?:save|record)|try(?:ing)? (?:to (?:save|record) )?again|\\brewr[io]te|no check (?:saw|reported)|record(?:ing)? (?:error|failed)"
+      }
+    ]
+  },
+  "rubric": [
+    "R-RECORD-REWRITE-SILENT",
+    "R-RECORD-HONEST"
+  ],
+  "note": "Spec 014 T079 (K5). The turns are case 26's flow (four frames apart, layers-pass), with the mistake line in the pass turn; Badge is a Mentor Practice 2 layer outside the Dots that no check attributes."
+}

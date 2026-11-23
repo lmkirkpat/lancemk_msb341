@@ -1,0 +1,81 @@
+{
+  "id": "44-record-rewrite-is-silent",
+  "title": "K5: the learner says they changed another layer by mistake and undid it. No check saw it, so the saved record never pairs a change word with Title; a refused save is rewritten and saved with no word of it to the learner",
+  "covers": [
+    "FR-036",
+    "K5",
+    "T071",
+    "T079"
+  ],
+  "learner_record": "product/evals/speed-graph/records/learned-title-not-due.json",
+  "fixture_sources": {
+    "subtitle-opening.json": "synthetic",
+    "subtitle-both-shaped.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "subtitle-opening.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "subtitle-opening.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "subtitle-opening.json",
+      "say": "I think it's fastest in the middle."
+    },
+    {
+      "project": "subtitle-both-shaped.json",
+      "say": "Done. Earlier I changed Title's Position by mistake and undid it, then I shaped both of Subtitle's moves."
+    },
+    {
+      "project": "subtitle-both-shaped.json",
+      "say": "Toward the start."
+    },
+    {
+      "project": "subtitle-both-shaped.json",
+      "say": "Thanks, that's it for today."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "tools_called": [
+      "record_lesson"
+    ],
+    "record_lesson": {
+      "skill": "easing.speed_graph",
+      "result": "passed",
+      "demo_used": false
+    },
+    "record_recovers": true,
+    "demo_calls_max": 0,
+    "record_text_never": [
+      {
+        "id": "no_unseen_change_on_title",
+        "pattern": "Title[^.|]*\\b(?:moved|undid|undo|changed|reverted|reset|mistake|fixed)\\b|\\b(?:moved|undid|changed|reverted|reset|fixed)\\b[^.|]*Title"
+      }
+    ],
+    "say_never_when_called": [
+      {
+        "id": "refusal_not_said_5",
+        "turn": 5,
+        "tool": "record_lesson",
+        "pattern": "unattributed|\\brefus|couldn['’]t (?:save|record)|wouldn['’]t (?:save|record)|didn['’]t (?:save|record)|try(?:ing)? (?:to (?:save|record) )?again|\\brewr[io]te|no check (?:saw|reported)|record(?:ing)? (?:error|failed)"
+      },
+      {
+        "id": "refusal_not_said_6",
+        "turn": 6,
+        "tool": "record_lesson",
+        "pattern": "unattributed|\\brefus|couldn['’]t (?:save|record)|wouldn['’]t (?:save|record)|didn['’]t (?:save|record)|try(?:ing)? (?:to (?:save|record) )?again|\\brewr[io]te|no check (?:saw|reported)|record(?:ing)? (?:error|failed)"
+      }
+    ]
+  },
+  "rubric": [
+    "R-RECORD-REWRITE-SILENT",
+    "R-RECORD-HONEST"
+  ],
+  "note": "Spec 014 T079 (K5). The turns are case 37's up to the pass (its learned-record) with the learner's mistake line added to the pass turn; the saved record is checked wherever it comes."
+}

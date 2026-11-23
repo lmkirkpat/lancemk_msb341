@@ -1,0 +1,85 @@
+{
+  "id": "40-hand-back-after-the-pass",
+  "title": "From an answer (A): after the pass and the record, the last line hands back to the answer's next step and nothing follows it",
+  "covers": [
+    "FR-026",
+    "T074",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "keyframes.types",
+    "layer": "Blink",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Select Blink's Opacity keys and hold them, so it snaps on and off.",
+        "skill": "keyframes.types",
+        "layer": "Blink"
+      },
+      {
+        "text": "Play it back and watch Blink snap on and off.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-all-held.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "blink-all-held.json",
+      "say": "I held all of Blink's pairs myself. Done."
+    },
+    {
+      "project": "blink-all-held.json",
+      "say": "Nothing here needs to run at constant speed."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "tools_called": [
+      "key_types_check",
+      "record_lesson"
+    ],
+    "demo_calls_max": 0,
+    "record_lesson": {
+      "skill": "keyframes.types",
+      "result": "passed",
+      "demo_used": false
+    },
+    "say_ends_with": [
+      {
+        "id": "hand_back_line",
+        "turn": 3,
+        "pattern": "^That was step 1[;.] next is (?:step 2: )?(?:to )?play it back and watch Blink snap on and off"
+      }
+    ],
+    "say": [
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-BACK"
+  ],
+  "note": "Spec 014 T079. The skill asks its constant-speed question in the pass turn and records after the learner's answer (step 8, step 10), so the record and the hand-back line come in turn 3: turn 2 says the pass, turn 3 answers the question and ends on the line. The learner's turn 3 answer says none applies, so the lesson goes on to the record."
+}

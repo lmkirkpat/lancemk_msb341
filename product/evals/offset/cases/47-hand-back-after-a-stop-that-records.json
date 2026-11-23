@@ -1,0 +1,85 @@
+{
+  "id": "47-hand-back-after-a-stop-that-records",
+  "title": "From an answer (A): a stagger check that isn't enough, then 'stop': recorded as partial, and the last line hands back to the answer's next step with nothing after it",
+  "covers": [
+    "FR-026",
+    "T106",
+    "T074",
+    "T079"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "hand_in": {
+    "skill": "timing.offset",
+    "layer": "Dot 1",
+    "step_number": 1,
+    "steps": [
+      {
+        "text": "Offset Dot 1, Dot 2 and Dot 3 so Dot 1 goes first, then Dot 2, then Dot 3, four frames apart.",
+        "skill": "timing.offset",
+        "layer": "Dot 1"
+      },
+      {
+        "text": "Play it back and watch the Dots land one after another.",
+        "skill": null,
+        "layer": null
+      }
+    ],
+    "goal": null,
+    "place_named": false
+  },
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "bar-dragged.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "bar-dragged.json",
+      "say": "I staggered them. Done."
+    },
+    {
+      "project": "bar-dragged.json",
+      "say": "Let's stop here for today."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "offset_check",
+      "record_lesson"
+    ],
+    "tools_not_called": [
+      "end_lesson"
+    ],
+    "record_lesson": {
+      "skill": "timing.offset",
+      "result": "partial"
+    },
+    "say_ends_with": [
+      {
+        "id": "hand_back_line",
+        "turn": 3,
+        "pattern": "^That was step 1[;.] next is (?:step 2: )?(?:to )?play it back and watch the Dots land one after another"
+      }
+    ],
+    "say": [
+      {
+        "id": "no_command",
+        "never": "/[a-z-]+-mentor",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HAND-BACK",
+    "R-RECORD-HONEST"
+  ],
+  "note": "Spec 014 T079. The fixture is case 23's (bars dragged, not a stagger). The answer's step already gave order and gap, so the opening asks nothing and turn 2 is the try."
+}

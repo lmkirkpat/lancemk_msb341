@@ -22,6 +22,9 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { parseJudgeReply } from "../lib/judge-reply.mjs"; // lenient judge reply (fences, stray text); unreadable = plumbing
 import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
+import { turnChecks } from "../lib/turn-checks.mjs"; // say_max_sentences (spec 014 T079)
+import { sessionProblems, seedSession } from "../lib/hand-in.mjs"; // a case's seeded hand-in (spec 014 T079)
+import { phase3Checks, phase3Problems, PHASE3_KEYS } from "../lib/phase3-checks.mjs"; // turn_tools, record_text_never, say_ends_with (spec 014 T079)
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
 // with no builder CLAUDE.md or auto-memory in context (agent audit 2026-10-12, lesson 4.5).
@@ -74,7 +77,9 @@ function loadCases() {
     .map((f) => ({ file: path.join(CASES_DIR, f), ...JSON.parse(fs.readFileSync(path.join(CASES_DIR, f), "utf8")) }));
 }
 
-const fixtureFile = (name) => path.join(FIXTURES_DIR, `${name}.json`);
+// A fixture is this folder's `<name>.json`, or (a name ending in .json) a file from the repo root, e.g. the builder's
+// own captures under mentor/test/fixtures (spec 014 T079: motion_from needs a capture with expression reads).
+const fixtureFile = (name) => (/\.json$/.test(name) ? path.join(REPO, name) : path.join(FIXTURES_DIR, `${name}.json`));
 
 function validate(c) {
   const problems = [];
@@ -85,7 +90,18 @@ function validate(c) {
   if (c.learner_record && !fs.existsSync(path.join(CASES_DIR, c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
-  const known = ["first_tool", "set_ease_max", "set_ease_min", "set_ease_only_on", "verdict", "tools_called", "last_turn_tools_not_called", "last_turn_tools_called", "record_lesson", "targets_include", "never_said_near"];
+  problems.push(...sessionProblems(c));
+  for (const r of c.runtimes || []) if (!["b1", "a"].includes(r)) problems.push(`runtimes: "${r}" isn't b1 or a`);
+  problems.push(...phase3Problems(c.expect, (c.turns || []).length));
+  for (const s of (c.expect || {}).say || []) {
+    if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
+    try { new RegExp(s.must || s.never); } catch { problems.push(`say ${s.id}: bad regex`); }
+    for (const t of Array.isArray(s.turns) ? s.turns : []) if (!Number.isInteger(t) || t < 1 || t > c.turns.length) problems.push(`say ${s.id}: turn ${t} is out of range`);
+  }
+  for (const s of (c.expect || {}).say_max_sentences || []) {
+    if (!s.id || !Number.isInteger(s.max) || !Array.isArray(s.turns) || !s.turns.length) problems.push(`say_max_sentences needs an id, turns and a whole max`);
+  }
+  const known = [...PHASE3_KEYS, "say", "say_max_sentences", "snapshot_reply", "tools_not_called", "first_tool", "set_ease_max", "set_ease_min", "set_ease_only_on", "verdict", "tools_called", "last_turn_tools_not_called", "last_turn_tools_called", "record_lesson", "targets_include", "never_said_near"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   return problems;
 }
@@ -250,6 +266,11 @@ function check(expect, turns) {
     const missing = expect.tools_called.filter((n) => !calls.some((e) => e.name === n));
     add("tools_called", missing.length === 0, missing.length ? `never called ${missing.join(", ")}` : "all called");
   }
+  // Spec 014 T079: over the whole case, as in the other sets.
+  if ("tools_not_called" in expect) {
+    const hit = expect.tools_not_called.filter((n) => calls.some((e) => e.name === n));
+    add("tools_not_called", hit.length === 0, hit.length ? `called ${hit.join(", ")}` : "none called");
+  }
   if ("last_turn_tools_not_called" in expect) {
     const called = expect.last_turn_tools_not_called.filter((n) => tools([turns.at(-1)]).some((e) => e.name === n));
     add("last_turn_tools_not_called", called.length === 0, called.length ? `called ${called.join(", ")}` : "none called");
@@ -284,6 +305,25 @@ function check(expect, turns) {
         !last ? "never recorded" : wrong.length ? wrong.map(([k, v]) => `${k} was ${JSON.stringify(last.input[k])}, expected ${JSON.stringify(v)}`).join("; ") : "matches");
     }
   }
+  // Spec 014 T079: the first successful snapshot reply (of one turn, when `turn` is given) holds these values; `equals` keys may be dotted.
+  for (const w of expect.snapshot_reply || []) {
+    const pool = (w.turn ? (turns[w.turn - 1] || { events: [] }).events.filter((e) => e.kind === "tool") : calls).filter((e) => e.name === "snapshot_project" && e.ok);
+    const r = pool.length ? parse(pool[0].result) : null;
+    const at = (o, k) => k.split(".").reduce((x, p) => (x == null ? undefined : x[p]), o);
+    const wrong = !r ? ["no successful snapshot reply"] : Object.entries(w.equals || {}).filter(([k, v]) => JSON.stringify(at(r, k)) !== JSON.stringify(v)).map(([k]) => `${k} was ${JSON.stringify(at(r, k))}`);
+    add(`snapshot_reply${w.turn ? "@" + w.turn : ""}`, wrong.length === 0, wrong.length ? wrong.join("; ") : "ok");
+  }
+  // What the mentor says, turn by turn: { id, must | never, turns?: [from, to] | [n] | "last" }.
+  for (const s of expect.say || []) {
+    const [from, to] = s.turns === "last" ? [turns.length, turns.length] : Array.isArray(s.turns) && s.turns.length === 2 ? s.turns : Array.isArray(s.turns) && s.turns.length === 1 ? [s.turns[0], s.turns[0]] : [1, turns.length];
+    const text = turns.slice(from - 1, to).flatMap((t) => t.events.filter((e) => e.kind === "say").map((e) => e.text)).join("\n");
+    const m = text.match(new RegExp(s.must || s.never, s.cs ? "" : "i"));
+    const where = from === to ? `turn ${from}` : `turns ${from} to ${to}`;
+    if (s.must) add(`say:${s.id}`, !!m, m ? `${where}: "${m[0]}"` : `${where}: never matched /${s.must}/`);
+    else add(`say:${s.id}`, !m, m ? `${where} said "${m[0]}"` : `${where}: clean`);
+  }
+  out.push(...turnChecks({ say_max_sentences: expect.say_max_sentences || [] }, turns, MENTOR_TOOLS));
+  out.push(...phase3Checks(expect, turns, MENTOR_TOOLS));
   return out;
 }
 
@@ -336,6 +376,7 @@ async function runCase(c, opts) {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-"));
   const stateFile = path.join(home, "fixture-state.json");
   if (c.learner_record) fs.copyFileSync(path.join(CASES_DIR, c.learner_record), path.join(home, "learner.json"));
+  if (c.hand_in || c.ask_started) seedSession(home, c); // what go_deeper leaves on A (spec 014 T079)
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
   const mentor = opts.runtime === "a" ? ab.openCase({ repo: REPO, home, env, opts }) : null;
   const runtime = mentor ? null : ensureRuntime(REPO, path.join(home, "runtime"));
@@ -418,6 +459,10 @@ async function main() {
   const bad = cases.map((c) => [c.id, validate(c)]).filter(([, p]) => p.length);
   for (const [id, p] of bad) console.error(`${id}: ${p.join("; ")}`);
   if (bad.length) process.exit(1);
+  // A case with `runtimes` runs only there (spec 014 T079: a hand-in opening is an A case, since B1 never offers a lesson).
+  for (const c of cases.filter((x) => !(x.runtimes || ["b1", "a"]).includes(opts.runtime))) console.log(`${c.id}  not run on ${opts.runtime} (${c.runtimes.join(", ")} only)`);
+  cases = cases.filter((x) => (x.runtimes || ["b1", "a"]).includes(opts.runtime));
+  if (!cases.length) throw new Error(`No case runs on ${opts.runtime} for ${opts.only || "this set"}`);
   if (opts.dryRun) {
     if (opts.runtime === "a") {
       const a = await ab.dryRunA({ repo: REPO, cases, opts });
