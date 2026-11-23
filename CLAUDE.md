@@ -267,22 +267,22 @@ a brand new session act like a colleague who already knows what you are working 
     hand-in until phase 3, so SC-006's A half re-runs on phase 3's merge commit. Case 19 (situation 16, the
     whole go-deeper on A) 3/3 after the A adapter learned `skill_loaded` (a hand-over isn't a `Skill` call on
     A). **The panel is on A** (T091); restart AE before a sitting. Logged in `ask-build.md` › Ship step.
-  - **Phase 3 built and reviewed, not merged** (branches `014-p3-mentor`, `014-p3-panel`, `014-p3-evals`;
-    worktrees removed, recut with `git worktree add` if needed): asked-question memory, `note_said`, K5
+  - **Phase 3 merged 2026-11-23 (T083, `c4b2d88`):** asked-question memory, `note_said`, K5
     (`RECORD_UNATTRIBUTED`), hand-ins for the other four skills, turn 4, 49 new eval cases. T081 and T082
     fixed. Builder decisions: an asked suggestion ranks **below** a due review; a new `FOLLOW_UP_NOT_ANSWER`
-    guard refuses a repeated answer card. A trial merge of all three passed every suite (mentor 2036, panel
-    894, helper 294, hooks 39, evals 166). `014-p3-evals` predates the mentor's last fix (`4058096`: pivot
-    and null go-deeper lessons record and hand back in the turn after the understanding check), so merge
-    `014-p3-mentor` last or re-merge it.
-  - **Next (sprint ends 2026-11-24):**
-    1. Session 1 on A on my own comp (T092), on `main` as it is; log with `/usage-session` in
-       `discovery/usage-notes/ask-sessions.md`. Watch: a go-deeper that stalls after "try it" (fixed on phase 3).
-    2. Between sittings: merge phase 3 (T083), then T080 on B1 at the merge commit, one set at a time (about
-       $190 to $230 of subscription; two or three usage windows). Ask 21 and 22 may need case 30's tolerance
-       for a refused repeat. Then the ask set on A again (SC-006's A half, case 19 at repeat 3) and T084.
-    3. Session 2 (T093); session 3 (T094) after phase 3 is merged; T095 to T098; T099 (paid A re-runs of every
-       changed set) before any tester; T100 closes the spec.
+    guard refuses a repeated answer card. Suites on `main` match the trial merge (mentor 2036 + 4 todo, panel
+    894, helper 294, hooks 39, evals 166). Ask set on A at `c4b2d88`: 23/31, short of 80%. With repeats, 07, 18
+    and 19 pass; 12 and 25 are 1/3; 21, 23, 26 and 30 are 0/3, mostly turn 4 prose over its cap (logged in
+    `ask-build.md` › Phase 3 merge, with three proposed `SKILL.md` fixes and one builder call on 25). The
+    runner's `ASK_ALLOWED` lacked `note_said` (fixed, with a guard test). About $4.6 credit.
+  - **Next (sprint 5 is due 2026-11-23 at midnight):**
+    1. Sessions 1 to 3 on A on three of my own comps (T092 to T094), on `main` with phase 3; restart AE first.
+       Log each with `/usage-session` in `discovery/usage-notes/ask-sessions.md`. Watch turn 4: long replies
+       after "done" or "it worked", or crediting a change you didn't make.
+    2. Moved to sprint 6: T080 on B1 at `c4b2d88`, one set at a time (about $190 to $230 of subscription; two or
+       three usage windows). Ask 21 and 22 may need case 30's tolerance for a refused repeat. Then T084.
+    3. After the sessions: T095 to T098; T099 (paid A re-runs of every changed set) before any tester; T100
+       closes the spec.
     4. Open for the builder at T084 (else the design reviewer's picks): hide "Welcome to Knack." once a
        question is saved; the divider "· practiced on [layer], not saved"; six lines into MU › Copy.
     5. Eval follow-ups: `practice.json`'s 140° beside `time * 30` (ask 13); keep 3,000 characters of an

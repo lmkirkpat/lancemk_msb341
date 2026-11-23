@@ -84,7 +84,7 @@ On the words the learner reads (explanation, step lines, closing offer, and any 
 On the tools:
 
 - **read_before_answer**: on an answer, describe or clarify turn, `describe_layers` was called before `give_answer` (FR-001; the tool can't enforce it). A how-to or outside answer needs no read.
-- **only_ask_tools**: `describe_layers`, `preview_frame` and `give_answer` only; from a case's yes turn on (phase 2), also `go_deeper`, `Skill` and the named lesson skill's own tools (`lesson_skill`).
+- **only_ask_tools**: `describe_layers`, `preview_frame`, `give_answer` and (phase 3) `note_said` only; `test/allowed.test.mjs` keeps this list in step with the skill's `allowed-tools`; from a case's yes turn on (phase 2), also `go_deeper`, `Skill` and the named lesson skill's own tools (`lesson_skill`).
 - **no_project_change**: no demonstration, no `set_*`, no `pan_*`, no `record_lesson`, no `end_lesson` (before a yes turn).
 - **no_lesson_started**: no `Skill`, no `go_deeper`, no snapshot or `recommend_next` call before the case's yes turn (T058: no lesson starts without a yes). Only case 19 has one; every other case never says yes.
 - **no_undo** covers the turns before the yes turn only: a lesson's hint says Edit > Undo.

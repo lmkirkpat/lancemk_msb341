@@ -73,7 +73,8 @@ const lessonTools = (skill) => ab.toolSets(REPO, skill).mentor;
 const MENTOR_TOOLS = [...new Set([...TOOLS.mentor, ...CONTRACT_TOOLS, ...LESSON_SKILLS.flatMap(lessonTools)])];
 // What an ask turn may call: the reads and the answer. The hand-over and the lesson's tools are allowed from a case's yes turn on (checks.mjs), and this
 // is the only way to start a lesson: a call to one before it is a lesson started without a yes (`no_lesson_started`).
-const ASK_ALLOWED = ["describe_layers", "preview_frame", "give_answer"];
+// Phase 3 adds note_said (FR-038): an ask-mode write to the learner's own asked entry, never a lesson or a project change.
+const ASK_ALLOWED = ["describe_layers", "preview_frame", "give_answer", "note_said"];
 const allowedB1 = () => TOOLS.allowed.filter((t) => t !== HAND_OVER);
 
 // ---------- arguments ----------

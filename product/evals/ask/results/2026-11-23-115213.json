@@ -1,0 +1,1226 @@
+{
+  "run_at": "2026-11-23T18:52:13.970Z",
+  "options": {
+    "only": "19",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 1.26,
+  "refusals": {
+    "answer_calls": 6,
+    "refused": 3,
+    "rate": 0.5,
+    "by_code": {
+      "BAD_CLOSING": 3
+    },
+    "offer_not_ready": 0,
+    "by_case": {
+      "19-go-deeper-hands-over-and-back": [
+        {
+          "BAD_CLOSING": 1
+        },
+        {
+          "BAD_CLOSING": 1
+        },
+        {
+          "BAD_CLOSING": 1
+        }
+      ]
+    }
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "19-go-deeper-hands-over-and-back",
+      "title": "A only, situation 16: the learner says yes to going deeper on the pivot step. The mentor hands over (go_deeper, then the hand-over, nothing said), the pivot lesson opens on Shake Control with no intent question and no proposal, and after the pass and the understanding check its last line hands back to the answer's next step",
+      "covers": [
+        "TD 17.16",
+        "FR-022",
+        "FR-025",
+        "FR-026",
+        "FR-027",
+        "SC-013",
+        "T058"
+      ],
+      "hash": "e1a7d44eb062b4a075bd8ad08b4dfe8dea33a5854101331193a5c90de6a4eb1a",
+      "pass": true,
+      "passes": 2,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_changes_only_the_lesson",
+              "pass": true,
+              "detail": "only transform.anchor changed"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "4 steps (wanted 2 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "1 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "answer_length@1",
+              "pass": false,
+              "detail": "152 words (about 120 wanted)",
+              "warn": true
+            },
+            {
+              "check": "no_keyframe_skills@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "step_skills_include@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "skill_step_on_layer:transform.anchor@1",
+              "pass": true,
+              "detail": "no step tagged transform.anchor on Shake Control (not_taught@Shake Control, not_taught@Shake Control, transform.anchor@Shake Control, none@none)"
+            },
+            {
+              "check": "handover@2",
+              "pass": true,
+              "detail": "handed over to anchor-mentor"
+            },
+            {
+              "check": "no_answer_after_yes",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "no_answer@2",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@3",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@4",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@5",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "text:opens_on_shake_control",
+              "pass": true,
+              "detail": "prose of turn 2: \"Shake Control\""
+            },
+            {
+              "check": "text:no_intent_question",
+              "pass": true,
+              "detail": "prose of turn 2: clean"
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turns 1, 2, 3, 4, 5: clean"
+            },
+            {
+              "check": "text:hand_back_line",
+              "pass": true,
+              "detail": "prose of turn 5: \"That was step 3; next is Play it back and watch the turn.\""
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "13 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-HAND-OVER-OPENS",
+              "pass": true,
+              "reason": "In turn 2 the mentor wrote nothing before go_deeper and the Skill call, named no command or skill ID, and the lesson opened with \"We're on Shake Control, so the rock turns from where the hammer hits. Select Shake Control in the timeline and press A, then Shift+P, so both show.\" It asked no which-layer or where question and made no proposal."
+            },
+            {
+              "item": "R-HAND-BACK",
+              "pass": true,
+              "reason": "Turn 5 ends with \"That was step 3; next is Play it back and watch the turn.\", which matches turn 1's step 3 and step 4 word for word, and nothing follows it."
+            }
+          ],
+          "cost": 0.46420259999999997,
+          "session_id": null,
+          "answer_calls": 2,
+          "refusals": [
+            {
+              "turn": 1,
+              "code": "BAD_CLOSING"
+            }
+          ],
+          "refusals_by_code": {
+            "BAD_CLOSING": 1
+          },
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the rock shake from where the hammer hits.\nTOOL CALL describe_layers {\"layers\":[\"rock\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":28,\"layer\":\"rock.png\",\"asked\":\"rock\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}},{\"property\":\"Rotation\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}]}],\"shifts\":[{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Position\",\"shift_px\":12.15,\"at\":1.502,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\",\"over_1px\":{\"status\":\"not_read\",\"reason\":\"older_snapshot\"}},{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Rotation\",\"shift_px\":9.36,\"at\":2.569,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\",\"over_1px\":{\"status\":\"not_read\",\"reason\":\"older_snapshot\"}}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\n(the answer tool refused 1 earlier attempt(s): BAD_CLOSING)\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- Position moves the rock about 12 px at most, near 1.5 s, and all three hits use the same size.\n- Rotation moves the rock about 9 px at most, near 2.6 s.\n- I didn't read where Shake Control's pivot is.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the second hit's size for all three. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n3. Select Shake Control (the null) and use the Pan Behind tool to drag its anchor point to where the hammer hits.  [tag: Set the pivot; layer: Shake Control]\n4. Play it back and watch the turn.  [no tag]\n\nCLOSING OFFER: Try them, or go deeper on step 3 with *Set the pivot*, which checks where you put the pivot but not the hammer's spot itself?\n\nGO DEEPER BUTTONS: Set the pivot\nWORDS: 152\n\n### Turn 2: the open comp is readable\nLEARNER: Yes, go deeper on Set the pivot.\nTOOL CALL go_deeper {\"skill\":\"transform.anchor\",\"step\":3,\"place_named\":true}\nTOOL RESULT (ok): {\"skill_name\":\"Set the pivot (anchor point)\",\"short_name\":\"Set the pivot\",\"command_skill\":\"anchor-mentor\",\"practice\":false,\"missing_prerequisite\":null}\nTOOL CALL Skill {\"skill\":\"anchor-mentor\"}\nTOOL RESULT (ok): \nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"hand_in\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Comp 1.aep\",\n  \"comp\": {\n    \"name\": \"Comp 1\",\n    \"time\": 3.403,\n    \"frame_rate\": 29.97,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"DISCOVER the past to INSPIRE the future\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\",\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"O2 Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"O2 Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"Y Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"Y Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"O Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"O Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"L Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"L Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"E Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"E Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"G Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"U Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"U Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Y Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Y Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"B Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"B Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"outline.png\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Black Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Center\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"logo.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"Shake Control\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hand_in_null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\",\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Sweep Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"General Logo Animation Graphics.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"rock.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"White Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"logo.png\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": [\n    \"Shake Control\"\n  ],\n  \"places\": {\n    \"Shake Control\": \"your_call\"\n  },\n  \"place_now\": {\n    \"logo.png\": \"center\",\n    \"Shake Control\": \"top-left\"\n  },\n  \"check_times\": {\n    \"Shake Control\": {\n      \"time\": 3.403,\n      \"basis\": \"current\"\n    }\n  },\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [\n    \"anchor/25\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"not_a_default_candidate\",\n  \"notes\": [\n    {\n      \"layer\": \"Shake Control\",\n      \"note\": \"null_focus\",\n      \"children\": [\n        \"DISCOVER the past to INSPIRE the future\",\n        \"O2 Shakers\",\n        \"Y Shakers\",\n        \"G Shakers\",\n        \"O Shakers\",\n        \"L Shakers\",\n        \"E Shakers\",\n        \"G Shakers\",\n        \"U Shakers\",\n        \"Y Shakers\",\n        \"B Shakers\",\n        \"logo.png\",\n        \"rock.png\"\n      ]\n    }\n  ],\n  \"watch_offer\": {\n    \"layer\": \"logo.png\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"reads\": 2,\n  \"hand_in\": {\n    \"layer\": \"Shake Control\",\n    \"step_number\": 3,\n    \"steps_after\": [\n      \"Play it back and watch the turn.\"\n    ],\n    \"place_named\": true,\n    \"practice\": false\n  }\n}\nMENTOR PROSE: We're on Shake Control, so the rock turns from where the hammer hits. Select Shake Control in the timeline and press A, then Shift+P, so both show.\n\n### Turn 3: the open comp is readable\nLEARNER: OK, both are showing.\nMENTOR PROSE: Shake Control carries the layers, so wherever its pivot sits is where they all turn from. Anchor Point is where the pivot sits inside Shake Control; Position is where that pivot sits in the comp. I can check that Shake Control, rock.png, logo.png and the other layers it carries don't move, but not where the pivot lands on the art. That part's up to you.\n\nPress Y for Pan Behind, start your drag right on Shake Control's crosshair, and take it to where the hammer hits. It changes both numbers together, so nothing moves on screen. Say done when it's there.\n\nI could show you on logo.png first, if you like.\n\n### Turn 4: the open comp is readable\nLEARNER: I used Pan Behind on it. Done.\nTOOL CALL anchor_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"time\": 3.403,\n  \"passed\": true,\n  \"layers\": [\n    {\n      \"layer\": \"Shake Control\",\n      \"credit\": \"learner\",\n      \"check_time\": 3.403,\n      \"basis\": \"current\",\n      \"item1\": {\n        \"passed\": null,\n        \"place_now\": \"outside\",\n        \"wanted\": null,\n        \"your_call\": true,\n        \"outside_side\": \"above-right\"\n      },\n      \"item2\": {\n        \"passed\": true,\n        \"children\": 13,\n        \"moved_children\": [],\n        \"not_compared\": [],\n        \"edges_px\": null,\n        \"direction\": null,\n        \"distance_px\": null\n      },\n      \"item3\": {\n        \"now\": 3.403,\n        \"at_rest\": true,\n        \"set_away_from_rest\": null\n      },\n      \"item4\": null,\n      \"item5\": {\n        \"passed\": true,\n        \"moved_layers\": [],\n        \"anchor_keys_added\": false,\n        \"not_compared\": []\n      },\n      \"kind\": \"null\",\n      \"anchor_changed\": true,\n      \"position_changed\": true,\n      \"rect_shifted\": false,\n      \"locked\": false,\n      \"cant_check\": [],\n      \"null_focus\": true,\n      \"passed\": true,\n      \"hints\": []\n    }\n  ],\n  \"other_changes\": [],\n  \"demo_undone\": false\n}\nMENTOR PROSE: That worked. Shake Control's pivot moved, and the 13 layers it carries didn't move at all, rock.png included.\n\nWhen the shake turns, which part of the rock will stay still?\n\n### Turn 5: the open comp is readable\nLEARNER: The spot by the hammer stays still.\nTOOL CALL record_lesson {\"skill\":\"transform.anchor\",\"project\":\"Comp 1.aep\",\"comp\":\"Comp 1\",\"attempted\":\"Set Shake Control's pivot to where the hammer hits the rock\",\"result\":\"passed\",\"demo_used\":false,\"summary\":\"Moved a null's pivot on the first try without it or the layers it carries moving; said the spot where the pivot sits stays still when it turns.\",\"next\":\"Play back the rock's shake and watch it turn from the hammer spot\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Play back the rock's shake and watch it turn from the hammer spot\"\n  },\n  \"hand_back\": {\n    \"step_number\": 3,\n    \"next_step\": \"Play it back and watch the turn.\"\n  }\n}\nMENTOR PROSE: Right: the spot by the hammer stays still, because that's where Shake Control's pivot is now. I've noted that for next time.\n\nThat was step 3; next is Play it back and watch the turn.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.3168,
+          "judge_cost_usd": 0.1474,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c",
+            "anchor-mentor": "36363d76e937e6de7a0fd3ff2df140b0762137b7c3892867216fe17f998b6ac3"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 13,
+            "detail": "13 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMxoeA4MJAxUrZMQmr5",
+              "status": 200,
+              "headers_ms": 522,
+              "max_gap_ms": 711,
+              "total_ms": 1237,
+              "end": "done",
+              "body_bytes": 40426
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMxtqSTUZAhHfVWSSTN",
+              "status": 200,
+              "headers_ms": 617,
+              "max_gap_ms": 195,
+              "total_ms": 1262,
+              "end": "done",
+              "body_bytes": 43261
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMxzK6u1dmfFTCxG7vn",
+              "status": 200,
+              "headers_ms": 486,
+              "max_gap_ms": 1698,
+              "total_ms": 5679,
+              "end": "done",
+              "body_bytes": 47059
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMyQcM9cAjt6phCo82X",
+              "status": 200,
+              "headers_ms": 823,
+              "max_gap_ms": 1753,
+              "total_ms": 4495,
+              "end": "done",
+              "body_bytes": 49908
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLMyjvwidWDQkXP77j5j",
+              "status": 200,
+              "headers_ms": 542,
+              "max_gap_ms": 196,
+              "total_ms": 1039,
+              "end": "done",
+              "body_bytes": 52788
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLMypQ5GFYf5s9Jg42eZ",
+              "status": 200,
+              "headers_ms": 578,
+              "max_gap_ms": 249,
+              "total_ms": 830,
+              "end": "done",
+              "body_bytes": 53293
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLMysyshUjCimYrsreDq",
+              "status": 200,
+              "headers_ms": 972,
+              "max_gap_ms": 50,
+              "total_ms": 1024,
+              "end": "done",
+              "body_bytes": 101599
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLMyxZDd5GwuHwiGcq4E",
+              "status": 200,
+              "headers_ms": 558,
+              "max_gap_ms": 450,
+              "total_ms": 1423,
+              "end": "done",
+              "body_bytes": 113336
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011ChLMz4j3dB2UogCFNritL",
+              "status": 200,
+              "headers_ms": 684,
+              "max_gap_ms": 3517,
+              "total_ms": 5817,
+              "end": "done",
+              "body_bytes": 114754
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011ChLMzVammgRXzAdUgQ4Ju",
+              "status": 200,
+              "headers_ms": 492,
+              "max_gap_ms": 223,
+              "total_ms": 716,
+              "end": "done",
+              "body_bytes": 117946
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011ChLMzYoVE9vSnhDqrJYCF",
+              "status": 200,
+              "headers_ms": 656,
+              "max_gap_ms": 772,
+              "total_ms": 1613,
+              "end": "done",
+              "body_bytes": 119513
+            },
+            {
+              "turn": 5,
+              "request_id": "req_011ChLMzfgVP56QVS48rNwQ7",
+              "status": 200,
+              "headers_ms": 536,
+              "max_gap_ms": 521,
+              "total_ms": 3017,
+              "end": "done",
+              "body_bytes": 121164
+            },
+            {
+              "turn": 5,
+              "request_id": "req_011ChLMztgphK8a3bwjbJ1Jt",
+              "status": 200,
+              "headers_ms": 1032,
+              "max_gap_ms": 2,
+              "total_ms": 1037,
+              "end": "done",
+              "body_bytes": 123343
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_changes_only_the_lesson",
+              "pass": true,
+              "detail": "only transform.anchor changed"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "4 steps (wanted 2 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "1 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_keyframe_skills@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "step_skills_include@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "skill_step_on_layer:transform.anchor@1",
+              "pass": true,
+              "detail": "no step tagged transform.anchor on Shake Control (not_taught@Shake Control, not_taught@Shake Control, transform.anchor@Shake Control, none@none)"
+            },
+            {
+              "check": "handover@2",
+              "pass": true,
+              "detail": "handed over to anchor-mentor"
+            },
+            {
+              "check": "no_answer_after_yes",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "no_answer@2",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@3",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@4",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@5",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "text:opens_on_shake_control",
+              "pass": true,
+              "detail": "prose of turn 2: \"Shake Control\""
+            },
+            {
+              "check": "text:no_intent_question",
+              "pass": true,
+              "detail": "prose of turn 2: clean"
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turns 1, 2, 3, 4, 5: clean"
+            },
+            {
+              "check": "text:hand_back_line",
+              "pass": true,
+              "detail": "prose of turn 5: \"That was step 3. Next is to play it back and watch the turn.\""
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "13 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-HAND-OVER-OPENS",
+              "pass": true,
+              "reason": "In turn 2 the mentor said nothing before go_deeper and the Skill call, and the lesson opened on Shake Control with \"We're on Shake Control, so the shake turns from where the hammer hits. Select Shake Control in the timeline and press A, then Shift+P, so both show.\" It asked no layer or place question and made no proposal."
+            },
+            {
+              "item": "R-HAND-BACK",
+              "pass": true,
+              "reason": "Turn 5 ends with \"That was step 3. Next is to play it back and watch the turn.\" This matches turn 1's step 3 and step 4 (\"Play it back and watch the turn.\"), and nothing follows it."
+            }
+          ],
+          "cost": 0.4746732,
+          "session_id": null,
+          "answer_calls": 2,
+          "refusals": [
+            {
+              "turn": 1,
+              "code": "BAD_CLOSING"
+            }
+          ],
+          "refusals_by_code": {
+            "BAD_CLOSING": 1
+          },
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the rock shake from where the hammer hits.\nTOOL CALL describe_layers {\"layers\":[\"rock\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":28,\"layer\":\"rock.png\",\"asked\":\"rock\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}},{\"property\":\"Rotation\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}]}],\"shifts\":[{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Position\",\"shift_px\":12.15,\"at\":1.502,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\",\"over_1px\":{\"status\":\"not_read\",\"reason\":\"older_snapshot\"}},{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Rotation\",\"shift_px\":9.36,\"at\":2.569,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\",\"over_1px\":{\"status\":\"not_read\",\"reason\":\"older_snapshot\"}}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\n(the answer tool refused 1 earlier attempt(s): BAD_CLOSING)\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- Position moves the rock about 12 px at most, near 1.5 s, and all three hits are the same size.\n- Rotation moves it about 9 px at most, near 2.6 s.\n- I didn't read where Shake Control's pivot is.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the middle hit's size for all three. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n2. Open Shake Control's Rotation expression and look at its amounts: about 0.59° at most. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n3. Select Shake Control (the null) and use the Pan Behind tool to drag its pivot to where the hammer hits.  [tag: Set the pivot; layer: Shake Control]\n4. Play it back and watch the turn.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 3 with *Set the pivot* (it can't check your exact hammer spot)?\n\nGO DEEPER BUTTONS: Set the pivot\nWORDS: 147\n\n### Turn 2: the open comp is readable\nLEARNER: Yes, go deeper on Set the pivot.\nTOOL CALL go_deeper {\"skill\":\"transform.anchor\",\"step\":3,\"place_named\":true}\nTOOL RESULT (ok): {\"skill_name\":\"Set the pivot (anchor point)\",\"short_name\":\"Set the pivot\",\"command_skill\":\"anchor-mentor\",\"practice\":false,\"missing_prerequisite\":null}\nTOOL CALL Skill {\"skill\":\"anchor-mentor\"}\nTOOL RESULT (ok): \nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"hand_in\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Comp 1.aep\",\n  \"comp\": {\n    \"name\": \"Comp 1\",\n    \"time\": 3.403,\n    \"frame_rate\": 29.97,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"DISCOVER the past to INSPIRE the future\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\",\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"O2 Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"O2 Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"Y Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"Y Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"O Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"O Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"L Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"L Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"E Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"E Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"G Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"U Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"U Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Y Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Y Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"B Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"B Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"outline.png\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Black Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Center\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"logo.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"Shake Control\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hand_in_null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\",\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Sweep Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"General Logo Animation Graphics.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"rock.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"White Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"logo.png\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": [\n    \"Shake Control\"\n  ],\n  \"places\": {\n    \"Shake Control\": \"your_call\"\n  },\n  \"place_now\": {\n    \"logo.png\": \"center\",\n    \"Shake Control\": \"top-left\"\n  },\n  \"check_times\": {\n    \"Shake Control\": {\n      \"time\": 3.403,\n      \"basis\": \"current\"\n    }\n  },\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [\n    \"anchor/25\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"not_a_default_candidate\",\n  \"notes\": [\n    {\n      \"layer\": \"Shake Control\",\n      \"note\": \"null_focus\",\n      \"children\": [\n        \"DISCOVER the past to INSPIRE the future\",\n        \"O2 Shakers\",\n        \"Y Shakers\",\n        \"G Shakers\",\n        \"O Shakers\",\n        \"L Shakers\",\n        \"E Shakers\",\n        \"G Shakers\",\n        \"U Shakers\",\n        \"Y Shakers\",\n        \"B Shakers\",\n        \"logo.png\",\n        \"rock.png\"\n      ]\n    }\n  ],\n  \"watch_offer\": {\n    \"layer\": \"logo.png\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"reads\": 2,\n  \"hand_in\": {\n    \"layer\": \"Shake Control\",\n    \"step_number\": 3,\n    \"steps_after\": [\n      \"Play it back and watch the turn.\"\n    ],\n    \"place_named\": true,\n    \"practice\": false\n  }\n}\nMENTOR PROSE: We're on Shake Control, so the shake turns from where the hammer hits. Select Shake Control in the timeline and press A, then Shift+P, so both show.\n\n### Turn 3: the open comp is readable\nLEARNER: OK, both are showing.\nMENTOR PROSE: Shake Control carries the other layers, so wherever its pivot sits is where they all turn from. I can check that Shake Control and the layers it carries, like rock.png and logo.png, don't move. I can't check where the pivot lands on the art, so that part's up to you.\n\nAnchor Point is where the pivot sits inside Shake Control. Position is where that pivot sits in the comp.\n\nPress Y for Pan Behind. Start your drag right on Shake Control's crosshair and drag it to where the hammer hits. Pan Behind changes both numbers together, so Shake Control and everything it carries stay where they are. Say done when it's there.\n\nI could show you on logo.png first, if you like.\n\n### Turn 4: the open comp is readable\nLEARNER: I used Pan Behind on it. Done.\nTOOL CALL anchor_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"time\": 3.403,\n  \"passed\": true,\n  \"layers\": [\n    {\n      \"layer\": \"Shake Control\",\n      \"credit\": \"learner\",\n      \"check_time\": 3.403,\n      \"basis\": \"current\",\n      \"item1\": {\n        \"passed\": null,\n        \"place_now\": \"outside\",\n        \"wanted\": null,\n        \"your_call\": true,\n        \"outside_side\": \"above-right\"\n      },\n      \"item2\": {\n        \"passed\": true,\n        \"children\": 13,\n        \"moved_children\": [],\n        \"not_compared\": [],\n        \"edges_px\": null,\n        \"direction\": null,\n        \"distance_px\": null\n      },\n      \"item3\": {\n        \"now\": 3.403,\n        \"at_rest\": true,\n        \"set_away_from_rest\": null\n      },\n      \"item4\": null,\n      \"item5\": {\n        \"passed\": true,\n        \"moved_layers\": [],\n        \"anchor_keys_added\": false,\n        \"not_compared\": []\n      },\n      \"kind\": \"null\",\n      \"anchor_changed\": true,\n      \"position_changed\": true,\n      \"rect_shifted\": false,\n      \"locked\": false,\n      \"cant_check\": [],\n      \"null_focus\": true,\n      \"passed\": true,\n      \"hints\": []\n    }\n  ],\n  \"other_changes\": [],\n  \"demo_undone\": false\n}\nMENTOR PROSE: Shake Control's pivot moved, and neither Shake Control nor any of the layers it carries moved with it. Nicely done.\n\nWhich part of the rock will stay still when Shake Control turns?\n\n### Turn 5: the open comp is readable\nLEARNER: The spot by the hammer stays still.\nTOOL CALL record_lesson {\"skill\":\"transform.anchor\",\"project\":\"Comp 1.aep\",\"comp\":\"Comp 1\",\"attempted\":\"Set Shake Control's pivot to where the hammer hits, without Shake Control or the layers it carries moving\",\"result\":\"passed\",\"demo_used\":false,\"summary\":\"Moved a control null's pivot on the first try without the null or anything it carries moving; said the point of impact stays still during the turn.\",\"next\":\"Play back the shake and watch it turn from the hammer's spot\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Play back the shake and watch it turn from the hammer's spot\"\n  },\n  \"hand_back\": {\n    \"step_number\": 3,\n    \"next_step\": \"Play it back and watch the turn.\"\n  }\n}\nMENTOR PROSE: You've got it: everything shakes around the spot by the hammer, and that spot stays still. I've noted that for next time.\n\nThat was step 3. Next is to play it back and watch the turn.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.3261,
+          "judge_cost_usd": 0.1486,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c",
+            "anchor-mentor": "36363d76e937e6de7a0fd3ff2df140b0762137b7c3892867216fe17f998b6ac3"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 13,
+            "detail": "13 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLN1MZ6Xk5Fx3A3izctb",
+              "status": 200,
+              "headers_ms": 865,
+              "max_gap_ms": 481,
+              "total_ms": 1464,
+              "end": "done",
+              "body_bytes": 40426
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLN1Tfwvyi2iY6axBCtH",
+              "status": 200,
+              "headers_ms": 611,
+              "max_gap_ms": 305,
+              "total_ms": 1372,
+              "end": "done",
+              "body_bytes": 43297
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLN1ZaeUhy4LydreVavP",
+              "status": 200,
+              "headers_ms": 665,
+              "max_gap_ms": 1788,
+              "total_ms": 6618,
+              "end": "done",
+              "body_bytes": 47107
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLN23uVAHUW4Yw6KsFge",
+              "status": 200,
+              "headers_ms": 693,
+              "max_gap_ms": 1705,
+              "total_ms": 4176,
+              "end": "done",
+              "body_bytes": 50225
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLN2Mqk6dSCiJVVnhBmK",
+              "status": 200,
+              "headers_ms": 664,
+              "max_gap_ms": 198,
+              "total_ms": 1161,
+              "end": "done",
+              "body_bytes": 53047
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLN2Src7nancxBTfc7YS",
+              "status": 200,
+              "headers_ms": 648,
+              "max_gap_ms": 255,
+              "total_ms": 906,
+              "end": "done",
+              "body_bytes": 53552
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLN2WmmNUDStoR3Ysh2D",
+              "status": 200,
+              "headers_ms": 818,
+              "max_gap_ms": 46,
+              "total_ms": 866,
+              "end": "done",
+              "body_bytes": 101858
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLN2agezhobtRsDV47qM",
+              "status": 200,
+              "headers_ms": 620,
+              "max_gap_ms": 592,
+              "total_ms": 1397,
+              "end": "done",
+              "body_bytes": 113595
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011ChLN2geq4rrfSvotpDZhs",
+              "status": 200,
+              "headers_ms": 443,
+              "max_gap_ms": 4683,
+              "total_ms": 6685,
+              "end": "done",
+              "body_bytes": 115158
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011ChLN3BHWkNGsFGV5hg7bC",
+              "status": 200,
+              "headers_ms": 551,
+              "max_gap_ms": 308,
+              "total_ms": 861,
+              "end": "done",
+              "body_bytes": 119298
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011ChLN3F6CzKjoakGsHFtdk",
+              "status": 200,
+              "headers_ms": 580,
+              "max_gap_ms": 607,
+              "total_ms": 1257,
+              "end": "done",
+              "body_bytes": 120865
+            },
+            {
+              "turn": 5,
+              "request_id": "req_011ChLN3LZcnQfFnhSNDLDbT",
+              "status": 200,
+              "headers_ms": 1175,
+              "max_gap_ms": 499,
+              "total_ms": 3225,
+              "end": "done",
+              "body_bytes": 122425
+            },
+            {
+              "turn": 5,
+              "request_id": "req_011ChLN3aR4abnjmkwnMk5Li",
+              "status": 200,
+              "headers_ms": 574,
+              "max_gap_ms": 1134,
+              "total_ms": 1907,
+              "end": "done",
+              "body_bytes": 123427
+            }
+          ]
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_changes_only_the_lesson",
+              "pass": true,
+              "detail": "only transform.anchor changed"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "4 steps (wanted 2 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "1 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_keyframe_skills@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "step_skills_include@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "skill_step_on_layer:transform.anchor@1",
+              "pass": true,
+              "detail": "no step tagged transform.anchor on Shake Control (not_taught@Shake Control, not_taught@Shake Control, transform.anchor@Shake Control, none@none)"
+            },
+            {
+              "check": "handover@2",
+              "pass": true,
+              "detail": "handed over to anchor-mentor"
+            },
+            {
+              "check": "no_answer_after_yes",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "no_answer@2",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@3",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@4",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@5",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "text:opens_on_shake_control",
+              "pass": true,
+              "detail": "prose of turn 2: \"Shake Control\""
+            },
+            {
+              "check": "text:no_intent_question",
+              "pass": true,
+              "detail": "prose of turn 2: clean"
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turns 1, 2, 3, 4, 5: clean"
+            },
+            {
+              "check": "text:hand_back_line",
+              "pass": false,
+              "detail": "prose of turn 5: never matched /That was step \\d+[;.,] ?[Nn]ext\\b[^.]*\\S|That was the last step/"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "13 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.3183196,
+          "session_id": null,
+          "answer_calls": 2,
+          "refusals": [
+            {
+              "turn": 1,
+              "code": "BAD_CLOSING"
+            }
+          ],
+          "refusals_by_code": {
+            "BAD_CLOSING": 1
+          },
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the rock shake from where the hammer hits.\nTOOL CALL describe_layers {\"layers\":[\"rock\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":28,\"layer\":\"rock.png\",\"asked\":\"rock\",\"kind\":\"footage\",\"class\":\"renders\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"collapse\":false,\"parents\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"expression\",\"expressions\":[{\"property\":\"Position\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"}},{\"property\":\"Rotation\",\"error\":false,\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"}}]}],\"shifts\":[{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Position\",\"shift_px\":12.15,\"at\":1.502,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\",\"over_1px\":{\"status\":\"not_read\",\"reason\":\"older_snapshot\"}},{\"from_layer_index\":25,\"from_layer\":\"Shake Control\",\"property\":\"Rotation\",\"shift_px\":9.36,\"at\":2.569,\"sampled_every\":0.033,\"sampled\":true,\"measured_on\":\"box\",\"over_1px\":{\"status\":\"not_read\",\"reason\":\"older_snapshot\"}}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\n(the answer tool refused 1 earlier attempt(s): BAD_CLOSING)\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- Position moves the rock about 12 px at most, near 1.5 s, and all three hits are the same size.\n- Rotation moves the rock about 9 px at most, near 2.6 s.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the second hit's size for all three. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet.  [no tag: not taught yet; layer: Shake Control]\n3. Select Shake Control (the null) and use the Pan Behind tool to drag its pivot to where the hammer hits. I didn't read where it is now.  [tag: Set the pivot; layer: Shake Control]\n4. Play it back and watch the turn.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 3 with *Set the pivot*, which can't check the hammer's spot on your art?\n\nGO DEEPER BUTTONS: Set the pivot\nWORDS: 148\n\n### Turn 2: the open comp is readable\nLEARNER: Yes, go deeper on Set the pivot.\nTOOL CALL go_deeper {\"skill\":\"transform.anchor\",\"step\":3,\"place_named\":true}\nTOOL RESULT (ok): {\"skill_name\":\"Set the pivot (anchor point)\",\"short_name\":\"Set the pivot\",\"command_skill\":\"anchor-mentor\",\"practice\":false,\"missing_prerequisite\":null}\nTOOL CALL Skill {\"skill\":\"anchor-mentor\"}\nTOOL RESULT (ok): \nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"hand_in\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Comp 1.aep\",\n  \"comp\": {\n    \"name\": \"Comp 1\",\n    \"time\": 3.403,\n    \"frame_rate\": 29.97,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"DISCOVER the past to INSPIRE the future\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\",\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"O2 Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"O2 Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"Y Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"Y Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"O Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"O Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"L Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"L Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"E Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"E Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"G Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"U Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"U Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Y Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Y Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"B Shakers\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"B Fragments\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"outline.png\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Black Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Center\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"logo.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"Shake Control\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hand_in_null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\",\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Sweep Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"General Logo Animation Graphics.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"rock.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"White Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"logo.png\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": [\n    \"Shake Control\"\n  ],\n  \"places\": {\n    \"Shake Control\": \"your_call\"\n  },\n  \"place_now\": {\n    \"logo.png\": \"center\",\n    \"Shake Control\": \"top-left\"\n  },\n  \"check_times\": {\n    \"Shake Control\": {\n      \"time\": 3.403,\n      \"basis\": \"current\"\n    }\n  },\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [\n    \"anchor/25\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"not_a_default_candidate\",\n  \"notes\": [\n    {\n      \"layer\": \"Shake Control\",\n      \"note\": \"null_focus\",\n      \"children\": [\n        \"DISCOVER the past to INSPIRE the future\",\n        \"O2 Shakers\",\n        \"Y Shakers\",\n        \"G Shakers\",\n        \"O Shakers\",\n        \"L Shakers\",\n        \"E Shakers\",\n        \"G Shakers\",\n        \"U Shakers\",\n        \"Y Shakers\",\n        \"B Shakers\",\n        \"logo.png\",\n        \"rock.png\"\n      ]\n    }\n  ],\n  \"watch_offer\": {\n    \"layer\": \"logo.png\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"reads\": 2,\n  \"hand_in\": {\n    \"layer\": \"Shake Control\",\n    \"step_number\": 3,\n    \"steps_after\": [\n      \"Play it back and watch the turn.\"\n    ],\n    \"place_named\": true,\n    \"practice\": false\n  }\n}\nMENTOR PROSE: We're on Shake Control, so the rock turns from where the hammer hits. Select Shake Control in the timeline and press A, then Shift+P, so both show.\n\n### Turn 3: the open comp is readable\nLEARNER: OK, both are showing.\nMENTOR PROSE: Shake Control carries rock.png, logo.png and the other layers under it, so wherever its pivot sits is the point they all turn from. Anchor Point is where the pivot sits inside Shake Control, and Position is where that pivot sits in the comp.\n\nI can check that Shake Control and the layers it carries don't move. I can't check where the pivot lands on the art, so that part's up to you.\n\nPress Y for Pan Behind. Then start your drag right on Shake Control's crosshair and take it to where the hammer hits. Pan Behind changes both numbers together, so nothing moves on screen.\n\nSay done when it's there. If you'd like, I could show you on logo.png first.\n\n### Turn 4: the open comp is readable\nLEARNER: I used Pan Behind on it. Done.\nTOOL CALL anchor_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"time\": 3.403,\n  \"passed\": true,\n  \"layers\": [\n    {\n      \"layer\": \"Shake Control\",\n      \"credit\": \"learner\",\n      \"check_time\": 3.403,\n      \"basis\": \"current\",\n      \"item1\": {\n        \"passed\": null,\n        \"place_now\": \"outside\",\n        \"wanted\": null,\n        \"your_call\": true,\n        \"outside_side\": \"above-right\"\n      },\n      \"item2\": {\n        \"passed\": true,\n        \"children\": 13,\n        \"moved_children\": [],\n        \"not_compared\": [],\n        \"edges_px\": null,\n        \"direction\": null,\n        \"distance_px\": null\n      },\n      \"item3\": {\n        \"now\": 3.403,\n        \"at_rest\": true,\n        \"set_away_from_rest\": null\n      },\n      \"item4\": null,\n      \"item5\": {\n        \"passed\": true,\n        \"moved_layers\": [],\n        \"anchor_keys_added\": false,\n        \"not_compared\": []\n      },\n      \"kind\": \"null\",\n      \"anchor_changed\": true,\n      \"position_changed\": true,\n      \"rect_shifted\": false,\n      \"locked\": false,\n      \"cant_check\": [],\n      \"null_focus\": true,\n      \"passed\": true,\n      \"hints\": []\n    }\n  ],\n  \"other_changes\": [],\n  \"demo_undone\": false\n}\nMENTOR PROSE: Nice work. Shake Control's pivot moved, and neither Shake Control nor any of the layers it carries moved on screen.\n\nWhen Shake Control turns, which part of the rock will stay still?\n\n### Turn 5: the open comp is readable\nLEARNER: The spot by the hammer stays still.\nTOOL CALL record_lesson {\"skill\":\"transform.anchor\",\"project\":\"Comp 1.aep\",\"comp\":\"Comp 1\",\"attempted\":\"Set Shake Control's pivot to where the hammer hits the rock\",\"result\":\"passed\",\"demo_used\":false,\"summary\":\"Moved a null's pivot on the first try without it or the layers it carries moving; said the spot under the new pivot stays still when it turns.\",\"next\":\"Play back the shake on Shake Control and watch it turn from the new spot\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Play back the shake on Shake Control and watch it turn from the new spot\"\n  },\n  \"hand_back\": {\n    \"step_number\": 3,\n    \"next_step\": \"Play it back and watch the turn.\"\n  }\n}\nMENTOR PROSE: You've got it: the spot by the hammer stays put and the rock turns around it. I've noted that for next time.\n\nThat was step 3. The next step is to play it back and watch the turn.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.3183,
+          "judge_cost_usd": 0,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c",
+            "anchor-mentor": "36363d76e937e6de7a0fd3ff2df140b0762137b7c3892867216fe17f998b6ac3"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 13,
+            "detail": "13 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLN4BD5k6nZooGykXhP6",
+              "status": 200,
+              "headers_ms": 655,
+              "max_gap_ms": 578,
+              "total_ms": 1352,
+              "end": "done",
+              "body_bytes": 40426
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLN4Gvs8Rs7VkzaDbLw6",
+              "status": 200,
+              "headers_ms": 622,
+              "max_gap_ms": 147,
+              "total_ms": 873,
+              "end": "done",
+              "body_bytes": 43297
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLN4Lhq7TmPzCAC1gnZ8",
+              "status": 200,
+              "headers_ms": 664,
+              "max_gap_ms": 1804,
+              "total_ms": 5511,
+              "end": "done",
+              "body_bytes": 46062
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLN4kLdnUt9NRdPkBj3B",
+              "status": 200,
+              "headers_ms": 470,
+              "max_gap_ms": 1758,
+              "total_ms": 4071,
+              "end": "done",
+              "body_bytes": 48879
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLN53ke8dcdgTjL8xcqr",
+              "status": 200,
+              "headers_ms": 603,
+              "max_gap_ms": 203,
+              "total_ms": 1086,
+              "end": "done",
+              "body_bytes": 51680
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLN58SvVzX7wYCcvLghV",
+              "status": 200,
+              "headers_ms": 913,
+              "max_gap_ms": 196,
+              "total_ms": 1111,
+              "end": "done",
+              "body_bytes": 52185
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLN5DE9Y4nGFVdDt8hto",
+              "status": 200,
+              "headers_ms": 579,
+              "max_gap_ms": 50,
+              "total_ms": 630,
+              "end": "done",
+              "body_bytes": 100491
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLN5G9Wkuuq4LBcPNhyD",
+              "status": 200,
+              "headers_ms": 836,
+              "max_gap_ms": 556,
+              "total_ms": 1574,
+              "end": "done",
+              "body_bytes": 112228
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011ChLN5NvZkZcN8dx64mCwE",
+              "status": 200,
+              "headers_ms": 604,
+              "max_gap_ms": 4018,
+              "total_ms": 6377,
+              "end": "done",
+              "body_bytes": 113718
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011ChLN5rF8AGDzhBNcAevmy",
+              "status": 200,
+              "headers_ms": 805,
+              "max_gap_ms": 275,
+              "total_ms": 1082,
+              "end": "done",
+              "body_bytes": 117348
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011ChLN5vxds85dnUFyRBFiG",
+              "status": 200,
+              "headers_ms": 729,
+              "max_gap_ms": 698,
+              "total_ms": 1603,
+              "end": "done",
+              "body_bytes": 118915
+            },
+            {
+              "turn": 5,
+              "request_id": "req_011ChLN63q8iYSwq1ZyvDukW",
+              "status": 200,
+              "headers_ms": 707,
+              "max_gap_ms": 448,
+              "total_ms": 2659,
+              "end": "done",
+              "body_bytes": 120500
+            },
+            {
+              "turn": 5,
+              "request_id": "req_011ChLN6FGTXDEVskjpwtays",
+              "status": 200,
+              "headers_ms": 484,
+              "max_gap_ms": 644,
+              "total_ms": 1555,
+              "end": "done",
+              "body_bytes": 121475
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "ff52218abb0312ef305254d08dfe66d984eba51465d8972da5c11d573ffe54f0",
+  "mentor_cost_usd": 0.96,
+  "judge_cost_usd": 0.3,
+  "non_baseline": false,
+  "prompt_hash": {
+    "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c",
+    "anchor-mentor": "36363d76e937e6de7a0fd3ff2df140b0762137b7c3892867216fe17f998b6ac3"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-11-19-171822.json",
+    "passed": 19,
+    "total": 19
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}

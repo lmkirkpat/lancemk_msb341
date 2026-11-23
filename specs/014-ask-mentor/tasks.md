@@ -398,7 +398,10 @@ must land before session 3 (T094).
 
 - [ ] T081 (reviewer) Review against FR-028 to FR-045, FR-062 and contracts.
 - [ ] T082 (design-reviewer) Review T070 (nothing shows asked entries; no ticks on turn 4).
-- [ ] T083 (cockpit) Merge both, between sittings; T080 on the merge commit if it ran on the branch.
+- [x] T083 (cockpit) Merge both, between sittings; T080 on the merge commit if it ran on the branch.
+  *(Done 2026-11-23: mentor `07e02f6` first (the evals branch already held an older merge of it, so its
+  ownership check is clean only after), evals `4231201`, panel `c4b2d88`. Mentor 2036 pass, 4 todo; panel 894;
+  helper 294; hooks 39; evals 166; all eight dry runs valid. T080 is still to run at `c4b2d88`.)*
 - [ ] T084 (spec-writer) Fold T078 to T083 into the spec.
 
 ## Later, when spec 015 phase 2 lands (not on the sessions' path)

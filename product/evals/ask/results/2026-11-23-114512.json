@@ -1,0 +1,587 @@
+{
+  "run_at": "2026-11-23T18:45:12.466Z",
+  "options": {
+    "only": "07",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.35,
+  "refusals": {
+    "answer_calls": 3,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "07-outside-the-six",
+      "title": "A question fully outside (render settings): the outside line, then a closing sentence on what it covers, no steps, no lesson offer, nothing from general knowledge",
+      "covers": [
+        "TD 17.10",
+        "FR-018"
+      ],
+      "hash": "836f2664a01b72f9003cbf8dcac6614d0a0cde561711e5b316e91fb55c0fa97c",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind outside"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was outside (wanted outside)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "no_offer_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "0 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:no_general_answer",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "2 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OUTSIDE",
+              "pass": true,
+              "reason": "The explanation is the single outside line \"exporting and render settings for Instagram are outside what I cover here,\" and the closing offer only names what it covers (\"easing, key types, the speed graph, offsetting timing, setting the pivot, or grouping with a null\"), with no steps, no export advice, and no offer to teach or do anything."
+            }
+          ],
+          "cost": 0.11579560000000001,
+          "session_id": null,
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: What render settings should I use to export this for Instagram?\nTOOL CALL describe_layers {}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":{\"status\":\"not_read\",\"reason\":\"not_asked\"},\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":2,\"layer\":\"Subtitle\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"eased\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"mixed\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":2,\"child_layers\":[{\"layer_index\":1,\"layer\":\"Title\"},{\"layer_index\":2,\"layer\":\"Subtitle\"}],\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":4,\"layer\":\"Bar\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"End\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"X Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":5,\"layer\":\"Glow\",\"kind\":\"adjustment\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Blurriness\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[\"Gaussian Blur\"],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":6,\"layer\":\"Cursor\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Opacity\",\"keys\":6,\"key_types\":\"all_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\",\"expression_on\":true}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":8,\"layer\":\"Old Take\",\"kind\":\"text\",\"class\":\"hidden\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":9,\"layer\":\"Icon\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":10,\"layer\":\"Background\",\"kind\":\"solid\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: outside; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, exporting and render settings for Instagram are outside what I cover here.\n\nCLOSING OFFER: I can help with how the layers in this comp move: easing, key types, the speed graph, offsetting timing, setting the pivot, or grouping with a null.\n\nGO DEEPER BUTTONS: none\nWORDS: 42\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0206,
+          "judge_cost_usd": 0.0951,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 2,
+            "detail": "2 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMXVXY2WnLaFfcDFCk9",
+              "status": 200,
+              "headers_ms": 764,
+              "max_gap_ms": 1187,
+              "total_ms": 1957,
+              "end": "done",
+              "body_bytes": 40442
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMXdjtjiW1LHReyatGM",
+              "status": 200,
+              "headers_ms": 825,
+              "max_gap_ms": 500,
+              "total_ms": 2277,
+              "end": "done",
+              "body_bytes": 46678
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind outside"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was outside (wanted outside)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "no_offer_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "0 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:no_general_answer",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "2 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OUTSIDE",
+              "pass": true,
+              "reason": "The explanation is the one-sentence outside line (\"exporting and render settings are outside what I cover, so I can't guide the Instagram export from here\"), and the closing sentence names what it covers (\"easing, key types, the speed graph, offsetting timing, setting a pivot, or grouping layers under a null\"). There are no steps, no export or Instagram settings from general knowledge, no links, and no offer to teach, start or do anything."
+            }
+          ],
+          "cost": 0.1193304,
+          "session_id": null,
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: What render settings should I use to export this for Instagram?\nTOOL CALL describe_layers {}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":{\"status\":\"not_read\",\"reason\":\"not_asked\"},\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":2,\"layer\":\"Subtitle\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"eased\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"mixed\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":2,\"child_layers\":[{\"layer_index\":1,\"layer\":\"Title\"},{\"layer_index\":2,\"layer\":\"Subtitle\"}],\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":4,\"layer\":\"Bar\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"End\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"X Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":5,\"layer\":\"Glow\",\"kind\":\"adjustment\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Blurriness\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[\"Gaussian Blur\"],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":6,\"layer\":\"Cursor\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Opacity\",\"keys\":6,\"key_types\":\"all_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\",\"expression_on\":true}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":8,\"layer\":\"Old Take\",\"kind\":\"text\",\"class\":\"hidden\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":9,\"layer\":\"Icon\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":10,\"layer\":\"Background\",\"kind\":\"solid\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: outside; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, exporting and render settings are outside what I cover, so I can't guide the Instagram export from here.\n\nCLOSING OFFER: What I can help with is how the motion itself feels: easing, key types, the speed graph, offsetting timing, setting a pivot, or grouping layers under a null.\n\nGO DEEPER BUTTONS: none\nWORDS: 49\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0215,
+          "judge_cost_usd": 0.0978,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 2,
+            "detail": "2 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMY375uyVVYENixAr6G",
+              "status": 200,
+              "headers_ms": 1271,
+              "max_gap_ms": 1392,
+              "total_ms": 2669,
+              "end": "done",
+              "body_bytes": 40442
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMYENk75xMeLNiP7o9o",
+              "status": 200,
+              "headers_ms": 796,
+              "max_gap_ms": 555,
+              "total_ms": 2442,
+              "end": "done",
+              "body_bytes": 46890
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind outside"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was outside (wanted outside)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "no_offer_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "0 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:no_general_answer",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "2 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OUTSIDE",
+              "pass": true,
+              "reason": "The explanation is one outside line (\"render and export settings aren't something I cover, so I can't help with sizing or settings for Instagram\") with no settings, steps or links, and the closing offer names what it covers (\"easing, key types, the speed graph, offsetting timing, setting a pivot, or grouping with a null\") without offering to teach, start or do anything."
+            }
+          ],
+          "cost": 0.1157724,
+          "session_id": null,
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: What render settings should I use to export this for Instagram?\nTOOL CALL describe_layers {}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":{\"status\":\"not_read\",\"reason\":\"not_asked\"},\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":2,\"layer\":\"Subtitle\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"eased\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"mixed\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":2,\"child_layers\":[{\"layer_index\":1,\"layer\":\"Title\"},{\"layer_index\":2,\"layer\":\"Subtitle\"}],\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":4,\"layer\":\"Bar\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"End\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"X Position\",\"keys\":3,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":5,\"layer\":\"Glow\",\"kind\":\"adjustment\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Blurriness\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[\"Gaussian Blur\"],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":6,\"layer\":\"Cursor\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Opacity\",\"keys\":6,\"key_types\":\"all_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\",\"expression_on\":true}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":8,\"layer\":\"Old Take\",\"kind\":\"text\",\"class\":\"hidden\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":9,\"layer\":\"Icon\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":10,\"layer\":\"Background\",\"kind\":\"solid\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: outside; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, render and export settings aren't something I cover, so I can't help with sizing or settings for Instagram.\n\nCLOSING OFFER: I can help with how your layers move: easing, key types, the speed graph, offsetting timing, setting a pivot, or grouping with a null.\n\nGO DEEPER BUTTONS: none\nWORDS: 45\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0204,
+          "judge_cost_usd": 0.0954,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 2,
+            "detail": "2 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMYgpDwPmn8YqUAkRrq",
+              "status": 200,
+              "headers_ms": 1043,
+              "max_gap_ms": 1326,
+              "total_ms": 2373,
+              "end": "done",
+              "body_bytes": 40442
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMYrsTLgfva4g75gDu6",
+              "status": 200,
+              "headers_ms": 1613,
+              "max_gap_ms": 495,
+              "total_ms": 3109,
+              "end": "done",
+              "body_bytes": 46694
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "ff52218abb0312ef305254d08dfe66d984eba51465d8972da5c11d573ffe54f0",
+  "mentor_cost_usd": 0.06,
+  "judge_cost_usd": 0.29,
+  "non_baseline": false,
+  "prompt_hash": {
+    "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-11-19-171822.json",
+    "passed": 19,
+    "total": 19
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}

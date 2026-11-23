@@ -239,3 +239,45 @@ Restart AE before session 1.
 
 **What it changes:** the paid runtime's own paths (here the hand-over event) are first tested at the ship
 step, because B1 can't take them. Write an A-only adapter test when a feature adds an event B1 never emits.
+
+## Phase 3 merge (2026-11-23)
+
+### T083 and the ask set on A at `c4b2d88`
+
+- **Merge:** mentor `07e02f6` first, then evals `4231201` and panel `c4b2d88`. The evals branch already held an
+  older merge of the mentor branch, so its ownership check flagged 40 skill-builder files until the mentor
+  branch was on `main`; its own commits touch only `product/evals/`. Same final tree in either order. Suites
+  match the trial merge (mentor 2036 + 4 todo, panel 894, helper 294, hooks 39, evals 166, dry runs valid).
+- **Before the full run:** ask 19 and 31 pass on A ($1.00).
+- **Full run: 23/31 (74%, target 80%)**, $1.86 credit. Refusals 12 of 45 answer calls (27%), 9 of them
+  `BAD_CLOSING`: plan › Risks says loosen a guard above 10%, so this one is the signal.
+- **Repeats ×3 on A** (about $2.1 credit):
+
+| Case | Repeat | Reading |
+|---|---|---|
+| 07 outside the six | 3/3 | noise |
+| 18 follow-up after a lesson | 3/3 | plumbing (`service_busy` on the full run) |
+| 19 whole go-deeper | 2/3 | majority pass; the miss is the hand-back line in turn 5 |
+| 12 matte eye off | 1/3 | judge R-HONEST-KINDS (a value said as fact); a known A weak spot from 051ebc2 |
+| 25 goal full of names | 1/3 | the goal said "a light sweep"; the effect is CC Light Sweep. The guard refuses only the whole name, the case bans "Light Sweep": **builder's call** which is right |
+| 21 done after the playhead moved | 0/3 | turn 4 prose 8 to 10 sentences (cap 5); 2 of 3 say "you dragged" |
+| 23 just the steps | 0/3 | turns 2 and 3 run 10 to 12 sentences (cap 6) |
+| 26 the learner says it worked | 0/3 | 5 sentences (cap 3); once said "saved" |
+| 30 repeat card on turn 4 | 0/3 | `note_said` called before the reread; prose 8 to 10 sentences |
+
+- **Eval plumbing fixed:** the runner's ask-turn allow list (`ASK_ALLOWED`) was still phase 1's three tools, so
+  any `note_said` call failed `only_ask_tools` (26 and 30 on the full run). `note_said` added, and
+  `test/allowed.test.mjs` now ties the list to the skill's `allowed-tools` (fails on the old list).
+- **Real findings, for `ask-mentor/SKILL.md` (not changed tonight; a prompt change moves every hash):**
+  1. **Turn 4 runs long on A.** The "Done / it didn't work" rule has no sentence cap; the follow-up rule's
+     "three sentences at most" isn't reaching it. Proposed: give the try-went rule its own cap (two or three
+     sentences plus the next step).
+  2. **Two rules both say "first".** "Done / how a try went" says read with `describe_layers` first; "they say
+     how the steps went" says `note_said` first. A message like "I did step 3 and it still shakes" is both.
+     Proposed: read first, then `note_said`, then the reply.
+  3. **"You dragged"** in 21: the rule says a difference is theirs only when they said they made it.
+- Phase 3's cases 21 to 31 had only been dry-run; this is their first live run on any runtime, so there's no
+  B1 number to compare. **SC-006's A half is not met** at `c4b2d88`; it re-runs after the fixes above, with
+  T080.
+- **What to watch in the sessions:** replies after "done" or "it worked" that run long, or credit you with a
+  change you didn't make.

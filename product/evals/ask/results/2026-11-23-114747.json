@@ -1,0 +1,802 @@
+{
+  "run_at": "2026-11-23T18:47:47.601Z",
+  "options": {
+    "only": "23",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.12,
+  "refusals": {
+    "answer_calls": 3,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "23-just-the-steps-no-more-offers",
+      "title": "Situation 8: after an answer the learner says \"just the steps\". The mentor stops offering a lesson: no offer in that reply or in the reply to a follow-up question that comes next, and no hand-over",
+      "covers": [
+        "TD 17.8",
+        "FR-030",
+        "TD 5.4",
+        "T078"
+      ],
+      "hash": "5fd2d1b809fb311d194804cd7534ba831207adce9f0569b1366d248303d7830d",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "4 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "1 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "turn_tools@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "turn_tools@3",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_answer@2",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@3",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "text:no_offer_after",
+              "pass": true,
+              "detail": "prose of turns 2, 3: clean"
+            },
+            {
+              "check": "text:no_question_after",
+              "pass": true,
+              "detail": "prose of turns 2, 3: clean"
+            },
+            {
+              "check": "prose_max_sentences:short_replies",
+              "pass": false,
+              "detail": "12 sentences of prose in turn 2, 3 (at most 6)"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "5 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.040829599999999994,
+          "session_id": null,
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Title land softer.\nTOOL CALL describe_layers {\"layers\":[\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"CTRL\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"child_layers\":[{\"layer_index\":1,\"layer\":\"Title\"},{\"layer_index\":2,\"layer\":\"Subtitle\"}],\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Title moves by its own keys and rides on CTRL, a null moved by keys. All of them are linear, which means they stop at full speed:\n- Title has 4 Position keys, 2 Scale keys and 2 Opacity keys.\n- CTRL has 2 Position keys and also carries Subtitle.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select Title's last Position keyframe, then choose Animation > Keyframe Assistant > Easy Ease In.  [tag: Easing; layer: Title]\n2. Select Title's last Scale keyframe and apply Easy Ease In the same way.  [tag: Easing; layer: Title]\n3. Select CTRL's last Position keyframe and apply Easy Ease In. This softens Subtitle's landing too.  [tag: Easing; layer: CTRL]\n4. Play it back and watch the landing.  [no tag]\n\nCLOSING OFFER: Want to try these yourself, or go deeper on step 1 with *Easing*?\n\nGO DEEPER BUTTONS: Easing\nWORDS: 112\n\n### Turn 2: the open comp is readable\nLEARNER: Just the steps, thanks.\nMENTOR PROSE: 1. Select Title's last Position keyframe, then choose Animation > Keyframe Assistant > Easy Ease In.\n2. Select Title's last Scale keyframe and apply Easy Ease In the same way.\n3. Select CTRL's last Position keyframe and apply Easy Ease In. Subtitle will land softer too.\n4. Play it back and watch the landing.\n\n### Turn 3: the open comp is readable\nLEARNER: Which keys do I select for step 1?\nMENTOR PROSE: Step 1 eases the moment Title comes to rest, so it only needs the keyframe where the move ends. Title has 4 Position keyframes, so you want the fourth one, the last on the right. Select Title, press P to show Position, click that last diamond, then choose Animation > Keyframe Assistant > Easy Ease In.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0408,
+          "judge_cost_usd": 0,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 5,
+            "detail": "5 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMhTQKfMic1TWYskCiL",
+              "status": 200,
+              "headers_ms": 928,
+              "max_gap_ms": 658,
+              "total_ms": 1591,
+              "end": "done",
+              "body_bytes": 40402
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMha3Rnv8UmbRyu3dpC",
+              "status": 200,
+              "headers_ms": 859,
+              "max_gap_ms": 646,
+              "total_ms": 2224,
+              "end": "done",
+              "body_bytes": 41674
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMhjctbr7MjfHxAf33P",
+              "status": 200,
+              "headers_ms": 754,
+              "max_gap_ms": 1645,
+              "total_ms": 5745,
+              "end": "done",
+              "body_bytes": 43972
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLMiAHiVAm6iafpDPhVY",
+              "status": 200,
+              "headers_ms": 809,
+              "max_gap_ms": 1240,
+              "total_ms": 2053,
+              "end": "done",
+              "body_bytes": 47764
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011ChLMiK1ppou2ULqvv7yfd",
+              "status": 200,
+              "headers_ms": 820,
+              "max_gap_ms": 663,
+              "total_ms": 2542,
+              "end": "done",
+              "body_bytes": 49376
+            }
+          ]
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "3 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "1 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "turn_tools@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "turn_tools@3",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_answer@2",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@3",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "text:no_offer_after",
+              "pass": true,
+              "detail": "prose of turns 2, 3: clean"
+            },
+            {
+              "check": "text:no_question_after",
+              "pass": true,
+              "detail": "prose of turns 2, 3: clean"
+            },
+            {
+              "check": "prose_max_sentences:short_replies",
+              "pass": false,
+              "detail": "10 sentences of prose in turn 2, 3 (at most 6)"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "5 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.037698999999999996,
+          "session_id": null,
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Title land softer.\nTOOL CALL describe_layers {\"layers\":[\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"CTRL\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"child_layers\":[{\"layer_index\":1,\"layer\":\"Title\"},{\"layer_index\":2,\"layer\":\"Subtitle\"}],\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Title moves on its own keys and also rides on CTRL, a null moved by its own keys:\n- Title has 4 Position keys, all linear, so it hits each one at full speed.\n- CTRL has 2 Position keys, also linear, and carries Title and Subtitle with it.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select Title's last Position keyframe and choose Animation > Keyframe Assistant > Easy Ease In.  [tag: Easing; layer: Title]\n2. Select CTRL's last Position keyframe and apply Easy Ease In too; this also softens Subtitle's stop.  [tag: Easing; layer: CTRL]\n3. Play it back and watch how Title settles.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 1 with *Easing*?\n\nGO DEEPER BUTTONS: Easing\nWORDS: 99\n\n### Turn 2: the open comp is readable\nLEARNER: Just the steps, thanks.\nMENTOR PROSE: 1. Select Title's last Position keyframe and choose Animation > Keyframe Assistant > Easy Ease In.\n2. Select CTRL's last Position keyframe and apply Easy Ease In there too. This also softens how Subtitle stops.\n3. Play it back and watch how Title settles.\n\n### Turn 3: the open comp is readable\nLEARNER: Which keys do I select for step 1?\nMENTOR PROSE: Step 1 softens the moment Title comes to rest, and that's its last Position key. Title has four Position keys. Select Title, press P to show Position, click only the rightmost of the four diamonds, then choose Animation > Keyframe Assistant > Easy Ease In.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0377,
+          "judge_cost_usd": 0,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 5,
+            "detail": "5 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMiXHWqwpY8sjQTEtQM",
+              "status": 200,
+              "headers_ms": 1648,
+              "max_gap_ms": 643,
+              "total_ms": 2298,
+              "end": "done",
+              "body_bytes": 40402
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMih2QPCAGjoDXgKy8E",
+              "status": 200,
+              "headers_ms": 1109,
+              "max_gap_ms": 1208,
+              "total_ms": 2957,
+              "end": "done",
+              "body_bytes": 41674
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMiugufEuXBNZZFmtKT",
+              "status": 200,
+              "headers_ms": 1272,
+              "max_gap_ms": 1346,
+              "total_ms": 4667,
+              "end": "done",
+              "body_bytes": 44208
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLMjFifJjiPdDrhoy8c7",
+              "status": 200,
+              "headers_ms": 732,
+              "max_gap_ms": 1298,
+              "total_ms": 2031,
+              "end": "done",
+              "body_bytes": 46416
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011ChLMjQQJqyEKCyxjtXSpJ",
+              "status": 200,
+              "headers_ms": 1131,
+              "max_gap_ms": 601,
+              "total_ms": 2761,
+              "end": "done",
+              "body_bytes": 48045
+            }
+          ]
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "4 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "1 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_starts_with_action@1",
+              "pass": false,
+              "detail": "\"Do the same on Title's last Scale keyframe.\" doesn't start with an action verb (the list is a guess)",
+              "warn": true
+            },
+            {
+              "check": "turn_tools@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "turn_tools@3",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_answer@2",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "no_answer@3",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "text:no_offer_after",
+              "pass": true,
+              "detail": "prose of turns 2, 3: clean"
+            },
+            {
+              "check": "text:no_question_after",
+              "pass": true,
+              "detail": "prose of turns 2, 3: clean"
+            },
+            {
+              "check": "prose_max_sentences:short_replies",
+              "pass": false,
+              "detail": "12 sentences of prose in turn 2, 3 (at most 6)"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "5 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.042311,
+          "session_id": null,
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Title land softer.\nTOOL CALL describe_layers {\"layers\":[\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"CTRL\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":2,\"child_layers\":[{\"layer_index\":1,\"layer\":\"Title\"},{\"layer_index\":2,\"layer\":\"Subtitle\"}],\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Title moves by its own keys and also rides on CTRL, a null with its own keys:\n- Title's Position (4 keys), Scale (2) and Opacity (2) are all linear, which means they stop dead.\n- CTRL's Position (2 keys) is linear too, and it moves Subtitle as well.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select Title's last Position keyframe and apply Keyframe Assistant > Easy Ease In (Shift+F9).  [tag: Easing; layer: Title]\n2. Do the same on Title's last Scale keyframe.  [tag: Easing; layer: Title]\n3. Select CTRL's last Position keyframe and apply Easy Ease In; this softens Subtitle's landing too.  [tag: Easing; layer: CTRL]\n4. Play it back and watch the landing.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 1 with *Easing*?\n\nGO DEEPER BUTTONS: Easing\nWORDS: 106\n\n### Turn 2: the open comp is readable\nLEARNER: Just the steps, thanks.\nMENTOR PROSE: 1. Select Title's last Position keyframe and choose Animation > Keyframe Assistant > Easy Ease In (Shift+F9).\n2. Select Title's last Scale keyframe and apply Easy Ease In the same way.\n3. Select CTRL's last Position keyframe and apply Easy Ease In. Subtitle rides on CTRL too, so its landing softens as well.\n4. Play it back and watch the landing.\n\n### Turn 3: the open comp is readable\nLEARNER: Which keys do I select for step 1?\nMENTOR PROSE: Select the last of Title's four Position keyframes, the one furthest right in the timeline, because that's where it lands. To find it, select Title and press P to show Position, then click that last diamond. Then choose Animation > Keyframe Assistant > Easy Ease In (Shift+F9).\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0423,
+          "judge_cost_usd": 0,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 5,
+            "detail": "5 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMjdRdm5AykwWHNC2b2",
+              "status": 200,
+              "headers_ms": 879,
+              "max_gap_ms": 652,
+              "total_ms": 1535,
+              "end": "done",
+              "body_bytes": 40402
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMjjs5se6ufS8697Ve7",
+              "status": 200,
+              "headers_ms": 971,
+              "max_gap_ms": 942,
+              "total_ms": 2489,
+              "end": "done",
+              "body_bytes": 41674
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLMjvX2tc4UeQhsKBLU9",
+              "status": 200,
+              "headers_ms": 739,
+              "max_gap_ms": 1653,
+              "total_ms": 5466,
+              "end": "done",
+              "body_bytes": 44072
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011ChLMkKxviBC8cWABxjr8Q",
+              "status": 200,
+              "headers_ms": 1500,
+              "max_gap_ms": 1540,
+              "total_ms": 3043,
+              "end": "done",
+              "body_bytes": 47915
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011ChLMkYzGNTJNyS9nhUyuD",
+              "status": 200,
+              "headers_ms": 1017,
+              "max_gap_ms": 430,
+              "total_ms": 2375,
+              "end": "done",
+              "body_bytes": 49677
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "ff52218abb0312ef305254d08dfe66d984eba51465d8972da5c11d573ffe54f0",
+  "mentor_cost_usd": 0.12,
+  "judge_cost_usd": 0,
+  "non_baseline": false,
+  "prompt_hash": {
+    "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-11-19-171822.json",
+    "passed": 19,
+    "total": 19
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}
