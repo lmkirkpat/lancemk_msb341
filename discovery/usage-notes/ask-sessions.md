@@ -224,8 +224,14 @@ which holds the text precomps. `main` at `cffc666`, AE restarted (`panel-loaded.
    hands its read to the other.
 4. **The ask box doesn't clear on send.** Panel fix.
 5. **The record can't tell the projects apart.** Every asked entry from sessions 2 and 3 saved its project as
-   "Untitled Project", though they were different projects. So session 2's earlier-questions fix can't key on the
-   project name as proposed; it needs the project's file path (or the bridge's project read checked first).
+   "Untitled Project", though they were different saved projects. **Cause (checked after the session):** each was an
+   `.aep` from an older AE, opened from Finder in AE 27.0, which opens it as an untitled "(converted)" copy, such as
+   "INTEH End Graphic (converted)". Until Save As, `app.project.file` is null (`ae_status`: "(unsaved project)"), and
+   `mentor/jsx/snapshot.jsx:584` falls back to "Untitled Project". The bridge reads AE correctly. This will be common
+   right after anyone upgrades AE. So the project name can't be the key for the asked list or earlier questions.
+   **Fix:** key on something that survives a conversion (the comp's ID plus its name, scoped to the AE session), and
+   when there's no file say "an unsaved project" rather than a made-up title. Check whether any lesson check that
+   compares `project` (offset, null, anchor, `marks.mjs`, `reviews.mjs`) treats two converted projects as one.
 6. **Strong on precomps.** Each read said exactly what it could and couldn't see and asked for the one thing it
    needed. The builder called this out unprompted.
 
@@ -248,8 +254,10 @@ which holds the text precomps. `main` at `cffc666`, AE restarted (`panel-loaded.
 ## To fix later
 
 - **Ask box keeps the text after send** (session 3, finding 4). Panel ask input; clear on send.
-- **Asked entries save "Untitled Project" for every project** (session 3, finding 5). Check the bridge's project
-  read and save the file path, then scope earlier questions on it.
+- **Asked entries save "Untitled Project" for every converted project** (session 3, finding 5). A converted
+  `.aep` has no file until Save As. Key the asked list and earlier questions on the comp's ID and name within the
+  AE session; `snapshot.jsx:584` says "an unsaved project" instead. Test: two fixtures with `project` null and
+  different comps never share earlier questions. Audit the lesson checks that compare `project`.
 
 - **`go_deeper` hands into a lesson whose finder excludes the layer** (session 2, finding 2). `mentor/tools/ask.mjs`
   `go_deeper` and the offer check in `give_answer`; run the skill's finder on the step's layer, refuse with a code
@@ -269,4 +277,5 @@ which holds the text precomps. `main` at `cffc666`, AE restarted (`panel-loaded.
 - **Two projects, one comp name.** Sessions 1 and 2 were different projects whose comps are both named Comp 1 (AE's
   default). Anything keyed on the comp name alone (the earlier-questions list, the asked entries, "same comp"
   checks, notes like these) mixes them. Key on the project file plus the comp, and say the project when two
-  match. Session 3 found the record saves "Untitled Project" for every project, so the name alone won't do. Checked in session 2's earlier-questions list.
+  match. Session 3 found a converted `.aep` (opened in a newer AE) has no file at all until Save As, so every one saves as
+  "Untitled Project" and the name alone won't do. Checked in session 2's earlier-questions list.
