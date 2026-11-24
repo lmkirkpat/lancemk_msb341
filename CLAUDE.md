@@ -273,7 +273,7 @@ a brand new session act like a colleague who already knows what you are working 
     guard refuses a repeated answer card. Suites on `main` match the trial merge (mentor 2036 + 4 todo, panel
     894, helper 294, hooks 39, evals 166). Ask set on A at `c4b2d88`: 23/31, short of 80%. With repeats, 07, 18
     and 19 pass; 12 and 25 are 1/3; 21, 23, 26 and 30 are 0/3, mostly turn 4 prose over its cap (logged in
-    `ask-build.md` › Phase 3 merge, with three proposed `SKILL.md` fixes and one builder call on 25). The
+    `ask-build.md` › Phase 3 merge, with three proposed `SKILL.md` fixes; case 25 now 3/3 after the builder ruled "a light sweep" general). The
     runner's `ASK_ALLOWED` lacked `note_said` (fixed, with a guard test). About $4.6 credit.
   - **Next (sprint 5 is due 2026-11-23 at midnight):**
     1. Sessions 1 to 3 on A on three of my own comps (T092 to T094), on `main` with phase 3; restart AE first.

@@ -259,7 +259,7 @@ step, because B1 can't take them. Write an A-only adapter test when a feature ad
 | 18 follow-up after a lesson | 3/3 | plumbing (`service_busy` on the full run) |
 | 19 whole go-deeper | 2/3 | majority pass; the miss is the hand-back line in turn 5 |
 | 12 matte eye off | 1/3 | judge R-HONEST-KINDS (a value said as fact); a known A weak spot from 051ebc2 |
-| 25 goal full of names | 1/3 | the goal said "a light sweep"; the effect is CC Light Sweep. The guard refuses only the whole name, the case bans "Light Sweep": **builder's call** which is right |
+| 25 goal full of names | 1/3 | the goal said "a light sweep"; the effect is CC Light Sweep. The guard refuses only the whole name, the case banned "Light Sweep". **Builder's call (2026-11-23): "a light sweep" is general.** Bare "Light Sweep" dropped from the case's `never_names`; then 3/3 on A |
 | 21 done after the playhead moved | 0/3 | turn 4 prose 8 to 10 sentences (cap 5); 2 of 3 say "you dragged" |
 | 23 just the steps | 0/3 | turns 2 and 3 run 10 to 12 sentences (cap 6) |
 | 26 the learner says it worked | 0/3 | 5 sentences (cap 3); once said "saved" |
