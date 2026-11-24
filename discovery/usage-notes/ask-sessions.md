@@ -159,7 +159,97 @@ a "do I need this?" question, not "how"), 0 explanation-only. Layers: 4 of 4 rig
 one user who has used both modes: it bears on `decisions/012` (ask-first Home) and on belief 7 (people take the
 result over the lesson). Worth a `/decision` revisit note on 012 once session 3 is in.
 
+## Session 3: 2026-11-23 (T094)
+
+A third project: a music-video comp (I Need Thee Every Hour Music Video Linked Comp 02) holding Nested Sequence 01,
+which holds the text precomps. `main` at `cffc666`, AE restarted (`panel-loaded.json` 19:06), every turn on A.
+
+### Steps
+
+| Step | What happened | Matches? |
+|---|---|---|
+| a. "Are the text layers eased right now? What controls their motion?" | In Nested Sequence 01: the text is inside three precomps, none has keys, expressions or effects of its own here, and it can't see inside; asks the learner to open one | Yes (a read limit, said honestly) |
+| b. to d. "It's open now" ×3 | Each precomp read in turn: two eased Position keys on each text layer, nothing else moving it; the third precomp holds only an unkeyed shape layer. One `COMP_NOT_NAMED` refusal | Yes |
+| e. "Make them smoother, they stop a little abrupt" | The active comp was now the top comp. The answer's only step was navigation ("double-click Nested Sequence 01, then SEEK JESUS THIS EASTER, and ask again"), after `UNKNOWN_LAYER` and `STEP_NEEDS_LAYER` refusals (22 s) | **No: problem 1** |
+| f. "The precomp is open" | Already eased, so a softer landing is the speed graph: drag the last key's incoming handle further left; play back. Tagged Speed graph, offered | Yes |
+| g. "Yes, go deeper on Speed graph" | Handed in. The lesson: "builds on *Easing*"; "I can't run the lesson on this text, because its keys already have the shape the lesson teaches"; then the step in prose. The learner edited and said "Done, check it": the check saw a change but had nothing to compare against; "I've noted that for next time"; recorded as practicing | **No: problem 2** |
+| h. Hand-back | "That was step 1. Next is step 2: Play it back and watch the landing." | Yes |
+| i. "Does it look right to you?" | Honest: its read doesn't show the curve's shape, the keys are still eased, play it back at full speed | Yes, **but problem 3** |
+| j. "It looks good to me" | `note_said`, then two sentences: do the same in the other precomp | Yes |
+| k. The ask box after each send | The typed text stays in the box | **No: problem 4** |
+
+### SC-002 and SC-003
+
+| # | Step line | Followed without asking? | Layer named | Right in AE? |
+|---|---|---|---|---|
+| 1 | Double-click Nested Sequence 01, then SEEK JESUS THIS EASTER, and ask again | ✓ | Nested Sequence 01, SEEK JESUS THIS EASTER | ✓ |
+| 2 | Select the Position keys, open the speed graph, drag the last key's incoming handle left | ✓ | the text layer | ✓ |
+| 3 | Play it back and watch the landing | ✓ | none | n/a |
+
+### SC-004 and SC-005 (A)
+
+| Measure | Value | Target | Pass? |
+|---|---|---|---|
+| First activity, all 10 turns | 1.4 to 5.9 s | ≤ 10 s | ✓ |
+| Longest whole turn | 22.0 s (step e, two refusals) | reads past 15 s logged | logged |
+| Answer turns (6) | median about $0.04 (first $0.27) | median ≤ $0.10 | ✓ |
+| Go-deeper lesson (hand-in and check) | about $0.23 | ≤ $0.40 | ✓ |
+
+### Builder's notes
+
+- "The speed graph go deeper lesson worked slightly better than the other go deeper lessons, but still wasn't
+  great. I think that's a technical limitation of what the mentor can read on the speed graph, because the ask page
+  performed the same way."
+- The ask box keeps the typed text after every turn; it should clear on send.
+- Layer names good, steps clear.
+- "The mentor did a very good job handling the mess of precomps on this project, so I was impressed by that."
+
+### Findings
+
+1. **A step that only navigates.** With the top comp active, the answer's one step was "open the precomp and ask
+   again", after two refusals. It worked, but a navigation-only answer is really a clarify with steps to come;
+   spec 015's phase 2 (reading inside precomps, T041) would remove the round trips in steps a to f entirely.
+   Five of this session's ten turns were the learner opening precomps for the mentor.
+2. **The hand-in landed in a lesson that refused the focus, again.** The ask said "a softer landing comes from the
+   speed graph"; the lesson said the keys "already have the shape the lesson teaches" (they start quickly and land
+   softly by its rule), so it couldn't run, then recorded a practice anyway. **2 of 2 go-deepers on A hit this**
+   (session 2: Offset excluded an expression layer). Same fix as session 2's finding 2: `go_deeper` runs the
+   lesson's finder on the step's layer before accepting, and the ask doesn't offer a lesson that would refuse. Also
+   a teaching gap: the learner felt the landing was abrupt while the lesson's rule called it soft. The rule's
+   threshold isn't the learner's taste; the lesson could take "it feels abrupt" as the focus instead of refusing.
+3. **The builder's read on the speed graph is half right.** The ask's read (`describe_layers`) can't see the
+   curve's shape, so the after-lesson "does it look right?" couldn't answer. But the mentor *can* read ease
+   influence: the speed graph lesson's own snapshot and check do. It's the ask mode that lacks it, and the lesson
+   refused before using it. Same root as session 2's finding 3: the two modes read different things, and neither
+   hands its read to the other.
+4. **The ask box doesn't clear on send.** Panel fix.
+5. **The record can't tell the projects apart.** Every asked entry from sessions 2 and 3 saved its project as
+   "Untitled Project", though they were different projects. So session 2's earlier-questions fix can't key on the
+   project name as proposed; it needs the project's file path (or the bridge's project read checked first).
+6. **Strong on precomps.** Each read said exactly what it could and couldn't see and asked for the one thing it
+   needed. The builder called this out unprompted.
+
+**Caveat:** builder as user, a third project, one go-deeper.
+
+## Tally across sessions 1 to 3 (T095, partial)
+
+- **Projects:** three, all my own and not set up for demos (session 1 on B1 because of a stale panel).
+- **SC-002:** 8 of 9 step lines followed without asking, 0 explanation-only. Met.
+- **SC-003:** every named layer right (7 of 7). Met so far; 10 needed.
+- **SC-001 (a go-deeper per session):** 3 of 3 sessions had one; 0 of 3 wanted (all for the test).
+- **SC-013 (3 of 3 hand-ins across two skills):** 2 hand-ins on A (Offset, Speed graph), both accepted and both
+  handed back, but both lessons refused the focus. Session 1's never handed in (B1). Not met.
+- **SC-004:** all 17 A turns' first activity ≤ 10 s. Met. **SC-005:** median answer cost under $0.10 across
+  sessions 2 and 3; go-deeper lessons about $0.20 and $0.23. Met.
+- **The headline:** asking works: steps clear, layers right, fast, honest about what it can't see. Going deeper
+  doesn't yet: every hand-in landed in a lesson that couldn't take the step it was given, or read less than the
+  ask did.
+
 ## To fix later
+
+- **Ask box keeps the text after send** (session 3, finding 4). Panel ask input; clear on send.
+- **Asked entries save "Untitled Project" for every project** (session 3, finding 5). Check the bridge's project
+  read and save the file path, then scope earlier questions on it.
 
 - **`go_deeper` hands into a lesson whose finder excludes the layer** (session 2, finding 2). `mentor/tools/ask.mjs`
   `go_deeper` and the offer check in `give_answer`; run the skill's finder on the step's layer, refuse with a code
@@ -179,4 +269,4 @@ result over the lesson). Worth a `/decision` revisit note on 012 once session 3 
 - **Two projects, one comp name.** Sessions 1 and 2 were different projects whose comps are both named Comp 1 (AE's
   default). Anything keyed on the comp name alone (the earlier-questions list, the asked entries, "same comp"
   checks, notes like these) mixes them. Key on the project file plus the comp, and say the project when two
-  match. Checked in session 2's earlier-questions list.
+  match. Session 3 found the record saves "Untitled Project" for every project, so the name alone won't do. Checked in session 2's earlier-questions list.

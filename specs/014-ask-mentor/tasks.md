@@ -430,13 +430,16 @@ must land before session 3 (T094).
   meet FR-033; $8.08 credit. Triage merged (`014-a-triage`).
 - [ ] T091 (cockpit) `bash panel/install.sh --runtime a`; restart AE; check the panel reads runtime A, the AE lock
   is free, and the learner record is the builder's real one (spec › Assumptions).
-- [ ] T092 (cockpit logs, AE, **builder's hands**) Session 1 on one of the builder's own comps not set up for
+- [x] T092 (cockpit logs, AE, **builder's hands**) Session 1 on one of the builder's own comps not set up for
   demos: a question, the steps, at least one go-deeper. Log in `discovery/usage-notes/ask-sessions.md` (new): the
   question in general terms, each step line followed without asking or not, the layer named against a look in
   AE, the go-deeper and whether it was forced.
-- [ ] T093 (cockpit logs, AE, **builder's hands**) Session 2, another comp. Merge `panel/` changes only between
+  *(Done 2026-11-23 on B1, a stale panel; `discovery/usage-notes/ask-sessions.md`.)*
+- [x] T093 (cockpit logs, AE, **builder's hands**) Session 2, another comp. Merge `panel/` changes only between
   sessions.
-- [ ] T094 (cockpit logs, AE, **builder's hands**) Session 3, after phase 3 is merged (T083).
+  *(Done 2026-11-23 on A, a second project.)*
+- [x] T094 (cockpit logs, AE, **builder's hands**) Session 3, after phase 3 is merged (T083).
+  *(Done 2026-11-23 on A, a third project, nested precomps.)*
 - [ ] T095 (cockpit) Tally in the usage note: SC-001 (go-deeper per session; the watch signal), SC-002 (≥ 80% of
   step lines followed, 0 explanation-only), SC-003 (9 of 10 right layer), SC-009, SC-010, SC-013 (3 of 3 hand-ins
   across two skills).
