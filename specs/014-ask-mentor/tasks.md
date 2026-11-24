@@ -382,10 +382,10 @@ must land before session 3 (T094).
   change landed, as a hint; no pass or fail), "just the steps" (FR-030), a new question (FR-031), asking again
   is normal (FR-041's banned phrases; a crediting bridge allowed), `note_said`; `allowed-tools` adds `note_said`.
 - [x] T077 (skill-builder) Mentor and hooks suites; all pass.
-- [ ] T078 [P] (eval-engineer) Ask cases: situations 2, 8, 17, 19, a new question, a learned skill asked about
+- [x] T078 [P] (eval-engineer) Ask cases: situations 2, 8, 17, 19, a new question, a learned skill asked about
   (SC-010's phrase check plus rubric); record checks (FR-061: the asked entry changes no skill state; no question
   text in `goal`, checked as no run of 5 words from the question).
-- [ ] T079 [P] (eval-engineer) Cases in easing, key types, speed graph and offset: rule 1, rule 5, hand-in (K6,
+- [x] T079 [P] (eval-engineer) Cases in easing, key types, speed graph and offset: rule 1, rule 5, hand-in (K6,
   `runtimes: ["a"]` where it hands over); a K5 case in each of the six sets; next-mentor's FR-042 candidate.
   *Added 2026-11-19 (OQ-10):* one end-lesson case each in easing, key types, speed graph, offset and next-mentor
   (`end_lesson` called, no `record_lesson`, no demo or check after, at most two sentences), plus a stop after a
