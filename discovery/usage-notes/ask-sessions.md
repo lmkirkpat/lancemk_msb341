@@ -247,6 +247,22 @@ which holds the text precomps. `main` at `cffc666`, AE restarted (`panel-loaded.
   handed back, but both lessons refused the focus. Session 1's never handed in (B1). Not met.
 - **SC-004:** all 17 A turns' first activity ≤ 10 s. Met. **SC-005:** median answer cost under $0.10 across
   sessions 2 and 3; go-deeper lessons about $0.20 and $0.23. Met.
+- **T096 (2026-11-23, `node panel/dev/turns.js --ask`):** on A, 12 answer turns (7 questions, 5 follow-ups),
+  first activity ≤ 10 s in 12 of 12, median 1.9 s: **SC-004 met.** Answer cost median $0.048, $1.13 in all;
+  go-deeper lessons $0.05 and $0.23 (median $0.14; the $0.20 above counted session 2's hand-in turn, $0.15, with
+  its lesson): **SC-005 met.** Turns past 15 s in all: **two ask turns**, session 2's first question (46.5 s,
+  the three `NOT_PLAIN_WORDS` refusals) and session 3's "make them smoother" question (22.0 s), plus one lesson
+  check (15.0 s). By whole-turn time that's two, which by SC-004's note puts a Stop control back on the table (MU
+  open question 7). The 46.5 s was refusals, not reads, so whether it counts is the builder's call. (B1, for
+  comparison: 14 of 14, median 2.1 s, $0.058.)
+- **T098 (2026-11-23, SC-008, a read of the builder's record):** four asked entries (sessions 1 to 3). **0**
+  changed a skill's fields: the one skill change since the sessions is Speed graph's, made by its own go-deeper
+  lesson's record, not by an asked entry. **0** hold the question word for word (no run of five words from any
+  typed question appears in a `goal` or `said`), **0** hold expression text or a name, email or phone. **0**
+  unattributed changes: the one new lesson entry says the check saw the learner's change. **SC-008 met for the
+  sessions.** Two notes: that lesson entry's summary adds a motive ("to suit their taste"), which the record
+  rules leave out, and it records a practice for a lesson that couldn't run (session 3, problem 2). Session 1's
+  entry has `went_deeper` empty, which is right: on B1 the go-deeper never handed in.
 - **The headline:** asking works: steps clear, layers right, fast, honest about what it can't see. Going deeper
   doesn't yet: every hand-in landed in a lesson that couldn't take the step it was given, or read less than the
   ask did.

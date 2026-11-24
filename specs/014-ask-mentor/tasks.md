@@ -443,11 +443,11 @@ must land before session 3 (T094).
 - [ ] T095 (cockpit) Tally in the usage note: SC-001 (go-deeper per session; the watch signal), SC-002 (≥ 80% of
   step lines followed, 0 explanation-only), SC-003 (9 of 10 right layer), SC-009, SC-010, SC-013 (3 of 3 hand-ins
   across two skills).
-- [ ] T096 (cockpit) `node panel/dev/turns.js --ask`: SC-004 (≥ 9 of 10 ask turns ≤ 10 s, median; reads past
+- [x] T096 (cockpit) `node panel/dev/turns.js --ask`: SC-004 (≥ 9 of 10 ask turns ≤ 10 s, median; reads past
   15 s logged) and SC-005 (median answer ≤ $0.10, go-deeper lesson ≤ $0.40).
 - [ ] T097 (**builder's hands**) SC-012: every new ask state at the default dock, at spec 007 SC-010's heights;
   then `ask-answer`, `ask-steps-open`, `ask-deeper-lesson` at 260 × 480 once (OQ-4). Cockpit logs.
-- [ ] T098 (cockpit) SC-008 against the builder's record after session 3: no asked entry changed a skill's fields;
+- [x] T098 (cockpit) SC-008 against the builder's record after session 3: no asked entry changed a skill's fields;
   no question, expression text or personal detail; no unattributed change in any entry.
 - [ ] T099 (eval-engineer, **paid**, before the first tester, not a session gate) A re-runs of every set whose
   skill changed in this spec (SC-007's A half; spec 006 FR-025).
