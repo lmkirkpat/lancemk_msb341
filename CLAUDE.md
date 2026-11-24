@@ -276,9 +276,11 @@ a brand new session act like a colleague who already knows what you are working 
     `ask-build.md` › Phase 3 merge, with three proposed `SKILL.md` fixes; case 25 now 3/3 after the builder ruled "a light sweep" general). The
     runner's `ASK_ALLOWED` lacked `note_said` (fixed, with a guard test). About $4.6 credit.
   - **Next (sprint 5 is due 2026-11-23 at midnight):**
-    1. Sessions 1 to 3 on A on three of my own comps (T092 to T094), on `main` with phase 3; restart AE first.
-       Log each with `/usage-session` in `discovery/usage-notes/ask-sessions.md`. Watch turn 4: long replies
-       after "done" or "it worked", or crediting a change you didn't make.
+    1. Sessions 1 to 3 done 2026-11-23 (T092 to T094, `discovery/usage-notes/ask-sessions.md`; session 1 on B1
+       because of a stale panel, sessions 2 and 3 on A). Asking works: 8 of 9 step lines followed, 7 of 7 layers
+       right, SC-004 and SC-005 met. Going deeper doesn't yet: both A hand-ins landed in lessons that refused the
+       focus (SC-013 not met). The fixes are in that note › To fix later (the `go_deeper` finder check first).
+       Next: finish the tally (T095) with T096 and T098, which are free, then T097 (builder's hands).
     2. Moved to sprint 6: T080 on B1 at `c4b2d88`, one set at a time (about $190 to $230 of subscription; two or
        three usage windows). Ask 21 and 22 may need case 30's tolerance for a refused repeat. Then T084.
     3. After the sessions: T095 to T098; T099 (paid A re-runs of every changed set) before any tester; T100

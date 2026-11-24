@@ -117,37 +117,37 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 **Goal:** every phase 1 MU state, drawn from fixture events. **Independent test:** panel tests, no mentor.
 
-- [ ] T017 [P] [US3] (panel-builder) `panel/lib/copy.js`: MU › Copy's strings and the hand-back line
+- [x] T017 [P] [US3] (panel-builder) `panel/lib/copy.js`: MU › Copy's strings and the hand-back line
   (contracts/panel-ask.md); `panel/test/copy.test.js` extended: no underscore names, tool names or commands.
-- [ ] T018 [P] [US3] (panel-builder) `panel/lib/view-state.js`: `home-cutoff` → `home-inprogress`; add MU's new
+- [x] T018 [P] [US3] (panel-builder) `panel/lib/view-state.js`: `home-cutoff` → `home-inprogress`; add MU's new
   ids. A test in `panel/test/view-state.test.js` reads MU's States table and checks every new and changed id
   is in `STATE_IDS`.
-- [ ] T019 [US1] (panel-builder) `panel/lib/ask-result.js`: a `give_answer` tool result → AskView or `null`
+- [x] T019 [US1] (panel-builder) `panel/lib/ask-result.js`: a `give_answer` tool result → AskView or `null`
   (data-model § 7; fail closed, FR-048); a `b1` panel always gets `offers: []`. Tests in
   `panel/test/ask-result.test.js`: TD § 16's result; every malformed shape in contracts/panel-ask.md › Tests.
-- [ ] T020 [US3] (panel-builder) `panel/lib/home.js` and `panel/lib/screens.js`: ask card and quiet line
+- [x] T020 [US3] (panel-builder) `panel/lib/home.js` and `panel/lib/screens.js`: ask card and quiet line
   (contracts/panel-ask.md › Home): `home-return`, `home-first`, `home-inprogress`, `home-review-due` (identical
   to `home-return`), `home-lessonopen`, `home-loading`, `home-unreadable`, `home-unreachable`, `home-busy`.
   Tests in `panel/test/home.test.js` (updated: no Up next, Practice due or memory on Home).
-- [ ] T021 [P] [US3] (panel-builder) `panel/lib/skills-view.js`, `panel/lib/memory.js`, `panel/lib/screens.js`:
+- [x] T021 [P] [US3] (panel-builder) `panel/lib/skills-view.js`, `panel/lib/memory.js`, `panel/lib/screens.js`:
   `skills-due` (Practice due line at the top with Warm up; memory under the path) and `lesson-none`'s new copy.
   Tests in `panel/test/skills-view.test.js` and `panel/test/memory.test.js`.
-- [ ] T022 [US3] (panel-builder) `panel/lib/ask-thread.js` (new): the thread model (data-model § 7): questions,
+- [x] T022 [US3] (panel-builder) `panel/lib/ask-thread.js` (new): the thread model (data-model § 7): questions,
   folding into "Earlier questions (n)", `latest_steps`, the 6 s "Still reading" switch. Tests in
   `panel/test/ask-thread.test.js`.
-- [ ] T023 [US3] (panel-builder) `panel/lib/screens.js` and `panel/panel.css`: `ask-typing`, `ask-sending`,
+- [x] T023 [US3] (panel-builder) `panel/lib/screens.js` and `panel/panel.css`: `ask-typing`, `ask-sending`,
   `ask-reading`, `ask-reading-long`, `ask-answer`, `ask-followup`, `ask-steps-open`, `ask-clarify`,
   `ask-outside` ("See what's covered ›" to Skills), `ask-new-question`, `ask-unreachable`, `ask-nocomp`,
   `ask-busy`, `home-thread`; Your steps in the checklist frame (FR-049: folded, no glyphs, header text, 38%
   cap, swap at short docks). Tests in `panel/test/ask-states.test.js`.
-- [ ] T024 [P] [US3] (panel-builder) `panel/lib/requests.js`: the ask and follow-up requests (contracts/panel-ask.md
+- [x] T024 [P] [US3] (panel-builder) `panel/lib/requests.js`: the ask and follow-up requests (contracts/panel-ask.md
   › Requests); bubbles show the typed text, never the prefix. `panel/test/requests-eval-sync.test.js` covers the
   new strings.
-- [ ] T025 [US3] (panel-builder) `panel/lib/connection.js` reads `comp_active`; Home pauses Ask only on `false`
+- [x] T025 [US3] (panel-builder) `panel/lib/connection.js` reads `comp_active`; Home pauses Ask only on `false`
   (`home-nocomp`, focusable, reason linked); `null` or absent leaves Ask on. Tests in `panel/test/connection.test.js`.
   **Note 2026-11-16:** FR-047 is withdrawn, so the bridge never sends the flag and Ask is always on; no
   behavior changes. The dead reading is removed in T101.
-- [ ] T026 [US3] (panel-builder) `panel/lib/panel-session.js` version 3 with the thread (research R12); a
+- [x] T026 [US3] (panel-builder) `panel/lib/panel-session.js` version 3 with the thread (research R12); a
   version 2 file reads as today; a Skills lesson ends the thread. Tests in `panel/test/panel-session.test.js`
   and `panel/test/close-continue.test.js`.
   **Note 2026-11-16 (spec amendment (d), the builder's decision):** starting a lesson (Find my next lesson,
@@ -155,16 +155,16 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   saved and visible, and "Back to your question ›" still works after the lesson; nothing is deleted (FR-052's
   note, research R12). A follow-up whose `give_answer` result is kind `answer`, `describe` or `howto` is a new
   question (FR-031's note). If `014-panel` built the old rule, the change needs a cockpit-numbered task.
-- [ ] T027 [P] [US3] (panel-builder) FR-058: `panel/lib/turns.js` adds `thread` and the kinds `question`,
+- [x] T027 [P] [US3] (panel-builder) FR-058: `panel/lib/turns.js` adds `thread` and the kinds `question`,
   `followup`, `go_deeper` (research R11); `panel/dev/turns.js --ask` reports answer turns and go-deeper lessons
   apart. Tests in `panel/test/turns.test.js` and `panel/test/turns-report.test.js`.
-- [ ] T028 [P] (panel-builder) `panel/helper/lib/mcp-client.mjs`: `serverEnv` sets `AE_MENTOR_RUNTIME=a`
+- [x] T028 [P] (panel-builder) `panel/helper/lib/mcp-client.mjs`: `serverEnv` sets `AE_MENTOR_RUNTIME=a`
   (research R4); the B1 runtime folder's `.mcp.json` (`panel/lib/runtime.js`) sets nothing. Tests in the
   helper's `mcp-client` test and `panel/test/runtime.test.js`.
-- [ ] T029 [US3] (panel-builder) FR-054 in the new states: `aria-disabled` with `aria-describedby`; steps toggle
+- [x] T029 [US3] (panel-builder) FR-054 in the new states: `aria-disabled` with `aria-describedby`; steps toggle
   `aria-expanded` and `aria-controls`; Steps a heading; focus never dropped; Enter sends, Shift+Enter adds a
   line; nothing under 11 px. Tests in `panel/test/ask-a11y.test.js`.
-- [ ] T030 (panel-builder) Run `node --test panel/test/*.test.js` and the helper's tests; all pass. List any
+- [x] T030 (panel-builder) Run `node --test panel/test/*.test.js` and the helper's tests; all pass. List any
   phase 1 MU id without a test (expected none).
 
 ## User Story 1 eval set (eval-engineer)
@@ -337,7 +337,7 @@ open, so Home's Ask stayed paused and follow-ups went into the lesson); cockpit 
 **Starts after T040.** FR-029 and FR-035 (turn 4, rule 3) wait on 015 T022 to T025. May land between sessions;
 must land before session 3 (T094).
 
-- [ ] T064 (cockpit) Cut the phase 3 skill-builder (`--shared-owner`) and panel-builder worktrees from local `main`.
+- [x] T064 (cockpit) Cut the phase 3 skill-builder (`--shared-owner`) and panel-builder worktrees from local `main`.
 
 ## User Story 5: remembered without judging (P2)
 
@@ -354,7 +354,7 @@ must land before session 3 (T094).
   carries the entry's goal in general terms. Tests in `mentor/test/recommend-asked.test.mjs`.
 - [x] T069 [P] [US5] (skill-builder) `.claude/skills/next-mentor/SKILL.md`: the asked-candidate line ("last
   week you asked about …", once); K4 respected.
-- [ ] T070 [P] [US5] (panel-builder) FR-043: `panel/lib/memory.js` and the Skills view never show asked entries
+- [x] T070 [P] [US5] (panel-builder) FR-043: `panel/lib/memory.js` and the Skills view never show asked entries
   or "asked again"; turn 4's answer changes nothing to ✓ or ✗. Tests in `panel/test/memory.test.js`,
   `panel/test/ask-thread.test.js`.
 
@@ -396,8 +396,8 @@ must land before session 3 (T094).
 
 ## Phase 3 gate
 
-- [ ] T081 (reviewer) Review against FR-028 to FR-045, FR-062 and contracts.
-- [ ] T082 (design-reviewer) Review T070 (nothing shows asked entries; no ticks on turn 4).
+- [x] T081 (reviewer) Review against FR-028 to FR-045, FR-062 and contracts.
+- [x] T082 (design-reviewer) Review T070 (nothing shows asked entries; no ticks on turn 4).
 - [x] T083 (cockpit) Merge both, between sittings; T080 on the merge commit if it ran on the branch.
   *(Done 2026-11-23: mentor `07e02f6` first (the evals branch already held an older merge of it, so its
   ownership check is clean only after), evals `4231201`, panel `c4b2d88`. Mentor 2036 pass, 4 todo; panel 894;
@@ -428,7 +428,7 @@ must land before session 3 (T094).
 - [x] T090 (eval-engineer, **paid**, recommended) Anchor and null-parenting on A, since every go-deeper in the
   sessions runs them on A. **Done 2026-11-19 at `051ebc2`:** anchor 65/68 (B1 63/68), null 53/58 (B1 52/58), both
   meet FR-033; $8.08 credit. Triage merged (`014-a-triage`).
-- [ ] T091 (cockpit) `bash panel/install.sh --runtime a`; restart AE; check the panel reads runtime A, the AE lock
+- [x] T091 (cockpit) `bash panel/install.sh --runtime a`; restart AE; check the panel reads runtime A, the AE lock
   is free, and the learner record is the builder's real one (spec › Assumptions).
 - [x] T092 (cockpit logs, AE, **builder's hands**) Session 1 on one of the builder's own comps not set up for
   demos: a question, the steps, at least one go-deeper. Log in `discovery/usage-notes/ask-sessions.md` (new): the

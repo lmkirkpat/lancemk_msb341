@@ -16,9 +16,15 @@ else.
 - [ ] I can ask the mentor an open-ended question about something I want to accomplish in a comp,
       limited to what the six skills cover, and it gives me steps to get there, with the option to
       go deeper into a lesson on any skill it references
-- [ ] 3 sessions on 3 of my own comps that aren't set up for demos, each logged in a usage note:
+      *Open at close (Nov 23):* asking works (8 of 9 step lines followed without asking, 7 of 7
+      layers named right, every A turn's first activity ≤ 10 s), but going deeper doesn't yet. Both
+      hand-ins on A landed in lessons that couldn't take the step they were given (SC-013 not met).
+      The fixes are in `discovery/usage-notes/ask-sessions.md` › To fix later.
+- [x] 3 sessions on 3 of my own comps that aren't set up for demos, each logged in a usage note:
       the question I asked, the steps it gave, whether I could follow them, and at least one
       go-deeper into a skill lesson
+      *(Nov 23, T092 to T094, `discovery/usage-notes/ask-sessions.md`. Session 1 ran on B1 because
+      of a stale panel; sessions 2 and 3 ran on A.)*
 - [x] Option A runtime carry-over done: pivot proven in a live lesson on A, the null set run on A,
       easing, speed graph and offset meeting FR-033 on A, T068's cause found (changed Nov 12:
       not reproduced in 1,082 timed requests, log left on), and T066 (the install switch) landed
