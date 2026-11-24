@@ -6,7 +6,7 @@ home (`node panel/dev/turns.js --ask`).
 
 ## Session 1: 2026-11-23 (T092)
 
-My own logo comp (Comp 1), `main` at `c74967b` with phase 3 merged. **It ran on B1, not A:** AE had been open
+My own logo project (its comp is named Comp 1), `main` at `c74967b` with phase 3 merged. **It ran on B1, not A:** AE had been open
 since Nov 19, 19:56, the panel loaded then (`panel-loaded.json`), and `panel.json` was switched to `"a"` at 21:05
 that night (T091). The panel reads its runtime at load, so every turn logged `"runtime":"b1"`, on the Nov 19 panel
 code. Nobody restarted AE before the session, and the cockpit's pre-session check read `panel.json` but not when
@@ -78,9 +78,9 @@ then check `panel-loaded.json`'s time is after the restart and the first turn lo
 
 ## Session 2: 2026-11-23 (T093)
 
-Same logo comp (Comp 1), `main` at `7fa5667`. AE restarted first: `panel-loaded.json` 18:36, and every turn logs
-`"runtime":"a"` (`claude-opus-5-5`, medium, settings `ff52218a`). A different comp from session 1 is still owed:
-T093 asks for another comp, so this one counts for the go-deeper and the lesson finding, not for the comp spread.
+A different project from session 1, with a rotating logo (Logo 1 to 4); its comp is also named Comp 1, AE's
+default name, so the reads and the logs can't tell the two apart by name. `main` at `7fa5667`. AE restarted first:
+`panel-loaded.json` 18:36, and every turn logs `"runtime":"a"` (`claude-opus-5-5`, medium, settings `ff52218a`).
 
 ### Steps
 
@@ -92,7 +92,7 @@ T093 asks for another comp, so this one counts for the go-deeper and the lesson 
 | d. Hand-back | "That was step 1. Next is step 2: ..." | Yes |
 | e. "It already feels like the other logo layers are keeping up. Is that true?" | Read Logo 1 to 4: "Partly": they ride on Logo 1, but their own keyed turns still peak after its overshoot | Yes |
 | f. "Done" | Read again: the extra turns now peak about 4 frames earlier, bigger overshoots, Logo 1's peak and Logo 2's Scale unmoved; then the effect step | Content yes; **8 sentences**, the same length problem as session 1 and ask 21/26/30 |
-| g. Earlier questions (after going back to the Ask tab) | Shows every question since Nov 19, from other comps, B1 sessions and before | **No: problem 4** |
+| g. Earlier questions (after going back to the Ask tab) | Shows every question since Nov 19, from session 1's project, B1 sessions and before | **No: problem 4** |
 
 ### SC-002 and SC-003
 
@@ -148,14 +148,14 @@ a "do I need this?" question, not "how"), 0 explanation-only. Layers: 4 of 4 rig
    should a handed-in lesson keep the ask's reads (`describe_layers`) for questions, and should it lead from the
    step it was handed instead of re-running its own opening (it opened with a prerequisite line and its own
    finder)?
-4. **Earlier questions shows the whole history.** Every saved question since Nov 19, from other comps and B1
+4. **Earlier questions shows the whole history.** Every saved question since Nov 19, from another project (session 1's, whose comp has the same default name) and B1
    sessions. The builder expects this comp and this session. **Fix (panel):** filter the earlier-questions list
    to the active comp and the current session, or group by comp with this session first; check what spec 014's
    FR on the asked list says first, since the record itself keeps everything for memory.
 5. **The try-went reply is long again** (8 sentences), though everything in it was right and useful. Third live
    example, with ask 21/23/26/30 at 0/3 on A.
 
-**Caveat:** builder as user, same comp as session 1, one go-deeper. Finding 3 is a product-level signal from the
+**Caveat:** builder as user, a second project, one go-deeper. Finding 3 is a product-level signal from the
 one user who has used both modes: it bears on `decisions/012` (ask-first Home) and on belief 7 (people take the
 result over the lesson). Worth a `/decision` revisit note on 012 once session 3 is in.
 
@@ -173,3 +173,10 @@ result over the lesson). Worth a `/decision` revisit note on 012 once session 3 
   `/usage-session` compares `panel-loaded.json` to AE's start time before a sitting.
 - **Numbers across turns** (finding 4): when a follow-up's read is wider than the answer's, say which layer the
   numbers are measured on.
+
+## Edge cases to plan for
+
+- **Two projects, one comp name.** Sessions 1 and 2 were different projects whose comps are both named Comp 1 (AE's
+  default). Anything keyed on the comp name alone (the earlier-questions list, the asked entries, "same comp"
+  checks, notes like these) mixes them. Key on the project file plus the comp, and say the project when two
+  match. Checked in session 2's earlier-questions list.
