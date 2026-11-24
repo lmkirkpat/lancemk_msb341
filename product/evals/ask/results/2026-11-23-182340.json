@@ -1,0 +1,678 @@
+{
+  "run_at": "2026-11-24T01:23:40.603Z",
+  "options": {
+    "only": "25",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.45,
+  "refusals": {
+    "answer_calls": 3,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "25-goal-from-a-question-full-of-names",
+      "title": "Situation 17, harder: a question that names the layers and the effect. The accepted answer's goal is still in general motion words, with none of those names in it (the tool may refuse once with GOAL_NOT_GENERAL and the mentor tries again)",
+      "covers": [
+        "TD 17.17",
+        "FR-040",
+        "T078"
+      ],
+      "hash": "21992d6084976fc5204839fef2a22d08cd3b24078e258a11bddeca9d6121b4d6",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "2 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "2 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "1 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "asked_entry",
+              "pass": true,
+              "detail": "one entry on Sweep Control, Black Solid 1"
+            },
+            {
+              "check": "asked_goal",
+              "pass": true,
+              "detail": "goal \"slow down a sweeping light's travel\""
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "3 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The turn is one answer at 101 words: it opens on the cause (\"the sweep's Center on Black Solid 1 comes from an expression that just copies Sweep Control's Position\"), gives two bullets and two steps, and ends on a single closing question, \"Try it, or want to go deeper on step 1 with *Offset*?\", which names one skill that is among the step tags; there is no greeting, recap, praise, second question or lesson."
+            }
+          ],
+          "cost": 0.18087540000000002,
+          "session_id": null,
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the sweep that Sweep Control drives on Black Solid 1 with CC Light Sweep go slower.\nTOOL CALL describe_layers {\"layers\":[\"Sweep Control\",\"Black Solid 1\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":26,\"layer\":\"Sweep Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":1,\"first\":[{\"from_layer\":\"Black Solid 1\",\"from_property\":\"Effects › CC Light Sweep › Center\",\"property\":\"Position\",\"inferred\":true,\"from_renders\":false}],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":23,\"layer\":\"Black Solid 1\",\"kind\":\"solid\",\"class\":\"hidden\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[\"CC Light Sweep\"],\"expressions\":[{\"property\":\"Center\",\"group\":\"effect\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"status\":\"not_read\",\"reason\":\"not_transform\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":1,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Black Solid 1\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":23,\"layer\":\"Black Solid 1\",\"kind\":\"solid\",\"class\":\"hidden\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[\"CC Light Sweep\"],\"expressions\":[{\"property\":\"Center\",\"group\":\"effect\",\"on\":true,\"error\":null,\"builds_on\":\"sets_own\",\"moves\":{\"status\":\"not_read\",\"reason\":\"not_transform\"},\"display_path\":\"Effects › CC Light Sweep › Center\",\"keys\":0,\"text\":\"thisComp.layer(\\\"Sweep Control\\\").transform.position\",\"cut_short\":false,\"full_length\":50,\"values\":{\"status\":\"not_read\",\"reason\":\"not_a_sampled_property\"},\"refs\":[{\"how\":\"name\",\"target_index\":26,\"target_name\":\"Sweep Control\",\"property\":\"Position\",\"shared_name\":false,\"inferred\":true}]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":1,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, the sweep's Center on Black Solid 1 comes from an expression that just copies Sweep Control's Position, so the speed comes from the null's own keys:\n- Sweep Control's Position has 2 keys, linear, not eased.\n- Black Solid 1 has its eye off, so the sweep is hidden right now.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select Sweep Control, press P, and drag its second Position keyframe later in the timeline so the two keys are further apart.  [tag: Offset; layer: Sweep Control]\n2. Turn on Black Solid 1's eye, then play it back and watch the sweep's speed.  [no tag; layer: Black Solid 1]\n\nCLOSING OFFER: Try it, or want to go deeper on step 1 with *Offset*?\n\nGO DEEPER BUTTONS: Offset\nWORDS: 101\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0717,
+          "judge_cost_usd": 0.1092,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 3,
+            "detail": "3 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLssqsx2aN1CK2bcCvw6",
+              "status": 200,
+              "headers_ms": 1086,
+              "max_gap_ms": 741,
+              "total_ms": 1831,
+              "end": "done",
+              "body_bytes": 40467
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLssyNANChRvxctQXXaP",
+              "status": 200,
+              "headers_ms": 857,
+              "max_gap_ms": 4536,
+              "total_ms": 6182,
+              "end": "done",
+              "body_bytes": 42145
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLstRpssMkmKsWe75tLW",
+              "status": 200,
+              "headers_ms": 1341,
+              "max_gap_ms": 1152,
+              "total_ms": 4583,
+              "end": "done",
+              "body_bytes": 46341
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "2 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "2 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "1 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "asked_entry",
+              "pass": true,
+              "detail": "one entry on Sweep Control, Black Solid 1"
+            },
+            {
+              "check": "asked_goal",
+              "pass": true,
+              "detail": "goal \"slow the light sweep's travel across the frame\""
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "3 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The turn is one answer: it opens with what drives the sweep ('In Comp 1, the sweep's center on Black Solid 1 follows Sweep Control…'), gives two steps, and ends on a single question offering one skill that is also a step tag ('Try them, or want to go deeper on step 1 with *Offset*?'), all in 111 words with no greeting, recap or praise."
+            }
+          ],
+          "cost": 0.141776,
+          "session_id": null,
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the sweep that Sweep Control drives on Black Solid 1 with CC Light Sweep go slower.\nTOOL CALL describe_layers {\"layers\":[\"Sweep Control\",\"Black Solid 1\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":26,\"layer\":\"Sweep Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":1,\"first\":[{\"from_layer\":\"Black Solid 1\",\"from_property\":\"Effects › CC Light Sweep › Center\",\"property\":\"Position\",\"inferred\":true,\"from_renders\":false}],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":23,\"layer\":\"Black Solid 1\",\"kind\":\"solid\",\"class\":\"hidden\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[\"CC Light Sweep\"],\"expressions\":[{\"property\":\"Center\",\"group\":\"effect\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"status\":\"not_read\",\"reason\":\"not_transform\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":1,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Black Solid 1\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":23,\"layer\":\"Black Solid 1\",\"kind\":\"solid\",\"class\":\"hidden\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[\"CC Light Sweep\"],\"expressions\":[{\"property\":\"Center\",\"group\":\"effect\",\"on\":true,\"error\":null,\"builds_on\":\"sets_own\",\"moves\":{\"status\":\"not_read\",\"reason\":\"not_transform\"},\"display_path\":\"Effects › CC Light Sweep › Center\",\"keys\":0,\"text\":\"thisComp.layer(\\\"Sweep Control\\\").transform.position\",\"cut_short\":false,\"full_length\":50,\"values\":{\"status\":\"not_read\",\"reason\":\"not_a_sampled_property\"},\"refs\":[{\"how\":\"name\",\"target_index\":26,\"target_name\":\"Sweep Control\",\"property\":\"Position\",\"shared_name\":false,\"inferred\":true}]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":1,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, the sweep's center on Black Solid 1 follows Sweep Control, a null moved by its own keys:\n- An expression on CC Light Sweep's Center copies Sweep Control's Position as it is.\n- Sweep Control's Position has 2 linear keys, so the gap between them sets how fast the sweep travels.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select Sweep Control, press P, and drag its second Position keyframe later in the timeline to widen the gap between the two keys.  [tag: Offset; layer: Sweep Control]\n2. Turn on the eye of Black Solid 1 (it's off now, so the sweep doesn't render), then play it back and watch the speed.  [no tag; layer: Black Solid 1]\n\nCLOSING OFFER: Try them, or want to go deeper on step 1 with *Offset*?\n\nGO DEEPER BUTTONS: Offset\nWORDS: 111\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0351,
+          "judge_cost_usd": 0.1067,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 3,
+            "detail": "3 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLsu9njovx7U8TLmQyYB",
+              "status": 200,
+              "headers_ms": 836,
+              "max_gap_ms": 1095,
+              "total_ms": 1939,
+              "end": "done",
+              "body_bytes": 40467
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLsuHx8qEiDU2Y2DvY6Z",
+              "status": 200,
+              "headers_ms": 851,
+              "max_gap_ms": 3682,
+              "total_ms": 5372,
+              "end": "done",
+              "body_bytes": 43118
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLsugukh1EgA3HLmjWhH",
+              "status": 200,
+              "headers_ms": 900,
+              "max_gap_ms": 1201,
+              "total_ms": 5444,
+              "end": "done",
+              "body_bytes": 46922
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "2 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "2 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "1 offered"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was a"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Comp 1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "asked_entry",
+              "pass": true,
+              "detail": "one entry on Sweep Control, Black Solid 1"
+            },
+            {
+              "check": "asked_goal",
+              "pass": true,
+              "detail": "goal \"slow down a sweeping light's travel\""
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "3 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The turn is one answer at 109 words: it opens directly on the source (\"In Comp 1, the center of CC Light Sweep on Black Solid 1 is set by an expression that copies the position of Sweep Control\"), gives two steps, and ends on a single question offering one skill that is among the step tags (\"Want to try these, or go deeper on step 1 with *Offset*?\"), with no greeting, recap, praise, second question or lesson."
+            }
+          ],
+          "cost": 0.1289226,
+          "session_id": null,
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the sweep that Sweep Control drives on Black Solid 1 with CC Light Sweep go slower.\nTOOL CALL describe_layers {\"layers\":[\"Sweep Control\",\"Black Solid 1\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":26,\"layer\":\"Sweep Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\",\"ease\":\"linear\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":1,\"first\":[{\"from_layer\":\"Black Solid 1\",\"from_property\":\"Effects › CC Light Sweep › Center\",\"property\":\"Position\",\"inferred\":true,\"from_renders\":false}],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":23,\"layer\":\"Black Solid 1\",\"kind\":\"solid\",\"class\":\"hidden\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[\"CC Light Sweep\"],\"expressions\":[{\"property\":\"Center\",\"group\":\"effect\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"status\":\"not_read\",\"reason\":\"not_transform\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":1,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Black Solid 1\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":23,\"layer\":\"Black Solid 1\",\"kind\":\"solid\",\"class\":\"hidden\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[\"CC Light Sweep\"],\"expressions\":[{\"property\":\"Center\",\"group\":\"effect\",\"on\":true,\"error\":null,\"builds_on\":\"sets_own\",\"moves\":{\"status\":\"not_read\",\"reason\":\"not_transform\"},\"display_path\":\"Effects › CC Light Sweep › Center\",\"keys\":0,\"text\":\"thisComp.layer(\\\"Sweep Control\\\").transform.position\",\"cut_short\":false,\"full_length\":50,\"values\":{\"status\":\"not_read\",\"reason\":\"not_a_sampled_property\"},\"refs\":[{\"how\":\"name\",\"target_index\":26,\"target_name\":\"Sweep Control\",\"property\":\"Position\",\"shared_name\":false,\"inferred\":true}]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":1,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Comp 1, the center of CC Light Sweep on Black Solid 1 is set by an expression that copies the position of Sweep Control, a null. That means the null's own two Position keys set the sweep's speed, and those keys move at an even, constant rate.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select Sweep Control, press P, and drag its second Position keyframe later in the timeline. The farther apart the two keys are, the slower the sweep.  [tag: Offset; layer: Sweep Control]\n2. Turn on the Video switch (the eye) for Black Solid 1, since it's off now, then play it back and watch the sweep.  [no tag; layer: Black Solid 1]\n\nCLOSING OFFER: Want to try these, or go deeper on step 1 with *Offset*?\n\nGO DEEPER BUTTONS: Offset\nWORDS: 109\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0359,
+          "judge_cost_usd": 0.0931,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 3,
+            "detail": "3 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011ChLsvQ328u9XaFA3yE62p",
+              "status": 200,
+              "headers_ms": 930,
+              "max_gap_ms": 889,
+              "total_ms": 1827,
+              "end": "done",
+              "body_bytes": 40467
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLsvXdBTB7Sx9a74nWrW",
+              "status": 200,
+              "headers_ms": 812,
+              "max_gap_ms": 561,
+              "total_ms": 2168,
+              "end": "done",
+              "body_bytes": 43082
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011ChLsvgu3HPWD6vDmZJTJo",
+              "status": 200,
+              "headers_ms": 1470,
+              "max_gap_ms": 4327,
+              "total_ms": 9416,
+              "end": "done",
+              "body_bytes": 45974
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "ff52218abb0312ef305254d08dfe66d984eba51465d8972da5c11d573ffe54f0",
+  "mentor_cost_usd": 0.14,
+  "judge_cost_usd": 0.31,
+  "non_baseline": false,
+  "prompt_hash": {
+    "ask-mentor": "742e260ba018e0828f5fabdbc456166718b8bba212288d7928b698872a7ff10c"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-11-19-171822.json",
+    "passed": 19,
+    "total": 19
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}
