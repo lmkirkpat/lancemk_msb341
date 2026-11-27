@@ -45,6 +45,15 @@ Adobe's After Effects assistant already teaches when asked. See
 tutorial."). The AE panel now shows the name; its internal IDs and the `AEMentor` learner-record
 folder are unchanged. See `decisions/006-name-the-product-knack.md`.
 
+**What changed (2026-11-26):** Shelved Knack. Adobe's newest updates across Creative Cloud cover
+what it set out to do, so I don't see it as a viable product. Building an AI mentor with a narrow
+scope was a useful exercise, and this repo keeps that work as it was at Sprint 5's close. From
+Sprint 6 on, the work is **Operation Food Critic**, a mobile app for finding restaurants, logging
+and rating them, and keeping a "guidebook" of past visits. Sprint 6 focuses on UI/UX design, user
+flows, mobile, and testing with a broader audience. That app's work lives in its own Operation
+Food Critic repo; sprint plans and reviews stay in `sprints/` here. My role is the same: solo
+builder, now leaning toward design and testing.
+
 If your situation changes, revise this and note what changed. That is normal; a silent
 mismatch between this file and your work is not.
 
