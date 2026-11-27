@@ -3,6 +3,14 @@
 Loaded at the start of every Claude Code session in this repo. Keep it current. It should let
 a brand new session act like a colleague who already knows what you are working on and why.
 
+> **Knack is shelved (2026-11-26).** Adobe's newest Creative Cloud updates cover what it set out
+> to do, so the builder doesn't see it as a viable product. Everything below is a record of the
+> project as it stood at Sprint 5's close; don't propose Knack tasks, evals or sittings unless the
+> builder asks. From Sprint 6 (`sprints/sprint-6-plan.md`) the work is **Operation Food Critic**,
+> a mobile app built in its own repo, starting with a clickable Figma wireframe prototype that gets
+> peer-tested and revised. This repo still holds the sprint plans and reviews (`sprints/`) and the
+> README context; see the README's 2026-11-26 note.
+
 ## What I am working on
 
 - **My role:** Solo builder: discovery, specs, building, design, testing, and GTM. Want to use
